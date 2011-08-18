@@ -1,0 +1,21 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="RobotInitial.PropertiesTabArea"
+	x:Name="UserControl"
+	d:DesignWidth="992" d:DesignHeight="187.55">
+
+	<Grid x:Name="LayoutRoot">
+		<TabControl>
+			<TabItem Header="Properties">
+				<Grid Background="#FFE5E5E5"/>
+			</TabItem>
+			<TabItem Header="SomethingElse">
+				<Grid Background="#FFE5E5E5"/>
+			</TabItem>
+		</TabControl>
+	</Grid>
+</UserControl>

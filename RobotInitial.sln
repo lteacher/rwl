@@ -1,0 +1,17 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RobotInitial", "RobotInitial\RobotInitial.csproj", "{4633a89f-b021-4782-a8a9-34cf93797c1b}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4633A89F-B021-4782-A8A9-34CF93797C1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4633A89F-B021-4782-A8A9-34CF93797C1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4633A89F-B021-4782-A8A9-34CF93797C1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4633A89F-B021-4782-A8A9-34CF93797C1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
