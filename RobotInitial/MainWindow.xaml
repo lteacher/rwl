@@ -70,7 +70,7 @@
 			<Button Content="Save" Height="21.98" Click="openFileDialog"/>
 		</ToolBar>
 		<TabControl x:Name="workspaceTabControl" Margin="116,44.833,8,4">
-            <local:WorkspaceTabItem>
+            <local:WorkspaceTabItem x:Name="wsTabItem">
                 <Canvas x:Name="dropCanvas" AllowDrop="True" Drop="BrickDrag_brickDropped" Loaded="DropCanvas_Initialise" Background="#FFFFE5E5" SizeChanged="BrickDropArea_SizeChanged" />
             </local:WorkspaceTabItem>
         </TabControl>

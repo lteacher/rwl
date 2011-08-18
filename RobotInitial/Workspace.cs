@@ -35,31 +35,15 @@ namespace RobotInitial
 
         public static void renderProject(Project project, DrawingContext context)
         {
-            Debug.WriteLine("Project has " + project.StartComponents.Count + " components");
+            Debug.WriteLine("Project has " + project.StartComponents.Count + " start components");
             foreach (Component c in project.StartComponents)
             {
-                // Hackish
                 Component _c = c;
                 while (_c != null)
                 {
-                    Debug.WriteLine(_c.GetType());
-                    string[] compName = _c.GetType().ToString().Split('.');
-                    switch (compName[compName.Length-1])
-                    {
-                        case "StartComponent":
-                            renderComponent((StartComponent)_c, context);
-                            break;
-                        case "MoveComponent":
-                            renderComponent((MoveComponent)_c, context);
-                            break;
-                        case "WaitComponent":
-                            renderComponent((WaitComponent)_c, context);
-                            break;
-                        case "LoopComponent":
-                            renderComponent((LoopComponent)_c, context);
-                            break;
-                    }
-
+                    // As Dynamic allows us to defer overloaded method resolution
+                    // until runtime, instead of compile time. No more Visitor Pattern!
+                    renderComponent(_c as dynamic, context);
                     _c = _c.Next;
                 }
             }

@@ -32,11 +32,13 @@ namespace RobotInitial
 		public MainWindow()
 		{
 			this.InitializeComponent();
-			WorkspaceTabItem tab = null;
-            if (workspaceTabControl.SelectedContent is WorkspaceTabItem)
+            WorkspaceTabItem tab = null;
+            Object o = workspaceTabControl.SelectedItem;
+            Debug.WriteLine(o == null? "Null" : o.GetType().ToString());
+            if (workspaceTabControl.SelectedItem is WorkspaceTabItem)
             {
                 Debug.WriteLine("was a WorkspaceTab");
-                tab = (WorkspaceTabItem) workspaceTabControl.SelectedContent;
+                tab = (WorkspaceTabItem) workspaceTabControl.SelectedItem;
                 tab.Canvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
             }
             else
