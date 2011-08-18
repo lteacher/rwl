@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace RobotInitial
 {
@@ -25,10 +26,24 @@ namespace RobotInitial
 		private bool _dragHasLeftScope = false;
 		private GridMask gridMask;
 
+        // The FrameElement that renders the model
+        private Workspace workspace;
+
 		public MainWindow()
 		{
 			this.InitializeComponent();
-			this.dropCanvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
+			WorkspaceTabItem tab = null;
+            if (workspaceTabControl.SelectedContent is WorkspaceTabItem)
+            {
+                Debug.WriteLine("was a WorkspaceTab");
+                tab = (WorkspaceTabItem) workspaceTabControl.SelectedContent;
+                tab.Canvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
+            }
+            else
+            {
+                Debug.WriteLine("was not a WorkspaceTab");
+                dropCanvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
+            }
 		}
 
 		private void BrickDrag_brickDropped(object sender, System.Windows.DragEventArgs e)
@@ -42,13 +57,13 @@ namespace RobotInitial
 			Rectangle element = (Rectangle)e.Data.GetData("Object");
 
 			if(panel != null && element != null) {
-				double x = e.GetPosition(panel).X;
-				double y = e.GetPosition(panel).Y;
+				double x = ((int)e.GetPosition(panel).X / 25) * 25;
+				double y = ((int)e.GetPosition(panel).Y / 25) * 25;
 				panel.Children.Add(element);
 
 				// Note we are dropping from the centre of the brick
-				element.SetValue(Canvas.LeftProperty, x - (element.Width / 2));
-				element.SetValue(Canvas.TopProperty, y - (element.Height / 2));
+				element.SetValue(Canvas.LeftProperty, x);// - (element.Width / 2));
+				element.SetValue(Canvas.TopProperty, y);// - (element.Height / 2));
 				element.SetValue(Canvas.ZIndexProperty, 100);
 					
 				// set the value to return to the DoDragDrop call
@@ -63,7 +78,7 @@ namespace RobotInitial
 
 		private void BrickDrag_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
 		{
-			if(e.LeftButton == MouseButtonState.Pressed) {
+			if (e.LeftButton == MouseButtonState.Pressed) {
 				// Set the brick button
 				UIElement brickButton = (UIElement)sender;
 
@@ -77,8 +92,8 @@ namespace RobotInitial
 					BrushConverter converter = new BrushConverter();
 					rect.Fill = ((Rectangle)brickButton).Fill;
 					rect.Stroke = ((Rectangle)brickButton).Stroke;
-					rect.Width = 80;
-					rect.Height = 50;
+					rect.Width = 75;
+					rect.Height = 75;
 					rect.RadiusX = 4.0;
 					rect.RadiusY = 4.0;
 					
@@ -174,7 +189,7 @@ namespace RobotInitial
 		private void saveFileDialog(object sender, System.Windows.RoutedEventArgs e)
 		{
 			SaveFileDialog saveFile = new SaveFileDialog();
-			saveFile.Filter = "RWL File | *.rwl";
+			saveFile.Filter = "RWL Files | *.rwl";
 			saveFile.ShowDialog();
 		}
 
@@ -185,11 +200,12 @@ namespace RobotInitial
 
 			// Create the gridmask and set the column to the custom value(brick size)
 			gridMask = new GridMask();
-			gridMask.ColWidth = 40;
+			gridMask.ColWidth = 25;
 			gridMask.RowWidth = 25;
 
 			// Add the gridmask to the panel
 			panel.Children.Add(gridMask);
+            panel.Children.Add(workspace = new Workspace());
 
 			// Register the size change event for the panel
 			panel.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);

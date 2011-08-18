@@ -40,7 +40,7 @@ namespace RobotInitial
 			Point b = new Point(parent.RenderSize.Width, 0);
 
 			Pen linePen = new Pen(Brushes.Black, 0.3);
-			for (int i = 1; a.Y <= parent.RenderSize.Height; i += 20)
+			while (a.Y <= parent.RenderSize.Height)
 			{
 				drawingContext.DrawLine(linePen, a, b);
 				a.Offset(0, RowWidth);
@@ -50,7 +50,7 @@ namespace RobotInitial
 			//Draw the vertical lines  
 			a = new Point(0, 0);
 			b = new Point(0, parent.RenderSize.Height);
-			for (int i = 1; a.X <= parent.RenderSize.Width; i += 20)
+			while (a.X <= parent.RenderSize.Width)
 			{
 				drawingContext.DrawLine(linePen, a, b);
 				a.Offset(ColWidth, 0);

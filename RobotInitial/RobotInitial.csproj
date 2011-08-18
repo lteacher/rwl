@@ -59,6 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Components.cs" />
+    <Compile Include="EventSystem.cs" />
+    <Compile Include="Workspace.cs" />
+    <Compile Include="WorkspaceTabItem.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

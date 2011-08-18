@@ -31,13 +31,13 @@ namespace RobotInitial
 			// As of now, assuming re have a rectangle (This will become a Brick proper)
 			Rectangle r = new Rectangle();
 			r.RadiusX = ((Rectangle)adornElement).RadiusX;
-			r.RadiusY = ((Rectangle)adornElement).RadiusY; ;
+			r.RadiusY = ((Rectangle)adornElement).RadiusY;
 			r.Width = ((Rectangle)adornElement).Width;
 			r.Height = ((Rectangle)adornElement).Height;
 
 			// Set the centre points
-			XCenter = r.Width / 2;
-			YCenter = r.Height / 2;
+            XCenter = 0; // r.Width / 2;
+            YCenter = 0; // r.Height / 2;
 
 			r.Fill = _brush;
 			_child = r;
@@ -45,24 +45,24 @@ namespace RobotInitial
         }
 
 
-        private double _leftOffset;
+        private double _leftOffset = 0;
         public double LeftOffset
         {
             get { return _leftOffset; }
             set
             {
-                _leftOffset = value - XCenter;
+                _leftOffset = value; // - XCenter;
                 UpdatePosition();
             }
         }
 
-        private double _topOffset;
+        private double _topOffset = 0;
         public double TopOffset
         {
             get { return _topOffset; }
             set
             {
-                _topOffset = value - YCenter;
+                _topOffset = value; // -YCenter;
 
                 UpdatePosition();
             }
