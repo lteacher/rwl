@@ -23,10 +23,12 @@ namespace RobotInitial
 		private BrickDragAdorner brickAdorner = null;
 		private AdornerLayer adornLayer;
 		private bool _dragHasLeftScope = false;
+		private GridMask gridMask;
 
 		public MainWindow()
 		{
 			this.InitializeComponent();
+			this.dropCanvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
 		}
 
 		private void BrickDrag_brickDropped(object sender, System.Windows.DragEventArgs e)
@@ -47,6 +49,7 @@ namespace RobotInitial
 				// Note we are dropping from the centre of the brick
 				element.SetValue(Canvas.LeftProperty, x - (element.Width / 2));
 				element.SetValue(Canvas.TopProperty, y - (element.Height / 2));
+				element.SetValue(Canvas.ZIndexProperty, 100);
 					
 				// set the value to return to the DoDragDrop call
 				e.Effects = DragDropEffects.Copy;
@@ -67,7 +70,7 @@ namespace RobotInitial
 				// Create the data object which will hold a brick in future
 				DataObject data = new DataObject();
 
-				// TEMPORARY
+				// TEMPORARY BRICK, LOVELY COLOURED BLOCKS
 				if (sender is Rectangle)
 				{
 					Rectangle rect = new Rectangle();
@@ -159,8 +162,8 @@ namespace RobotInitial
 				e.Action = DragAction.Cancel;
 				e.Handled = true;
 			}
-
 		}
+
 		private void openFileDialog(object sender, System.Windows.RoutedEventArgs e)
 		{
 			OpenFileDialog openFile = new OpenFileDialog();
@@ -175,6 +178,31 @@ namespace RobotInitial
 			saveFile.ShowDialog();
 		}
 
-		
+		private void DropCanvas_Initialise(object sender, System.Windows.RoutedEventArgs e)
+		{
+			// This should always be a panel
+			Panel panel = (Panel)sender;
+
+			// Create the gridmask and set the column to the custom value(brick size)
+			gridMask = new GridMask();
+			gridMask.ColWidth = 40;
+			gridMask.RowWidth = 25;
+
+			// Add the gridmask to the panel
+			panel.Children.Add(gridMask);
+
+			// Register the size change event for the panel
+			panel.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
+			
+		}
+
+		private void BrickDropArea_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+		{
+			// Block the update before initialise
+			if (gridMask != null)
+			{
+				gridMask.InvalidateVisual();
+			}
+		}
 	}
 }

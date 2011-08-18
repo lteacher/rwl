@@ -71,8 +71,8 @@
 		</ToolBar>
 		<TabControl Margin="116,44.833,8,4">
 			<TabItem Header="untitled.rwl">
-				<Canvas Background="#FFFFD6D6" AllowDrop="True" Drop="BrickDrag_brickDropped"/>
-			</TabItem>
+                <Canvas x:Name="dropCanvas" AllowDrop="True" Drop="BrickDrag_brickDropped" Loaded="DropCanvas_Initialise" Background="#FFFFE5E5" SizeChanged="BrickDropArea_SizeChanged" />
+            </TabItem>
 		</TabControl>
 		<TabControl x:Name="navTabControl" HorizontalAlignment="Left" Width="104" Margin="8,44.833,0,8" TabStripPlacement="Bottom">
 			<TabItem Header="C">
