@@ -13,7 +13,7 @@ namespace RobotInitial
 
         public WorkspaceTabItem()
         {
-            Header = "untitled_RAWR_.rwl";
+            Header = "untitled.rwl";
             
             AddChild(canvas = new Canvas());
             GridMask gridMask = new GridMask();
