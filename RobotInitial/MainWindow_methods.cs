@@ -24,25 +24,25 @@ namespace RobotInitial
         private GridMask gridMask;
 
         // The FrameElement that renders the model
-        private Workspace workspace;
+        private _Workspace workspace;
 
         public void _cons_MainWindow()
         {
             //this.InitializeComponent();
             WorkspaceTabItem tab = null;
-            Object o = workspaceTabControl.SelectedItem;
-            Debug.WriteLine(o == null ? "Null" : o.GetType().ToString());
-            if (workspaceTabControl.SelectedItem is WorkspaceTabItem)
-            {
-                Debug.WriteLine("was a WorkspaceTab");
-                tab = (WorkspaceTabItem)workspaceTabControl.SelectedItem;
-                tab.Canvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
-            }
-            else
-            {
-                Debug.WriteLine("was not a WorkspaceTab");
-                dropCanvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
-            }
+            //Object o = workspaceTabControl.SelectedItem;
+            //Debug.WriteLine(o == null ? "Null" : o.GetType().ToString());
+            //if (workspaceTabControl.SelectedItem is WorkspaceTabItem)
+            //{
+            //    Debug.WriteLine("was a WorkspaceTab");
+            //    tab = (WorkspaceTabItem)workspaceTabControl.SelectedItem;
+            //    tab.Canvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
+            //}
+            //else
+            //{
+            //    Debug.WriteLine("was not a WorkspaceTab");
+            //    dropCanvas.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);
+            //}
         }
 
         private void BrickDrag_brickDropped(object sender, System.Windows.DragEventArgs e)
@@ -207,7 +207,7 @@ namespace RobotInitial
 
             // Add the gridmask to the panel
             panel.Children.Add(gridMask);
-            panel.Children.Add(workspace = new Workspace());
+            panel.Children.Add(workspace = new _Workspace());
 
             // Register the size change event for the panel
             panel.SizeChanged += new SizeChangedEventHandler(BrickDropArea_SizeChanged);

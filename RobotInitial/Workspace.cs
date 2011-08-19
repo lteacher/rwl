@@ -12,9 +12,17 @@ using RobotInitial.Components;
 
 namespace RobotInitial
 {
-    class Workspace : FrameworkElement
+    class _Workspace : FrameworkElement
     {
         Project project = new Project();
+
+        DragEventHandler handler;
+
+        public _Workspace()
+        {
+            handler = new DragEventHandler(this.OnDrop);
+            Drop += handler;
+        }
 
         protected override void OnRender(DrawingContext drawingContext)
         {
@@ -24,9 +32,13 @@ namespace RobotInitial
             //drawingContext.DrawText(new FormattedText("Woohoo Hi (Robot) World",System.Globalization.CultureInfo.CurrentCulture, FlowDirection.LeftToRight, new Typeface("Monospaced"), 50, Brushes.Black), new Point(0, 0));
         }
 
-    }
+        void OnDrop(object sender, DragEventArgs e)
+        {
+            Debug.WriteLine(sender);
+            Debug.WriteLine(e);
+        }
 
-    
+    }
 
     class ProjectRenderer
     {

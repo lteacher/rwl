@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Controls;
+using System.Diagnostics;
 
 namespace RobotInitial
 {
@@ -15,6 +16,8 @@ namespace RobotInitial
 		private UIElement parent;
 		public int RowWidth {get; set;}
 		public int ColWidth {get; set;}
+
+        private SizeChangedEventHandler handler;
 
 		public GridMask() {
 			// Default properties unless reset
@@ -26,14 +29,36 @@ namespace RobotInitial
 
 			// Add the event handler for MouseLeftButtonUp.
 			this.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(MyVisualHost_MouseLeftButtonUp);
+
+            handler = new SizeChangedEventHandler(parent_SizeChanged);
 		}
+
+        // Update parent whenever it changes.
+        // Update the SizeChanged listener to handle invalidation.
+        protected override void  OnVisualParentChanged(DependencyObject oldParent)
+        {
+ 	        base.OnVisualParentChanged(oldParent);
+            parent = (UIElement) Parent;
+
+            if (parent is Canvas)
+                (parent as Canvas).SizeChanged += handler;
+
+            if (oldParent is Canvas)
+                (oldParent as Canvas).SizeChanged -= handler;
+        }
+
+        void parent_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            InvalidateVisual();
+        }
 
 		protected override void OnRender(DrawingContext drawingContext)
 		{
 			base.OnRender(drawingContext);
 
-			// Set the parent UIElemnt for resizing
-			parent = (UIElement)this.Parent;
+            if (parent == null)
+                return;
+
 
 			//Draw the horizontal lines  
 			Point a = new Point(0, 0);

@@ -120,4 +120,7 @@
   <data name="MainWindowViewModel_DisplayName" xml:space="preserve">
     <value>Robot Workshop Language</value>
   </data>
+  <data name="WorkspaceViewModel_Untitled" xml:space="preserve">
+    <value>untitled.rwl</value>
+  </data>
 </root>

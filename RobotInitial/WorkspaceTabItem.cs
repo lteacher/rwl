@@ -9,7 +9,7 @@ namespace RobotInitial
     class WorkspaceTabItem : TabItem
     {
         Canvas canvas;
-        Workspace workspace;
+        _Workspace workspace;
 
         public WorkspaceTabItem()
         {
@@ -20,7 +20,7 @@ namespace RobotInitial
             gridMask.ColWidth = 25;
             gridMask.RowWidth = 25;
             canvas.Children.Add(gridMask);
-            canvas.Children.Add(workspace = new Workspace());
+            canvas.Children.Add(workspace = new _Workspace());
 
         }
 

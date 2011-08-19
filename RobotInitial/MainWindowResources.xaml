@@ -39,4 +39,44 @@
         </Setter>
     </Style>
     
+    <!--
+    CloseableTabItem Template
+    -->
+    <DataTemplate x:Key="CloseableTabItemTemplate">
+        <DockPanel Width="120">
+            <Button
+                Command="{Binding Path=CloseCommand}"
+                Content="X"
+                Cursor="Hand"
+                DockPanel.Dock="Right"
+                Focusable="False"
+                FontFamily="Courier"
+                FontSize="9"
+                FontWeight="Bold"
+                Margin="0,1,0,0"
+                Padding="0"
+                VerticalContentAlignment="Bottom"
+                Width="16" Height="16"
+                />
+            <ContentPresenter 
+                Content="{Binding Path=DisplayName}" 
+                VerticalAlignment="Center"
+                />
+        </DockPanel>
+        
+    </DataTemplate>
+    
+    <!--
+    Workspaces Template
+    -->
+    <DataTemplate x:Key="WorkspacesTemplate">
+        <TabControl
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding}"
+            ItemTemplate="{StaticResource CloseableTabItemTemplate}"
+            Margin="116,0,8,4"
+            
+            />
+    </DataTemplate>
+    
 </ResourceDictionary>

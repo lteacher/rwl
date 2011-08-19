@@ -62,6 +62,7 @@
     <Compile Include="Components.cs" />
     <Compile Include="EventSystem.cs" />
     <Compile Include="MainWindow_methods.cs" />
+    <Compile Include="Model\Workspace.cs" />
     <Compile Include="RelayCommand.cs" />
     <Compile Include="Properties\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -120,9 +121,7 @@
   <ItemGroup>
     <Resource Include="Content\Images\image0.png" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
