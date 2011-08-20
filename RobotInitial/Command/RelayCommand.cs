@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using System.Diagnostics;
 
-namespace RobotInitial
+namespace RobotInitial.Command
 {
     // Based on the demo application from the MVVM tutorial
     // at http://msdn.microsoft.com/en-us/magazine/dd419663.aspx

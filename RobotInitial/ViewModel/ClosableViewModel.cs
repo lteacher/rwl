@@ -1,6 +1,8 @@
 ﻿using System.Windows.Input;
 using System;
 
+using RobotInitial.Command;
+
 namespace RobotInitial.ViewModel
 {
     // Based on the demo application from the MVVM tutorial

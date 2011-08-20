@@ -1,60 +1,82 @@
 ﻿<Window 
-    x:Class="RobotInitial.MainWindow"
+    x:Class="RobotInitial.View.MainWindowView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" 
     xmlns:local="clr-namespace:RobotInitial"
+    xmlns:p="clr-namespace:RobotInitial.Properties"
+    xmlns:vw="clr-namespace:RobotInitial.View"
 	mc:Ignorable="d"
 	Title="{Binding Path=DisplayName}"
 	Width="1024" Height="768"
     >
 	<Window.Resources>
-        <ResourceDictionary Source="MainWindowResources.xaml"/>
+        <ResourceDictionary Source="..\MainWindowResources.xaml"/>
     </Window.Resources>
+    
+    <!-- TODO: Add more Input Bindings for appropriate commands -->
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="N" Command="{Binding Path=NewWorkspaceCommand}" />
     </Window.InputBindings>
     
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" KeyboardNavigation.TabNavigation="None">
-            <Menu Height="19.833" VerticalAlignment="Top">
-                <MenuItem Header="_File" Height="19.833" Width="34.283">
-                    <MenuItem Header="_New" Command="{Binding Path=NewWorkspaceCommand}" />
-                    <MenuItem Header="_Open..." Command="{Binding Path=OpenWorkspaceCommand}" />
-                    <MenuItem Header="_Close" Command="{Binding Path=CloseWorkspaceCommand}" />
-                    <Separator Width="138.423" />
-                    <MenuItem Header="_Save" Command="{Binding Path=SaveWorkspaceCommand}" />
-                    <MenuItem Header="Save _As..." Command="{Binding Path=SaveWorkspaceAsCommand}" />
-                    <Separator Width="138.423" Margin="0,2,-0.001,2" />
-                    <MenuItem Header="Page Set_up..." Command="{Binding Path=PageSetupCommand}" />
-                    <MenuItem Header="_Print..." Command="{Binding Path=PrintWorkspaceCommand}" />
-                    <Separator Width="138.423" Margin="9.697,2,9.696,2" />
-                    <MenuItem Header="E_xit" Command="{Binding Path=CloseCommand}" />
-                </MenuItem>
-                <MenuItem Header="Edit">
-                    <MenuItem Header="Undo" Command="{Binding Path=UndoCommand}" />
-                    <MenuItem Header="Redo" Command="{Binding Path=RedoCommand}" />
+            <!-- TODO: Add 'Key Accelerators' to the Menu Items -->
+            <Menu VerticalAlignment="Top">
+                <MenuItem Header="{x:Static p:Resources.menuFile}">
+                    <MenuItem Header="{x:Static p:Resources.menuFileNew}" 
+                              Command="{Binding Path=NewWorkspaceCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuFileOpen}" 
+                              Command="{Binding Path=OpenWorkspaceCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuFileClose}" 
+                              Command="{Binding Path=CloseWorkspaceCommand}" />
                     <Separator/>
-                    <MenuItem Header="Cut" Command="{Binding Path=CutCommand}" />
-                    <MenuItem Header="Copy" Command="{Binding Path=CopyCommand}" />
-                    <MenuItem Header="Paste" Command="{Binding Path=PasteCommand}" />
-                    <MenuItem Header="Clear" Command="{Binding Path=ClearCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuFileSave}" 
+                              Command="{Binding Path=SaveWorkspaceCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuFileSaveAs}" 
+                              Command="{Binding Path=SaveWorkspaceAsCommand}" />
                     <Separator/>
-                    <MenuItem Header="Preferences..."/>
+                    <MenuItem Header="{x:Static p:Resources.menuFilePageSetup}" 
+                              Command="{Binding Path=PageSetupCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuFilePrint}" 
+                              Command="{Binding Path=PrintWorkspaceCommand}"  />
+                    <Separator/>
+                    <MenuItem Header="{x:Static p:Resources.menuFileExit}" 
+                              Command="{Binding Path=CloseCommand}" />
                 </MenuItem>
-                <MenuItem Header="Tools"/>
-                <MenuItem Header="Help">
-                    <MenuItem Header="About" Command="{Binding Path=AboutCommand}" />
+                <MenuItem Header="{x:Static p:Resources.menuEdit}">
+                    <MenuItem Header="{x:Static p:Resources.menuEditUndo}" 
+                              Command="{Binding Path=UndoCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuEditRedo}" 
+                              Command="{Binding Path=RedoCommand}" />
+                    <Separator/>
+                    <MenuItem Header="{x:Static p:Resources.menuEditCut}" 
+                              Command="{Binding Path=CutCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuEditCopy}" 
+                              Command="{Binding Path=CopyCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuEditPaste}" 
+                              Command="{Binding Path=PasteCommand}" />
+                    <MenuItem Header="{x:Static p:Resources.menuEditClear}" 
+                              Command="{Binding Path=ClearCommand}" />
+                    <Separator/>
+                    <MenuItem Header="{x:Static p:Resources.menuEditPreferences}"/>
+                </MenuItem>
+                <MenuItem Header="{x:Static p:Resources.menuTools}"/>
+                <MenuItem Header="{x:Static p:Resources.menuHelp}">
+                    <MenuItem Header="{x:Static p:Resources.menuHelpAbout}" 
+                              Command="{Binding Path=AboutCommand}" />
                 </MenuItem>
             </Menu>
 
         </DockPanel>
         <DockPanel DockPanel.Dock="Top" KeyboardNavigation.TabNavigation="None">
-            <ToolBar VerticalAlignment="Top"  Height="21" HorizontalAlignment="Stretch">
-                <Button Content="Open" Height="21.98" Command="{Binding Path=OpenCommand}" />
-                <Button Content="Save" Height="21.98" Command="{Binding Path=SaveCommand}" />
+            <ToolBar VerticalAlignment="Top"   HorizontalAlignment="Stretch">
+                <Button Content="{x:Static p:Resources.toolbarOpen}" 
+                        Command="{Binding Path=OpenCommand}" />
+                <Button Content="{x:Static p:Resources.toolbarSave}" 
+                        Command="{Binding Path=SaveCommand}" />
             </ToolBar>
         </DockPanel>
         
@@ -63,10 +85,12 @@
                 <RowDefinition Height="0.715*"/>
                 <RowDefinition Height="0.285*"/>
             </Grid.RowDefinitions>
-            <ContentControl 
-            Content="{Binding Path=Workspaces}" 
-            ContentTemplate="{StaticResource WorkspacesTemplate}"
-            />
+            <ContentControl Content="{Binding Path=Workspaces}" 
+                            ContentTemplate="{StaticResource WorkspacesTemplate}"
+                            />
+            <ContentControl Content="{Binding Path=BrickTabs}"
+                            ContentTemplate="{StaticResource BrickTabTemplate}"
+                            />
             <!--
 		<TabControl x:Name="workspaceTabControl" Margin="116,44.833,8,4">
             <local:WorkspaceTabItem x:Name="wsTabItem">
@@ -74,6 +98,7 @@
             </local:WorkspaceTabItem>
         </TabControl>
         -->
+            <!--
             <TabControl x:Name="navTabControl" HorizontalAlignment="Left" Width="104" Margin="8,44.833,0,8" TabStripPlacement="Bottom">
                 <TabItem Header="C">
                     <ScrollViewer>
@@ -89,7 +114,8 @@
                     <Grid Background="#FFE5E5E5"/>
                 </TabItem>
             </TabControl>
-            <local:PropertiesTabArea Margin="8,12.5,8,8" Grid.Row="1"/>
+            -->
+            <vw:PropertiesTabView Margin="8,12.5,8,8" Grid.Row="1"/>
             <GridSplitter HorizontalAlignment="Stretch" Margin="8,0" Grid.Row="1" Height="8.5" VerticalAlignment="Top" Opacity="0.315">
                 <GridSplitter.Background>
                     <RadialGradientBrush>

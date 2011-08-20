@@ -41,6 +41,7 @@
     <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Interactivity" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,21 +60,29 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Command\CommandBehavior.cs" />
+    <Compile Include="Command\CommandBehaviorBinding.cs" />
+    <Compile Include="Command\EventHandlerGenerator.cs" />
     <Compile Include="Components.cs" />
     <Compile Include="EventSystem.cs" />
+    <Compile Include="Command\ExecutionStrategy.cs" />
     <Compile Include="MainWindow_methods.cs" />
     <Compile Include="Model\Workspace.cs" />
-    <Compile Include="RelayCommand.cs" />
-    <Compile Include="Properties\Strings.Designer.cs">
+    <Compile Include="Command\RelayCommand.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\BrickTabViewModel.cs" />
     <Compile Include="ViewModel\ClosableViewModel.cs" />
     <Compile Include="ViewModel\CommandViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\WorkspaceViewModel.cs" />
+    <Compile Include="View\BrickTabView.xaml.cs">
+      <DependentUpon>BrickTabView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WorkspaceView.xaml.cs">
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
     </Compile>
@@ -87,13 +96,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BrickDragAdorner.cs" />
-    <Compile Include="GridMask.cs" />
+    <Compile Include="UI\BrickDragAdorner.cs" />
+    <Compile Include="UI\GridMask.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="PropertiesTabArea.xaml">
+    <Page Include="View\BrickTabView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PropertiesTabView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -107,8 +120,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PropertiesTabArea.xaml.cs">
-      <DependentUpon>PropertiesTabArea.xaml</DependentUpon>
+    <Compile Include="View\PropertiesTabView.xaml.cs">
+      <DependentUpon>PropertiesTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -123,9 +136,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <EmbeddedResource Include="Properties\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />

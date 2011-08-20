@@ -3,17 +3,18 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:p="clr-namespace:RobotInitial.Properties"
 	mc:Ignorable="d"
-	x:Class="RobotInitial.PropertiesTabArea"
+	x:Class="RobotInitial.View.PropertiesTabView"
 	x:Name="UserControl"
 	d:DesignWidth="992" d:DesignHeight="187.55">
 
 	<Grid x:Name="LayoutRoot">
 		<TabControl>
-			<TabItem Header="Properties">
+			<TabItem Header="{x:Static p:Resources.tabProperties}">
 				<Grid Background="#FFE5E5E5"/>
 			</TabItem>
-			<TabItem Header="SomethingElse">
+			<TabItem Header="{x:Static p:Resources.tabSomethingElse}">
 				<Grid Background="#FFE5E5E5"/>
 			</TabItem>
 		</TabControl>

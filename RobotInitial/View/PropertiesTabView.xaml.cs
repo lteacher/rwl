@@ -11,14 +11,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RobotInitial
+namespace RobotInitial.View
 {
 	/// <summary>
-	/// Interaction logic for PropertiesTabArea.xaml
+	/// Interaction logic for PropertiesTabView.xaml
 	/// </summary>
-	public partial class PropertiesTabArea : UserControl
+	public partial class PropertiesTabView : UserControl
 	{
-		public PropertiesTabArea()
+		public PropertiesTabView()
 		{
 			this.InitializeComponent();
 		}

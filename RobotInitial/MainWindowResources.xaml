@@ -4,12 +4,23 @@
     xmlns:vw="clr-namespace:RobotInitial.View"
     xmlns:vm="clr-namespace:RobotInitial.ViewModel"
     >
+    
     <!--
     This Template applies a WorkspaceView to an instance
     of the WorkspaceViewModel class.
     -->
     <DataTemplate DataType="{x:Type vm:WorkspaceViewModel}">
         <vw:WorkspaceView />
+    </DataTemplate>
+    
+    <!--
+    <DataTemplate DataType="{x:Type vm:PropertiesViewModel}">
+        <vw:PropertiesTabView />
+    </DataTemplate>
+    -->
+
+    <DataTemplate DataType="{x:Type vm:BrickTabViewModel}">
+        <vw:BrickTabView />
     </DataTemplate>
 
     <!--
@@ -68,14 +79,30 @@
     
     <!--
     Workspaces Template
+    
+    Container of the Workspaces
     -->
     <DataTemplate x:Key="WorkspacesTemplate">
         <TabControl
             IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding}"
             ItemTemplate="{StaticResource CloseableTabItemTemplate}"
-            Margin="116,0,8,4"
-            
+            Margin="116,0,8,4" />
+    </DataTemplate>
+    
+    <!-- 
+    BrickTab Template
+    
+    Container of the Brick Selection Tabs
+    -->
+    <DataTemplate x:Key="BrickTabTemplate">
+        <TabControl 
+            IsSynchronizedWithCurrentItem="True"
+            ItemsSource="{Binding}"
+            HorizontalAlignment="Left"
+            Width="104" 
+            Margin="8,0,0,8" 
+            TabStripPlacement="Bottom"
             />
     </DataTemplate>
     

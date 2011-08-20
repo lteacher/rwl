@@ -12,9 +12,9 @@ using System.Windows.Shapes;
 using Microsoft.Win32;
 using System.Diagnostics;
 
-namespace RobotInitial
+namespace RobotInitial.View
 {
-    public partial class MainWindow : Window
+    public partial class MainWindowView : Window
     {
 
         public FrameworkElement DragScope { get; set; }
