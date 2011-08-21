@@ -15,8 +15,8 @@ namespace RobotInitial.ViewModel
 
         public WorkspaceViewModel(Workspace workspace)
         {
-            base.DisplayName = Resources.untitledFileName + Resources.fileExtension;
             _workspace = workspace;
+            base.DisplayName = _workspace.FileName;
         }
 
         RelayCommand _dropCommand;
@@ -31,6 +31,19 @@ namespace RobotInitial.ViewModel
                 }
 
                 return _dropCommand;
+            }
+        }
+
+        public bool IsUntitled
+        {
+            get
+            {
+                if (_workspace != null)
+                {
+                    return _workspace.IsUntitled;
+                }
+
+                return false;
             }
         }
 

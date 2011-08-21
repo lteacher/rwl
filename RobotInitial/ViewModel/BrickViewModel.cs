@@ -1,0 +1,24 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace RobotInitial.ViewModel
+{
+    class BrickViewModel : ViewModelBase
+    {
+
+        string _fillColor;
+
+        public String FillColor
+        {
+            get { return _fillColor; }
+        }
+
+        public BrickViewModel(string fillColor)
+        {
+            _fillColor = fillColor;
+        }
+
+    }
+}

@@ -23,6 +23,10 @@
         <vw:BrickTabView />
     </DataTemplate>
 
+    <DataTemplate DataType="{x:Type vm:BrickViewModel}">
+        <vw:BrickView />
+    </DataTemplate>
+
     <!--
     This is the style block moved from MainWindow.xaml
     -->
@@ -54,7 +58,7 @@
     CloseableTabItem Template
     -->
     <DataTemplate x:Key="CloseableTabItemTemplate">
-        <DockPanel Width="120">
+        <DockPanel Width="80">
             <Button
                 Command="{Binding Path=CloseCommand}"
                 Content="X"
@@ -87,9 +91,16 @@
             IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding}"
             ItemTemplate="{StaticResource CloseableTabItemTemplate}"
-            Margin="116,0,8,4" />
+            Margin="106,0,1,2" />
     </DataTemplate>
-    
+
+
+    <DataTemplate x:Key="BrickTabItemTemplate">
+        <ContentPresenter 
+                Content="{Binding Path=DisplayName}" 
+                VerticalAlignment="Center"
+                />
+    </DataTemplate>
     <!-- 
     BrickTab Template
     
@@ -99,11 +110,14 @@
         <TabControl 
             IsSynchronizedWithCurrentItem="True"
             ItemsSource="{Binding}"
+            ItemTemplate="{StaticResource BrickTabItemTemplate}"
             HorizontalAlignment="Left"
             Width="104" 
-            Margin="8,0,0,8" 
+            Margin="1,2,0,0" 
             TabStripPlacement="Bottom"
             />
     </DataTemplate>
+    
+
     
 </ResourceDictionary>

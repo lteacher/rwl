@@ -19,6 +19,8 @@
     <!-- TODO: Add more Input Bindings for appropriate commands -->
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="N" Command="{Binding Path=NewWorkspaceCommand}" />
+        <KeyBinding Modifiers="Control" Key="Y" Command="{Binding Path=RedoCommand}" />
+        <KeyBinding Modifiers="Control" Key="Z" Command="{Binding Path=UndoCommand}" />
     </Window.InputBindings>
     
     <DockPanel>
@@ -48,8 +50,12 @@
                 </MenuItem>
                 <MenuItem Header="{x:Static p:Resources.menuEdit}">
                     <MenuItem Header="{x:Static p:Resources.menuEditUndo}" 
+                              InputGestureText="Ctrl+Z"
+                              IsEnabled="{Binding Path=IsUndoEnabled}"
                               Command="{Binding Path=UndoCommand}" />
                     <MenuItem Header="{x:Static p:Resources.menuEditRedo}" 
+                              InputGestureText="Ctrl+Y"
+                              IsEnabled="{Binding Path=IsRedoEnabled}"
                               Command="{Binding Path=RedoCommand}" />
                     <Separator/>
                     <MenuItem Header="{x:Static p:Resources.menuEditCut}" 

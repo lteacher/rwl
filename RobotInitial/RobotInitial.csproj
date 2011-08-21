@@ -75,6 +75,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\BrickTabViewModel.cs" />
+    <Compile Include="ViewModel\BrickViewModel.cs" />
     <Compile Include="ViewModel\ClosableViewModel.cs" />
     <Compile Include="ViewModel\CommandViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -83,12 +84,19 @@
     <Compile Include="View\BrickTabView.xaml.cs">
       <DependentUpon>BrickTabView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\BrickView.xaml.cs">
+      <DependentUpon>BrickView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\WorkspaceView.xaml.cs">
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Workspace.cs" />
     <Compile Include="WorkspaceTabItem.cs" />
-    <Page Include="MainWindow.xaml">
+    <Page Include="View\BrickView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -98,8 +106,8 @@
     </Compile>
     <Compile Include="UI\BrickDragAdorner.cs" />
     <Compile Include="UI\GridMask.cs" />
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="View\MainWindowView.xaml.cs">
+      <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\BrickTabView.xaml">

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Data;
@@ -9,7 +10,6 @@ using System.Windows.Input;
 using RobotInitial.Command;
 using RobotInitial.Properties;
 using RobotInitial.Model;
-using System.Collections.Specialized;
 
 namespace RobotInitial.ViewModel
 {
@@ -23,7 +23,7 @@ namespace RobotInitial.ViewModel
         RelayCommand _newWorkspaceCommand;
         RelayCommand _openWorkspaceCommand;
         RelayCommand _saveWorkspaceCommand;
-        RelayCommand _saveWorkspaceAsCommand;
+        RelayCommand _saveAsWorkspaceCommand;
         RelayCommand _closeWorkspaceCommand;
 
         #endregion // Commands
@@ -35,6 +35,9 @@ namespace RobotInitial.ViewModel
         
         #endregion // Collections
 
+        bool _undoEnabled = false;
+        bool _redoEnabled = false;
+
         #endregion // Fields
 
         #region Constructor
@@ -42,6 +45,7 @@ namespace RobotInitial.ViewModel
         public MainWindowViewModel()
         {
             base.DisplayName = Resources.applicationDisplayName;
+            Initialise();
         }
 
         #endregion // Constructor
@@ -88,7 +92,7 @@ namespace RobotInitial.ViewModel
             {
                 if (_saveWorkspaceCommand == null)
                 {
-                    _saveWorkspaceCommand = new RelayCommand(param => this.SaveWorkspace());
+                    _saveWorkspaceCommand = new RelayCommand(param => this.SaveWorkspace(false));
                 }
                 return _saveWorkspaceCommand;
             }
@@ -96,17 +100,17 @@ namespace RobotInitial.ViewModel
 
         #endregion // SaveWorkspaceCommand
 
-        #region SaveWorkspaceAsCommand
+        #region SaveAsWorkspaceCommand
 
-        public ICommand SaveWorkspaceAsCommand
+        public ICommand SaveAsWorkspaceCommand
         {
             get
             {
-                if (_saveWorkspaceAsCommand == null)
+                if (_saveAsWorkspaceCommand == null)
                 {
-                    _saveWorkspaceAsCommand = new RelayCommand(param => this.SaveAsWorkspace());
+                    _saveAsWorkspaceCommand = new RelayCommand(param => this.SaveWorkspace(true));
                 }
-                return _saveWorkspaceAsCommand;
+                return _saveAsWorkspaceCommand;
             }
         }
 
@@ -129,6 +133,22 @@ namespace RobotInitial.ViewModel
         #endregion // CloseWorkspaceCommand
 
         #endregion // Command Definitions
+
+        #region Property Bindings
+        
+        public bool IsRedoEnabled
+        {
+            get { return _redoEnabled; }
+        }
+
+        public bool IsUndoEnabled
+        {
+            get { return _undoEnabled; }
+        }
+
+        #endregion // Property Bindings
+
+        #region Collection Definitions
 
         #region Workspaces
 
@@ -175,7 +195,61 @@ namespace RobotInitial.ViewModel
 
 #endregion // Workspaces
 
+        #region BrickTabs
+
+        public ObservableCollection<BrickTabViewModel> BrickTabs
+        {
+            get
+            {
+                if (_brickTabs == null)
+                {
+                    _brickTabs = new ObservableCollection<BrickTabViewModel>();
+                    _brickTabs.CollectionChanged += OnBricksTabChanged;
+                }
+
+                return _brickTabs;
+
+            }
+        }
+
+        void OnBricksTabChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            if (e.NewItems != null && e.NewItems.Count != 0)
+            {
+                foreach (BrickTabViewModel brickTab in e.NewItems)
+                {
+                    brickTab.RequestClose += this.OnBrickTabRequestClose;
+                }
+
+            }
+
+            if (e.OldItems != null && e.OldItems.Count != 0)
+            {
+                foreach (BrickTabViewModel brickTab in e.OldItems)
+                {
+                    brickTab.RequestClose -= this.OnBrickTabRequestClose;
+                }
+            }
+        }
+
+        void OnBrickTabRequestClose(object sender, EventArgs e)
+        {
+            BrickTabViewModel brickTab = sender as BrickTabViewModel;
+            brickTab.Dispose();
+            this.BrickTabs.Remove(brickTab);
+        }
+
+        #endregion // BrickTabs
+
+        #endregion // Collection Definitions
+
         #region Private Helper Methods
+
+        void Initialise()
+        {
+            BrickTabViewModel btmodel = new BrickTabViewModel();
+            this.BrickTabs.Add(btmodel);
+        }
 
         void CreateNewWorkspace()
         {
@@ -198,25 +272,33 @@ namespace RobotInitial.ViewModel
 
         void OpenWorkspace()
         {
-            // Show Dialog
-            // Load Workspace Model
-            // Create Workspace View Model
-            // Add to Workspaces
+            // Show Dialog (this is a non-trivial task in MVVM)
+            // Get filename from dialog
+            Workspace workspaceModel = Workspace.LoadWorkspace("rawr.rwl");
+            WorkspaceViewModel workspace = new WorkspaceViewModel(workspaceModel);
+            this.Workspaces.Add(workspace);
+            this.SetActiveWorkspace(workspace);
         }
 
-        void SaveWorkspace()
+        void SaveWorkspace(bool newFile)
         {
-            // If Workspace is unnamed,
-            //    call SaveAsWorkspace()
-            // else, 
-            //    Write Workspace Model to disk.
-        }
+            ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Workspaces);
+            if (collectionView != null)
+            {
+                WorkspaceViewModel viewmodel = collectionView.CurrentItem as WorkspaceViewModel;
+                if (viewmodel != null)
+                {
+                    if (viewmodel.IsUntitled || newFile)
+                    {
+                        // Show Dialog (this is a non-trivial task in MVVM)
+                        // Get filename from dialog
+                    }
 
-        void SaveAsWorkspace()
-        {
-            // Show Dialog
-            // Write Workspace Model to disk
-            // Mark Workspace as saved.
+                    // Write Workspace Model to disk
+                    // Mark Workspace as saved.
+                }
+                    
+            }
         }
 
         void CloseWorkspace()
