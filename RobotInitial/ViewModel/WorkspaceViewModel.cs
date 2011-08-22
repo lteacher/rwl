@@ -50,6 +50,7 @@ namespace RobotInitial.ViewModel
         void OnDrop()
         {
             Debug.WriteLine("OnDrop called");
+			Console.Write("OnDrop called");
         }
     }
 }

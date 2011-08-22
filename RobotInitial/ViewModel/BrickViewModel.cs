@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using RobotInitial.Command;
+using RobotInitial.Properties;
+using RobotInitial.Model;
+using System.Windows.Input;
+using System.Windows;
+
 namespace RobotInitial.ViewModel
 {
     class BrickViewModel : ViewModelBase

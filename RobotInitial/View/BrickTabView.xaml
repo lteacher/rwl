@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <!-- <TabItem Header="{Binding Path=DisplayName}"> -->
-        <ScrollViewer> 
+    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto"> 
             <ItemsControl ItemsSource="{Binding Path=Bricks}" />
                 <!--
                 <Rectangle Fill="#FF00FF33" Height="58" Stroke="Black" Width="59" Margin="0,40,0,0" 

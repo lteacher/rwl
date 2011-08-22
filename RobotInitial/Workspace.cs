@@ -22,6 +22,8 @@ namespace RobotInitial
         {
             handler = new DragEventHandler(this.OnDrop);
             Drop += handler;
+			this.Drop +=new DragEventHandler(this.OnDrop);
+			Debug.WriteLine("Something Else");
         }
 
         protected override void OnRender(DrawingContext drawingContext)
@@ -34,8 +36,7 @@ namespace RobotInitial
 
         void OnDrop(object sender, DragEventArgs e)
         {
-            Debug.WriteLine(sender);
-            Debug.WriteLine(e);
+            Debug.WriteLine("Something");
         }
 
     }
@@ -101,18 +102,18 @@ namespace RobotInitial
         public Project()
         {
             Component startComponent = new StartComponent();
-            startComponent.Location = new Point(3, 3);
-            startList.Add(startComponent);
-            startComponent.Next = new MoveComponent();
-            startComponent.Next.Location = new Point(7, 3);
-            startComponent.Next.Next = new WaitComponent();
-            startComponent.Next.Next.Location = new Point(11, 3);
-            startComponent.Next.Next.Next = new LoopComponent();
-            startComponent.Next.Next.Next.Location = new Point(15, 3);
+			//startComponent.Location = new Point(3, 3);
+			//startList.Add(startComponent);
+			//startComponent.Next = new MoveComponent();
+			//startComponent.Next.Location = new Point(7, 3);
+			//startComponent.Next.Next = new WaitComponent();
+			//startComponent.Next.Next.Location = new Point(11, 3);
+			//startComponent.Next.Next.Next = new LoopComponent();
+			//startComponent.Next.Next.Next.Location = new Point(15, 3);
 
-            startComponent = new MoveComponent();
-            startList.Add(startComponent);
-            startComponent.Location = new Point(10, 9);
+			//startComponent = new MoveComponent();
+			//startList.Add(startComponent);
+			//startComponent.Location = new Point(10, 9);
         }
 
         public List<Component> StartComponents
