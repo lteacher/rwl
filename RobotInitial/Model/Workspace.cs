@@ -38,7 +38,8 @@ namespace RobotInitial.Model
 
         #region Fields
 
-
+        private StartBrick startBrick = new StartBrick();
+        private List<Brick> unattached = new List<Brick>();
 
         #endregion // Fields
 
