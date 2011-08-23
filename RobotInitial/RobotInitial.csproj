@@ -61,6 +61,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviours\DragWithAdornment.cs" />
+    <Compile Include="Behaviours\DropToWorkspace.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
