@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="RobotInitial.View.TaskBlockTabView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:vm="clr-namespace:RobotInitial.ViewModel"
+			 xmlns:vw="clr-namespace:RobotInitial.View"
+             xmlns:c="clr-namespace:RobotInitial.Controls"
+			 xmlns:local="clr-namespace:RobotInitial"
+             xmlns:e="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="clr-namespace:RobotInitial.Behaviours"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="300">
+	<UserControl.Resources>
+        <ResourceDictionary Source="..\MainWindowResources.xaml"/>
+    </UserControl.Resources>
+	
+    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
+    	<StackPanel Height="Auto" Width="Auto">
+            <c:TaskBlockItem Margin="0 40 0 0" Action="Move" Style="{StaticResource MoveStyle}">
+                <e:Interaction.Behaviors>
+                    <b:DragWithAdornment></b:DragWithAdornment>
+                </e:Interaction.Behaviors>
+            </c:TaskBlockItem>
+            <c:TaskBlockItem Margin="0 40 0 0" Action="Loop" Style="{StaticResource LoopStyle}">
+                <e:Interaction.Behaviors>
+                    <b:DragWithAdornment></b:DragWithAdornment>
+                </e:Interaction.Behaviors>                
+            </c:TaskBlockItem>
+            <c:TaskBlockItem Margin="0 40 0 0" Action="Switch" Style="{StaticResource SwitchStyle}">
+                <e:Interaction.Behaviors>
+                    <b:DragWithAdornment></b:DragWithAdornment>
+                </e:Interaction.Behaviors>
+            </c:TaskBlockItem>
+            <c:TaskBlockItem Margin="0 40 0 0" Action="Wait" Style="{StaticResource WaitStyle}">
+                <e:Interaction.Behaviors>
+                    <b:DragWithAdornment></b:DragWithAdornment>
+                </e:Interaction.Behaviors>
+            </c:TaskBlockItem>
+        </StackPanel>
+        <!--<ItemsControl ItemsSource="{Binding Path=Bricks}" /> -->
+    </ScrollViewer>
+</UserControl>

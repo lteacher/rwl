@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:vw="clr-namespace:RobotInitial.View"
     xmlns:vm="clr-namespace:RobotInitial.ViewModel"
+    xmlns:c="clr-namespace:RobotInitial.Controls"
     >
     
     <!--
@@ -19,19 +20,14 @@
     </DataTemplate>
     -->
 
-    <DataTemplate DataType="{x:Type vm:BrickTabViewModel}">
-        <vw:BrickTabView />
+    <DataTemplate DataType="{x:Type vm:TaskBlockTabViewModel}">
+        <vw:TaskBlockTabView />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:BrickViewModel}">
         <vw:BrickView />
     </DataTemplate>
     
-    <!-- Bind the BlockView component to its BlockViewModel -->
-    <DataTemplate DataType="{x:Type vm:BlockViewModel}">
-        <vw:BlockView />
-    </DataTemplate>    
-
     <!--
     This is the style block moved from MainWindow.xaml
     -->
@@ -123,21 +119,61 @@
             />
     </DataTemplate>
 	
-	<Style x:Key="MoveStyle" TargetType="vw:BlockView">
-		<!--<Setter Property="Background" Value="Green" />-->
+    <!-- Create the style for the Movement Task Block-->
+	<Style x:Key="MoveStyle" TargetType="c:TaskBlockItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:TaskBlockItem">
+                    <Rectangle Fill="Green"  Height="58" Width="59"
+               		        Stroke="Black"  Margin="0,0,0,0" 
+               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
+                    </Rectangle>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
 	</Style>
-	
-	<Style x:Key="LoopStyle" TargetType="vw:BlockView">
-		<!--<Setter Property="Background" Value="Red" />-->
-	</Style>
-	
-	<Style x:Key="SwitchStyle" TargetType="vw:BlockView">
-		<!--<Setter Property="Background" Value="Yellow" />-->
-	</Style>
-	
-	<Style x:Key="WaitStyle" TargetType="vw:BlockView">
-		<!--<Setter Property="Background" Value="Blue" />-->
-	</Style>
+
+    <!-- Create the style for the Loop Task Block-->
+    <Style x:Key="LoopStyle" TargetType="c:TaskBlockItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:TaskBlockItem">
+                    <Rectangle Fill="Blue"  Height="58" Width="59"
+               		        Stroke="Black"  Margin="0,0,0,0" 
+               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
+                    </Rectangle>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Create the style for the Switch Task Block-->
+    <Style x:Key="SwitchStyle" TargetType="c:TaskBlockItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:TaskBlockItem">
+                    <Rectangle Fill="Yellow"  Height="58" Width="59"
+               		        Stroke="Black"  Margin="0,0,0,0" 
+               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
+                    </Rectangle>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Create the style for the Wait Task Block-->
+    <Style x:Key="WaitStyle" TargetType="c:TaskBlockItem">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="c:TaskBlockItem">
+                    <Rectangle Fill="Red"  Height="58" Width="59"
+               		        Stroke="Black"  Margin="0,0,0,0" 
+               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
+                    </Rectangle>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     
 
     

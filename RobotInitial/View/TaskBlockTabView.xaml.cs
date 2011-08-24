@@ -15,18 +15,13 @@ using System.Windows.Shapes;
 namespace RobotInitial.View
 {
     /// <summary>
-    /// Interaction logic for BrickTabView.xaml
+	/// Interaction logic for TaskBlockTabView.xaml
     /// </summary>
-    public partial class BrickTabView : UserControl
+    public partial class TaskBlockTabView : UserControl
     {
-        public BrickTabView()
+        public TaskBlockTabView()
         {
             InitializeComponent();
-        }
-
-        private void Rectangle_MouseMove(object sender, MouseEventArgs e)
-        {
-
         }
     }
 }

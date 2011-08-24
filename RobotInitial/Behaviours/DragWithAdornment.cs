@@ -8,6 +8,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using RobotInitial.Controls;
 
 namespace RobotInitial.Behaviours
 {
@@ -30,12 +31,12 @@ namespace RobotInitial.Behaviours
 					DataObject data = new DataObject();
 
 					// TEMPORARY BRICK, LOVELY COLOURED BLOCKS
-					if (sender is Rectangle)
+					if (sender is TaskBlockItem)
 					{
 						Rectangle rect = new Rectangle();
 						BrushConverter converter = new BrushConverter();
-						rect.Fill = ((Rectangle)brickButton).Fill;
-						rect.Stroke = ((Rectangle)brickButton).Stroke;
+						rect.Fill = Brushes.Red;
+						rect.Stroke = Brushes.Black;
 						rect.Width = 75;
 						rect.Height = 75;
 						rect.RadiusX = 4.0;

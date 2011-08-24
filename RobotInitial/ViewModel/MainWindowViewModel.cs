@@ -31,7 +31,7 @@ namespace RobotInitial.ViewModel
         #region Collections
         
         ObservableCollection<WorkspaceViewModel> _workspaces;
-        ObservableCollection<BrickTabViewModel> _brickTabs;
+        ObservableCollection<TaskBlockTabViewModel> _brickTabs;
         
         #endregion // Collections
 
@@ -197,13 +197,13 @@ namespace RobotInitial.ViewModel
 
         #region BrickTabs
 
-        public ObservableCollection<BrickTabViewModel> BrickTabs
+        public ObservableCollection<TaskBlockTabViewModel> BrickTabs
         {
             get
             {
                 if (_brickTabs == null)
                 {
-                    _brickTabs = new ObservableCollection<BrickTabViewModel>();
+                    _brickTabs = new ObservableCollection<TaskBlockTabViewModel>();
                     _brickTabs.CollectionChanged += OnBricksTabChanged;
                 }
 
@@ -216,7 +216,7 @@ namespace RobotInitial.ViewModel
         {
             if (e.NewItems != null && e.NewItems.Count != 0)
             {
-                foreach (BrickTabViewModel brickTab in e.NewItems)
+                foreach (TaskBlockTabViewModel brickTab in e.NewItems)
                 {
                     brickTab.RequestClose += this.OnBrickTabRequestClose;
                 }
@@ -225,7 +225,7 @@ namespace RobotInitial.ViewModel
 
             if (e.OldItems != null && e.OldItems.Count != 0)
             {
-                foreach (BrickTabViewModel brickTab in e.OldItems)
+                foreach (TaskBlockTabViewModel brickTab in e.OldItems)
                 {
                     brickTab.RequestClose -= this.OnBrickTabRequestClose;
                 }
@@ -234,7 +234,7 @@ namespace RobotInitial.ViewModel
 
         void OnBrickTabRequestClose(object sender, EventArgs e)
         {
-            BrickTabViewModel brickTab = sender as BrickTabViewModel;
+            TaskBlockTabViewModel brickTab = sender as TaskBlockTabViewModel;
             brickTab.Dispose();
             this.BrickTabs.Remove(brickTab);
         }
@@ -247,7 +247,7 @@ namespace RobotInitial.ViewModel
 
         void Initialise()
         {
-            BrickTabViewModel btmodel = new BrickTabViewModel();
+            TaskBlockTabViewModel btmodel = new TaskBlockTabViewModel();
             this.BrickTabs.Add(btmodel);
         }
 

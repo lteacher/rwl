@@ -6,12 +6,12 @@ using System.Text;
 
 namespace RobotInitial.ViewModel
 {
-    class BrickTabViewModel : ClosableViewModel
+    class TaskBlockTabViewModel : ClosableViewModel
     {
 
         ObservableCollection<BrickViewModel> _bricks;
 
-        public BrickTabViewModel()
+        public TaskBlockTabViewModel()
         {
             base.DisplayName = "C";
             Initialize();
