@@ -33,10 +33,10 @@ namespace RobotInitial.ViewModel
 
         void Initialize()
         {
-            Bricks.Add(new BrickViewModel("#FF00FF33"));
-            Bricks.Add(new BrickViewModel("Red"));
-            Bricks.Add(new BrickViewModel("#FF0061FF"));
-            Bricks.Add(new BrickViewModel("#FFFFEA00"));
+			//Bricks.Add(new BrickViewModel("#FF00FF33"));
+			//Bricks.Add(new BrickViewModel("Red"));
+			//Bricks.Add(new BrickViewModel("#FF0061FF"));
+			//Bricks.Add(new BrickViewModel("#FFFFEA00"));
 
         }
     }

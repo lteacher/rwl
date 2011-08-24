@@ -23,7 +23,7 @@ namespace RobotInitial.ViewModel
 
         public BrickViewModel(string fillColor)
         {
-            _fillColor = fillColor;
+            _fillColor = "Red";
         }
 
     }

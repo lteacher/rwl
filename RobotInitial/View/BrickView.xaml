@@ -15,7 +15,4 @@
             <b:DragWithAdornment/>
         </e:Interaction.Behaviors>
     </Rectangle>
-    <!-- MouseMove="BrickDrag_MouseMove" 
-         MouseLeftButtonDown="BrickDrag_MouseLeftButtonDown" 
-         GiveFeedback="BrickDrag_GiveFeedback"  -->
 </UserControl>
