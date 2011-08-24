@@ -13,7 +13,11 @@
     <DataTemplate DataType="{x:Type vm:WorkspaceViewModel}">
         <vw:WorkspaceView />
     </DataTemplate>
-    
+
+    <DataTemplate DataType="{x:Type vm:MoveBlockViewModel}">
+        <vw:MoveBlockView />
+    </DataTemplate>
+
     <!--
     <DataTemplate DataType="{x:Type vm:PropertiesViewModel}">
         <vw:PropertiesTabView />

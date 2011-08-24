@@ -33,16 +33,24 @@ namespace RobotInitial.Behaviours
 					// TEMPORARY BRICK, LOVELY COLOURED BLOCKS
 					if (sender is TaskBlockItem)
 					{
+						
 						Rectangle rect = new Rectangle();
-						BrushConverter converter = new BrushConverter();
-						rect.Fill = Brushes.Red;
-						rect.Stroke = Brushes.Black;
-						rect.Width = 75;
-						rect.Height = 75;
-						rect.RadiusX = 4.0;
-						rect.RadiusY = 4.0;
 
-						data.SetData("Object", rect);
+						//if (((TaskBlockItem)sender).Action.Equals("Move")) rect.Fill = Brushes.Green;
+						//if (((TaskBlockItem)sender).Action.Equals("Loop")) rect.Fill = Brushes.Blue;
+						//if (((TaskBlockItem)sender).Action.Equals("Switch")) rect.Fill = Brushes.Yellow;
+						//if (((TaskBlockItem)sender).Action.Equals("Wait")) rect.Fill = Brushes.Red;
+						
+						//rect.Stroke = Brushes.Black;
+						//rect.Width = 75;
+						//rect.Height = 75;
+						//rect.RadiusX = 4.0;
+						//rect.RadiusY = 4.0;
+
+						TaskBlockItem tb = new TaskBlockItem();
+						tb.Style = ((TaskBlockItem)sender).Style;
+
+						data.SetData("Object", tb);
 
 
 						// Define the drag scope for the adorner
@@ -67,7 +75,7 @@ namespace RobotInitial.Behaviours
 
 
 						// Create the BrickDragAdorner giving the parent and the child
-						brickAdorner = new BrickDragAdorner(DragScope, (UIElement)rect, 0.5);
+						brickAdorner = new BrickDragAdorner(DragScope, (UIElement)tb, 0.5);
 						adornLayer = AdornerLayer.GetAdornerLayer(DragScope as Visual);
 						adornLayer.Add(brickAdorner);
 

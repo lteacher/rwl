@@ -5,13 +5,13 @@ using System.Windows.Documents;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using RobotInitial.Controls;
 
 namespace RobotInitial 
 {
     class BrickDragAdorner : Adorner
     {
         protected UIElement _child;
-        protected VisualBrush _brush;
         protected UIElement _owner;
         protected double XCenter;
         protected double YCenter;
@@ -28,19 +28,17 @@ namespace RobotInitial
 			VisualBrush _brush = new VisualBrush(adornElement);
 			_brush.Opacity = opacity;
 
-			// As of now, assuming re have a rectangle (This will become a Brick proper)
-			Rectangle r = new Rectangle();
-			r.RadiusX = ((Rectangle)adornElement).RadiusX;
-			r.RadiusY = ((Rectangle)adornElement).RadiusY;
-			r.Width = ((Rectangle)adornElement).Width;
-			r.Height = ((Rectangle)adornElement).Height;
+			// Now im assuming the adornment is a TaskBlock! ooooo getting close!
+			TaskBlockItem tb = new TaskBlockItem();
+			tb.Style = ((TaskBlockItem)adornElement).Style;
+			tb.Opacity = opacity;
 
 			// Set the centre points
             XCenter = 0; // r.Width / 2;
             YCenter = 0; // r.Height / 2;
 
-			r.Fill = _brush;
-			_child = r;
+			//r.Fill = _brush;
+			_child = tb;
             
         }
 

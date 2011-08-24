@@ -77,6 +77,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\MoveBlockViewModel.cs" />
     <Compile Include="ViewModel\TaskBlockTabViewModel.cs" />
     <Compile Include="ViewModel\BrickViewModel.cs" />
     <Compile Include="ViewModel\ClosableViewModel.cs" />
@@ -84,6 +85,9 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\WorkspaceViewModel.cs" />
+    <Compile Include="View\MoveBlockView.xaml.cs">
+      <DependentUpon>MoveBlockView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\TaskBlockTabView.xaml.cs">
       <DependentUpon>TaskBlockTabView.xaml</DependentUpon>
     </Compile>
@@ -117,6 +121,10 @@
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\MoveBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\TaskBlockTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

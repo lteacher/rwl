@@ -21,8 +21,8 @@ namespace RobotInitial.Behaviours
 
 				Panel panel = (Panel)sender;
 
-				// AGAIN WE ASSUME THAT THIS IS A RECTANGLE
-				Rectangle element = (Rectangle)e.Data.GetData("Object");
+				// Get the FrameworkElement that is to be dropped
+				FrameworkElement element = (FrameworkElement)e.Data.GetData("Object");
 
 				if (panel != null && element != null)
 				{
