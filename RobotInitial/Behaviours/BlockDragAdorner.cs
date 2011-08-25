@@ -6,40 +6,39 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using RobotInitial.Controls;
+using System.Windows.Controls;
+using RobotInitial.View;
 
 namespace RobotInitial 
 {
-    class BrickDragAdorner : Adorner
+    class BlockDragAdorner : Adorner
     {
         protected UIElement _child;
         protected UIElement _owner;
         protected double XCenter;
         protected double YCenter;
 
-        public BrickDragAdorner(UIElement owner) : base(owner) { }
+        public BlockDragAdorner(UIElement owner) : base(owner) { }
 
-        public BrickDragAdorner(UIElement owner, UIElement adornElement, double opacity)
+        public BlockDragAdorner(UIElement owner, ControlBlock adornElement, double opacity)
             : base(owner)
         {
             System.Diagnostics.Debug.Assert(owner != null);
             System.Diagnostics.Debug.Assert(adornElement != null); 
+
             _owner = owner;
 
-			VisualBrush _brush = new VisualBrush(adornElement);
-			_brush.Opacity = opacity;
+			// Now ...
+			ControlBlock ctrl = new ControlBlock();
 
-			// Now im assuming the adornment is a TaskBlock! ooooo getting close!
-			TaskBlockItem tb = new TaskBlockItem();
-			tb.Style = ((TaskBlockItem)adornElement).Style;
-			tb.Opacity = opacity;
+			ctrl.Opacity = opacity;
+			ctrl.Style = adornElement.Style;
 
 			// Set the centre points
             XCenter = 0; // r.Width / 2;
             YCenter = 0; // r.Height / 2;
 
-			//r.Fill = _brush;
-			_child = tb;
-            
+			_child = ctrl;    
         }
 
 

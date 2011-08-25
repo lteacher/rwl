@@ -9,15 +9,17 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using RobotInitial.Controls;
+using RobotInitial.View;
 
 namespace RobotInitial.Behaviours
 {
 	class DragWithAdornment : Behavior<UIElement>
 	{
 		public FrameworkElement DragScope { get; set; }
-		private BrickDragAdorner brickAdorner = null;
+		private BlockDragAdorner blockAdorner = null;
 		private AdornerLayer adornLayer;
 		private bool _dragHasLeftScope = false;
+		private ResourceDictionary dict;
 		protected override void OnAttached()
 		{
 
@@ -30,28 +32,37 @@ namespace RobotInitial.Behaviours
 					// Create the data object which will hold a brick in future
 					DataObject data = new DataObject();
 
+					// Setup the resource dictionary, need this to set the style
+					// of a each initialized custom control
+					dict = new ResourceDictionary();
+					dict.Source = new Uri("/MainWindowResources.xaml",
+											UriKind.Relative);
+
 					// TEMPORARY BRICK, LOVELY COLOURED BLOCKS
 					if (sender is TaskBlockItem)
 					{
 						
 						Rectangle rect = new Rectangle();
+						ControlBlock ctrl = null;
 
-						//if (((TaskBlockItem)sender).Action.Equals("Move")) rect.Fill = Brushes.Green;
-						//if (((TaskBlockItem)sender).Action.Equals("Loop")) rect.Fill = Brushes.Blue;
-						//if (((TaskBlockItem)sender).Action.Equals("Switch")) rect.Fill = Brushes.Yellow;
-						//if (((TaskBlockItem)sender).Action.Equals("Wait")) rect.Fill = Brushes.Red;
+						if (((TaskBlockItem)sender).Action.Equals("Move")) {
+							ctrl = new MoveControlBlock();
+							ctrl.Style = dict["MoveControlBlockStyle"] as Style;
+						}
+						if (((TaskBlockItem)sender).Action.Equals("Loop")) { 
+							ctrl = new LoopControlBlock();
+							ctrl.Style = dict["LoopControlBlockStyle"] as Style;
+						}
+						if (((TaskBlockItem)sender).Action.Equals("Switch")) {
+							ctrl = new LoopControlBlock();
+							ctrl.Style = dict["SwitchControlBlockStyle"] as Style;
+						}
+						if (((TaskBlockItem)sender).Action.Equals("Wait")) {
+							ctrl = new LoopControlBlock();
+							ctrl.Style = dict["WaitControlBlockStyle"] as Style;
+						}
 						
-						//rect.Stroke = Brushes.Black;
-						//rect.Width = 75;
-						//rect.Height = 75;
-						//rect.RadiusX = 4.0;
-						//rect.RadiusY = 4.0;
-
-						TaskBlockItem tb = new TaskBlockItem();
-						tb.Style = ((TaskBlockItem)sender).Style;
-
-						data.SetData("Object", tb);
-
+						data.SetData("Object", ctrl);
 
 						// Define the drag scope for the adorner
 						DragScope = Application.Current.MainWindow.Content as FrameworkElement;
@@ -73,19 +84,18 @@ namespace RobotInitial.Behaviours
 						QueryContinueDragEventHandler queryhandler = new QueryContinueDragEventHandler(DragScope_QueryContinueDrag);
 						DragScope.QueryContinueDrag += queryhandler;
 
-
 						// Create the BrickDragAdorner giving the parent and the child
-						brickAdorner = new BrickDragAdorner(DragScope, (UIElement)tb, 0.5);
+						blockAdorner = new BlockDragAdorner(DragScope, ctrl, 0.5);
 						adornLayer = AdornerLayer.GetAdornerLayer(DragScope as Visual);
-						adornLayer.Add(brickAdorner);
+						adornLayer.Add(blockAdorner);
 
 						// Do the drag drop
 						DragDrop.DoDragDrop(brickButton, data, DragDropEffects.Move | DragDropEffects.Copy);
 
 						// Remove the Adorner from the layer
 						DragScope.AllowDrop = previousDrop;
-						AdornerLayer.GetAdornerLayer(DragScope).Remove(brickAdorner);
-						brickAdorner = null;
+						AdornerLayer.GetAdornerLayer(DragScope).Remove(blockAdorner);
+						blockAdorner = null;
 
 						// Remove the handlers for the drag scope
 						DragScope.DragLeave -= dragleavehandler;
@@ -99,10 +109,10 @@ namespace RobotInitial.Behaviours
 
 		private void DragScope_DragOver(object sender, DragEventArgs args)
 		{
-			if (brickAdorner != null)
+			if (blockAdorner != null)
 			{
-				brickAdorner.LeftOffset = args.GetPosition(DragScope).X /* - _startPoint.X */ ;
-				brickAdorner.TopOffset = args.GetPosition(DragScope).Y /* - _startPoint.Y */ ;
+				blockAdorner.LeftOffset = args.GetPosition(DragScope).X /* - _startPoint.X */ ;
+				blockAdorner.TopOffset = args.GetPosition(DragScope).Y /* - _startPoint.Y */ ;
 			}
 		}
 

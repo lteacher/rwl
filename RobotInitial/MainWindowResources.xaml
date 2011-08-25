@@ -4,6 +4,9 @@
     xmlns:vw="clr-namespace:RobotInitial.View"
     xmlns:vm="clr-namespace:RobotInitial.ViewModel"
     xmlns:c="clr-namespace:RobotInitial.Controls"
+    xmlns:e="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:b="clr-namespace:RobotInitial.Behaviours"
     >
     
     <!--
@@ -14,10 +17,6 @@
         <vw:WorkspaceView />
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:MoveBlockViewModel}">
-        <vw:MoveBlockView />
-    </DataTemplate>
-
     <!--
     <DataTemplate DataType="{x:Type vm:PropertiesViewModel}">
         <vw:PropertiesTabView />
@@ -26,10 +25,6 @@
 
     <DataTemplate DataType="{x:Type vm:TaskBlockTabViewModel}">
         <vw:TaskBlockTabView />
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:BrickViewModel}">
-        <vw:BrickView />
     </DataTemplate>
     
     <!--
@@ -142,7 +137,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="c:TaskBlockItem">
-                    <Rectangle Fill="Blue"  Height="58" Width="59"
+                    <Rectangle Fill="LightSkyBlue"  Height="58" Width="59"
                		        Stroke="Black"  Margin="0,0,0,0" 
                		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
                     </Rectangle>
@@ -178,7 +173,100 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
 
-    
+    <!-- This is used in the Adorner to set the style on drag -->
+    <Style x:Key="MoveControlBlockStyle" TargetType="c:ControlBlock">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:ControlBlock}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Rectangle Fill="Green"  Height="75" Width="75"
+               	                       Stroke="Black"  Margin="0,0,0,0" 
+               	                       RadiusY="4.0" RadiusX="4.0" HorizontalAlignment="Center">
+                            </Rectangle>
+                            <TextBlock TextWrapping="Wrap" Text="MOVE" FontSize="15" 
+                                       FontFamily="Comic Sans MS" HorizontalAlignment="Center" 
+                                       VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- This is used in the Adorner to set the style on drag -->
+    <Style x:Key="LoopControlBlockStyle" TargetType="c:ControlBlock">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:ControlBlock}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Rectangle Fill="LightSkyBlue"  Height="75" Width="25"
+               	                       Stroke="Black"  Margin="-50,0,0,0" 
+               	                       RadiusY="4.0" RadiusX="4.0" HorizontalAlignment="Center" />
+                            <Rectangle Fill="LightSkyBlue"  Height="75" Width="25"
+               	                       Stroke="Black"  Margin="50,0,0,0" 
+               	                       RadiusY="4.0" RadiusX="4.0" HorizontalAlignment="Center" />
+
+                            <TextBlock TextWrapping="Wrap" Text="LOOP" FontSize="15" FontFamily="Comic Sans MS" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- This is used in the Adorner to set the style on drag -->
+    <Style x:Key="SwitchControlBlockStyle" TargetType="c:ControlBlock">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:ControlBlock}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Rectangle Fill="Yellow"  Height="175" Width="25"
+               	                       Stroke="Black"  Margin="-50,0,0,0" 
+               	                       RadiusY="4.0" RadiusX="4.0" HorizontalAlignment="Center"/>
+                            <Rectangle Fill="Yellow"  Height="175" Width="25"
+               	                       Stroke="Black"  Margin="50,0,0,0" 
+               	                       RadiusY="4.0" RadiusX="4.0" HorizontalAlignment="Center"/>
+                            <TextBlock TextWrapping="Wrap" Text="SWITCH" FontSize="15" FontFamily="Comic Sans MS" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- This is used in the Adorner to set the style on drag -->
+    <Style x:Key="WaitControlBlockStyle" TargetType="c:ControlBlock">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type c:ControlBlock}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid>
+                            <Rectangle Fill="Red"  Height="75" Width="75"
+               	                       Stroke="Black"  Margin="0,0,0,0" 
+               	                       RadiusY="4.0" RadiusX="4.0" HorizontalAlignment="Center">
+                            </Rectangle>
+                            <TextBlock TextWrapping="Wrap" Text="WAIT" FontSize="15" FontFamily="Comic Sans MS" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
 </ResourceDictionary>
