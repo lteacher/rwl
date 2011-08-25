@@ -30,7 +30,8 @@ namespace RobotInitial
         /// <param name="e"></param>
         protected override void  OnStartup(StartupEventArgs e)
         {
- 	        base.OnStartup(e);
+            RobotInitial.Model.Test.test();
+ 	       /* base.OnStartup(e);
 
             MainWindowView window = new MainWindowView();
             var viewModel = new MainWindowViewModel();
@@ -44,7 +45,7 @@ namespace RobotInitial
             viewModel.RequestClose += handler;
 
             window.DataContext = viewModel;
-            window.Show();
+            window.Show();*/
         }
 	}
 }

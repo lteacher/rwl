@@ -10,5 +10,6 @@ namespace RobotInitial.Model {
         Brick Next { get; set; }
         ParameterList Parameters { get; set; }
         void perform(Protocol protocol);
+        Brick PerformNext { get; }
     }
 }

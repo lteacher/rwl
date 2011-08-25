@@ -8,33 +8,33 @@ namespace RobotInitial.Model {
     class MoveBrick : AbstractBrick, MoveParameters {
         
         public MoveDirection Direction {
-            set { parameters[MoveParameter.DIRECTION.ToString()] = value; }
-            get { return (MoveDirection)parameters[MoveParameter.DIRECTION.ToString()]; }
+            set { Parameters[MoveParameter.DIRECTION.ToString()] = value; }
+            get { return (MoveDirection)Parameters[MoveParameter.DIRECTION.ToString()]; }
         }
 
         public int Duration {
-            set { parameters[MoveParameter.DURATION.ToString()] = value; }
-            get { return (int)parameters[MoveParameter.DIRECTION.ToString()]; }
+            set { Parameters[MoveParameter.DURATION.ToString()] = value; }
+            get { return (int)Parameters[MoveParameter.DURATION.ToString()]; }
         }
 
         public MoveDurationUnit DurationUnit {
-            set { parameters[MoveParameter.DURATIONUNIT.ToString()] = value; }
-            get { return (MoveDurationUnit)parameters[MoveParameter.DURATIONUNIT.ToString()]; }
+            set { Parameters[MoveParameter.DURATIONUNIT.ToString()] = value; }
+            get { return (MoveDurationUnit)Parameters[MoveParameter.DURATIONUNIT.ToString()]; }
         }
 
         public int Power {
-            set { parameters[MoveParameter.POWER.ToString()] = value; }
-            get { return (int)parameters[MoveParameter.POWER.ToString()]; }
+            set { Parameters[MoveParameter.POWER.ToString()] = value; }
+            get { return (int)Parameters[MoveParameter.POWER.ToString()]; }
         }
 
         public int Steering {
-            set { parameters[MoveParameter.STEERING.ToString()] = value; }
-            get { return (int)parameters[MoveParameter.STEERING.ToString()]; }
+            set { Parameters[MoveParameter.STEERING.ToString()] = value; }
+            get { return (int)Parameters[MoveParameter.STEERING.ToString()]; }
         }
 
         public bool BrakeAfterMove {
-            set { parameters[MoveParameter.BRAKEAFTERMOVE.ToString()] = value; }
-            get { return (bool)parameters[MoveParameter.BRAKEAFTERMOVE.ToString()]; }
+            set { Parameters[MoveParameter.BRAKEAFTERMOVE.ToString()] = value; }
+            get { return (bool)Parameters[MoveParameter.BRAKEAFTERMOVE.ToString()]; }
         }
 
         public MoveBrick() {
@@ -43,13 +43,11 @@ namespace RobotInitial.Model {
             DurationUnit = MoveDurationUnit.ROTATIONS;
             Power = 50;
             Steering = 0;
+            BrakeAfterMove = true;
         }
 
         public override void perform(Protocol protocol) {
             protocol.move(this);
-            //if (Next != null) {
-            //    Next.perform(protocol);
-            //}
         }
     }
 }

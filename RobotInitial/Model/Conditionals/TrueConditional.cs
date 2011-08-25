@@ -8,5 +8,11 @@ namespace RobotInitial.Model {
         public bool evaluate(Protocol protocol) {
             return true;
         }
+
+        public void initilize() {
+        }
+
+        public void update() {
+        }
     }
 }

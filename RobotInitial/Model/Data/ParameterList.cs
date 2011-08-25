@@ -8,13 +8,7 @@ namespace RobotInitial.Model {
         private Dictionary<String, Object> parameters = new Dictionary<String, Object>();
 
         public Object this[String key] {
-            get {
-                if (parameters.ContainsKey(key)) {
-                    return parameters.ContainsKey(key);
-                } else {
-                    return null;
-                }
-            }
+            get { return parameters.ContainsKey(key) ? parameters[key] : null; }
 
             set {
                 if (parameters.ContainsKey(key)) {
@@ -23,6 +17,16 @@ namespace RobotInitial.Model {
                     parameters.Add(key, value);
                 }
             }
+        }
+
+        public override string ToString() {
+            StringBuilder builder = new StringBuilder("{ ");
+
+            foreach (Object o in parameters) {
+                builder.Append(o.ToString()).Append(", ");
+            }
+
+            return builder.Append("}").ToString();
         }
     }
 }

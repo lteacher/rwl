@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace RobotInitial.Model {
     class WaitBrick : AbstractBrick {
 
         public Conditional<bool> WaitFor {
-            set { parameters["WaitFor"] = value; }
-            get { return (Conditional<bool>)parameters["WaitFor"]; }
+            set { Parameters["WaitFor"] = value; }
+            get { return (Conditional<bool>)Parameters["WaitFor"]; }
         }
 
         public WaitBrick() {
@@ -16,11 +17,9 @@ namespace RobotInitial.Model {
         }
 
         public override void perform(Protocol protocol) {
-            while (WaitFor.evaluate(protocol)) { } //full busy wait probaly isn't ideal...
-
-            //if (Next != null) {
-            //    Next.perform(protocol);
-            //}
+            while (WaitFor.evaluate(protocol)) {
+                Thread.Sleep(50);   //value may have to be adjusted
+            }
         }
     }
 }

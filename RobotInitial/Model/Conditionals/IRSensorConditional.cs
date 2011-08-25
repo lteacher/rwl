@@ -10,27 +10,23 @@ namespace RobotInitial.Model {
             LESSTHAN
         }
 
-        private Operator op = Operator.GREATERTHAN;
-        public Operator EqualityOperator {
-            set { op = value; }
-            get { return op; }
+        public Operator EqualityOperator { get; set; }
+        public int Distance { get; set; }
+
+        public void initilize() {
         }
 
-        private int distance = 50;
-        public int Distance {
-            get { return distance; }
-            set { distance = Math.Max(0, value); }
+        public void update() {
         }
-
 
         public bool evaluate(Protocol protocol) {
             IRSensorData data = protocol.readIRSensor();
-            switch (op) {
+            switch (EqualityOperator) {
                 case Operator.GREATERTHAN:
-                    return data.Distance >= distance;
+                    return data.Distance >= Distance;
                 case Operator.LESSTHAN:
                 default:
-                    return data.Distance <= distance;
+                    return data.Distance <= Distance;
             }
         }
     }

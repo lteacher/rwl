@@ -6,25 +6,19 @@ using System.Diagnostics;
 
 namespace RobotInitial.Model {
     class TimeConditional : Conditional<bool> {
-        Stopwatch timer = new Stopwatch();
+        private Stopwatch timer = new Stopwatch();
+        public int Duration { get; set; }
 
-        private int duration = 1000;
-        public int Duration {
-            set { duration = Math.Max(0, value); }
-            get { return duration; }
+        public void initilize() {
+            timer.Restart();
         }
 
-        public void startTimer() {
-            timer.Start();
+        public void update() {
         }
 
         public bool evaluate(Protocol protocol) {
-            if (!timer.IsRunning) {
-                timer.Start();
-            }
-
-            if (timer.ElapsedMilliseconds > duration) {
-                timer.Reset();
+            if (timer.ElapsedMilliseconds > Duration) {
+                timer.Stop();
                 return true;
             } else {
                 return false;
