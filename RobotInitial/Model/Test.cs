@@ -25,12 +25,13 @@ namespace RobotInitial.Model {
 
     public class Test {
         public static void test() {
-            StartBrick start = new StartBrick();
+            StartBlock start = new StartBlock();
 
-            Brick brick = start;
-            for (int i = 0; i < 10; i++) {
-                brick.Next = new MoveBrick();
-                brick = brick.Next;
+            Block block = start;
+            for (int i = 0; i < 5; i++) {
+                block.Next = new MoveBlock();
+                block = block.Next;
+                if (block is MoveBlock) (block as MoveBlock).Duration = i;
             }
 
             Executor executor = new Executor(start, new TestProtocol());

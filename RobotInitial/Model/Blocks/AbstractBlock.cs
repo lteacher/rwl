@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Diagnostics.Contracts;
 
 namespace RobotInitial.Model {
-    abstract class AbstractBrick : Brick {
+    abstract class AbstractBlock : Block {
         public ParameterList Parameters { get; set; }
 
         public Point Location {
@@ -14,17 +14,17 @@ namespace RobotInitial.Model {
             set { Parameters["Location"] = value; }
         }
 
-        public Brick Next {
-            get { return Parameters["Next"] as Brick; }
+        public Block Next {
+            get { return Parameters["Next"] as Block; }
             set { Parameters["Next"] = value; }
         }
 
-        public AbstractBrick() {
+        public AbstractBlock() {
             Parameters = new ParameterList();
         }
 
         public abstract void perform(Protocol protocol);
-        public Brick PerformNext { 
+        public Block PerformNext { 
             get { return Next; }
         }
     }

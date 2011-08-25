@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
-    interface CompositeBrick : Brick {
+    class LoopBlock /*: AbstractCompositeBlock*/ {
+        //public override void perform(Protocol protocol) {
+        //}
     }
 }

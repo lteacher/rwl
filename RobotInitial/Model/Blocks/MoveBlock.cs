@@ -5,7 +5,7 @@ using System.Text;
 
 namespace RobotInitial.Model {
 
-    class MoveBrick : AbstractBrick, MoveParameters {
+    class MoveBlock : AbstractBlock, MoveParameters {
         
         public MoveDirection Direction {
             set { Parameters[MoveParameter.DIRECTION.ToString()] = value; }
@@ -37,7 +37,7 @@ namespace RobotInitial.Model {
             get { return (bool)Parameters[MoveParameter.BRAKEAFTERMOVE.ToString()]; }
         }
 
-        public MoveBrick() {
+        public MoveBlock() {
             Direction = MoveDirection.FORWARD;
             Duration = 1;
             DurationUnit = MoveDurationUnit.ROTATIONS;

@@ -5,16 +5,16 @@ using System.Text;
 
 namespace RobotInitial.Model {
     class Executor {
-        public StartBrick Start { get; private set; }
+        public StartBlock Start { get; private set; }
         public Protocol Protocol { get; private set; }
 
-        public Executor(StartBrick start, Protocol protocol) {
+        public Executor(StartBlock start, Protocol protocol) {
             this.Start = start;
             this.Protocol = protocol;
         }
 
         public void execute() {
-            Brick cur = Start;
+            Block cur = Start;
             while (cur != null) {
                 cur.perform(Protocol);
                 cur = cur.PerformNext;

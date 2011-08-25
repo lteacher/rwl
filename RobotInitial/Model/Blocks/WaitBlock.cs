@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading;
 
 namespace RobotInitial.Model {
-    class WaitBrick : AbstractBrick {
+    class WaitBlock : AbstractBlock {
 
         public Conditional<bool> WaitFor {
             set { Parameters["WaitFor"] = value; }
             get { return (Conditional<bool>)Parameters["WaitFor"]; }
         }
 
-        public WaitBrick() {
+        public WaitBlock() {
             WaitFor = new TimeConditional();
         }
 

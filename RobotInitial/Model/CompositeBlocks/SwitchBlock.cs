@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
-    abstract class AbstractCompositeBrick : AbstractBrick, CompositeBrick {
-        //new public Brick PerformNext;
+    class SwitchBlock /*: AbstractCompositeBlock*/ {
+        //public override void perform(Protocol protocol) {
+        //}
     }
 }
