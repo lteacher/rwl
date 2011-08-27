@@ -62,16 +62,12 @@
     </ApplicationDefinition>
     <Compile Include="Behaviours\DragWithAdornment.cs" />
     <Compile Include="Behaviours\DropToWorkspace.cs" />
+    <Compile Include="Behaviours\ExpandingDrop.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
     <Compile Include="Components.cs" />
-    <Compile Include="Controls\ControlBlock.cs" />
-    <Compile Include="Controls\LoopControlBlock.cs" />
-    <Compile Include="Controls\MoveControlBlock.cs" />
-    <Compile Include="Controls\SwitchControlBlock.cs" />
     <Compile Include="Controls\TaskBlockItem.cs" />
-    <Compile Include="Controls\WaitControlBlock.cs" />
     <Compile Include="EventSystem.cs" />
     <Compile Include="Command\ExecutionStrategy.cs" />
     <Compile Include="MainWindow_methods.cs" />
@@ -82,14 +78,36 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\LoopControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\MoveControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\SwitchControlBlockViewModel.cs" />
     <Compile Include="ViewModel\TaskBlockTabViewModel.cs" />
     <Compile Include="ViewModel\ClosableViewModel.cs" />
     <Compile Include="ViewModel\CommandViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
+    <Compile Include="ViewModel\WaitControlBlockViewModel.cs" />
     <Compile Include="ViewModel\WorkspaceViewModel.cs" />
+    <Compile Include="View\ControlBlockTest.xaml.cs">
+      <DependentUpon>ControlBlockTest.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ControlBlockView.cs" />
+    <Compile Include="View\LoopControlBlockView.xaml.cs">
+      <DependentUpon>LoopControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\MoveControlBlockView.xaml.cs">
+      <DependentUpon>MoveControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SwitchControlBlockView.xaml.cs">
+      <DependentUpon>SwitchControlBlockView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\TaskBlockTabView.xaml.cs">
       <DependentUpon>TaskBlockTabView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\TestControl.cs" />
+    <Compile Include="View\WaitControlBlockView.xaml.cs">
+      <DependentUpon>WaitControlBlockView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WorkspaceView.xaml.cs">
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
@@ -99,6 +117,14 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ControlBlockTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoopControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainWindowView.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -114,6 +140,14 @@
       <DependentUpon>MainWindowView.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\MoveControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SwitchControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\TaskBlockTabView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -123,6 +157,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MainWindowResources.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WaitControlBlockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -8,6 +8,7 @@ using System.Windows.Shapes;
 using RobotInitial.Controls;
 using System.Windows.Controls;
 using RobotInitial.View;
+using RobotInitial.ViewModel;
 
 namespace RobotInitial 
 {
@@ -20,7 +21,7 @@ namespace RobotInitial
 
         public BlockDragAdorner(UIElement owner) : base(owner) { }
 
-        public BlockDragAdorner(UIElement owner, ControlBlock adornElement, double opacity)
+        public BlockDragAdorner(UIElement owner, FrameworkElement adornElement, double opacity)
             : base(owner)
         {
             System.Diagnostics.Debug.Assert(owner != null);
@@ -28,17 +29,20 @@ namespace RobotInitial
 
             _owner = owner;
 
-			// Now ...
-			ControlBlock ctrl = new ControlBlock();
+			ControlBlockViewModel viewModel = (ControlBlockViewModel)adornElement.DataContext;
 
-			ctrl.Opacity = opacity;
-			ctrl.Style = adornElement.Style;
+			if(viewModel.Type == "Move") _child = new MoveControlBlockView();
+			if(viewModel.Type == "Loop") _child = new LoopControlBlockView();
+			if(viewModel.Type == "Wait") _child = new WaitControlBlockView();
+			if(viewModel.Type == "Switch") _child = new SwitchControlBlockView();
+
+			_child.Opacity = opacity;
 
 			// Set the centre points
             XCenter = 0; // r.Width / 2;
             YCenter = 0; // r.Height / 2;
 
-			_child = ctrl;    
+			//_child = ctrl;    
         }
 
 

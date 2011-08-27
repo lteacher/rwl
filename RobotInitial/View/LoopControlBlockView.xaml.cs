@@ -12,24 +12,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RobotInitial.Controls
+namespace RobotInitial.View
 {
 	/// <summary>
-	///
-	///     <MyNamespace:MoveBlock/>
-	///
+	/// Interaction logic for LoopControlBlockView.xaml
 	/// </summary>
-	public class MoveControlBlock : ControlBlock
-	{
-		static MoveControlBlock()
-		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(MoveControlBlock), new FrameworkPropertyMetadata(typeof(MoveControlBlock)));
-		}
+	public partial class LoopControlBlockView : UserControl
 
-		protected override void OnInitialized(EventArgs e)
+	{
+		public LoopControlBlockView()
 		{
-			base.OnInitialized(e);
-			base.Action = "Move";
+			InitializeComponent();
 		}
 	}
 }

@@ -12,24 +12,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace RobotInitial.Controls
+namespace RobotInitial.View
 {
 	/// <summary>
-	///
-	///     <MyNamespace:WaitControlBlock/>
-	///
+	/// Interaction logic for SwitchControlBlockView.xaml
 	/// </summary>
-	public class WaitControlBlock : ControlBlock
+	public partial class SwitchControlBlockView : UserControl
 	{
-		static WaitControlBlock()
+		public SwitchControlBlockView()
 		{
-			DefaultStyleKeyProperty.OverrideMetadata(typeof(WaitControlBlock), new FrameworkPropertyMetadata(typeof(WaitControlBlock)));
-		}
-
-		protected override void OnInitialized(EventArgs e)
-		{
-			base.OnInitialized(e);
-			base.Action = "Wait";
+			InitializeComponent();
 		}
 	}
 }

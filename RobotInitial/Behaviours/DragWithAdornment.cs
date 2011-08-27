@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using RobotInitial.Controls;
 using RobotInitial.View;
+using System.Windows.Controls;
 
 namespace RobotInitial.Behaviours
 {
@@ -43,26 +44,28 @@ namespace RobotInitial.Behaviours
 					{
 						
 						Rectangle rect = new Rectangle();
-						ControlBlock ctrl = null;
+						//ControlBlock ctrl = null;
+						FrameworkElement ctrl = null;
+						//ControlBlockViewModel ctrlVM
 
-						if (((TaskBlockItem)sender).Action.Equals("Move")) {
-							ctrl = new MoveControlBlock();
-							ctrl.Style = dict["MoveControlBlockStyle"] as Style;
+						if (((TaskBlockItem)sender).Action.Equals("Move"))
+						{
+							ctrl = new MoveControlBlockView();
 						}
 						if (((TaskBlockItem)sender).Action.Equals("Loop")) { 
-							ctrl = new LoopControlBlock();
-							ctrl.Style = dict["LoopControlBlockStyle"] as Style;
+						    ctrl = new LoopControlBlockView();
 						}
-						if (((TaskBlockItem)sender).Action.Equals("Switch")) {
-							ctrl = new LoopControlBlock();
-							ctrl.Style = dict["SwitchControlBlockStyle"] as Style;
+						if (((TaskBlockItem)sender).Action.Equals("Switch"))
+						{
+							ctrl = new SwitchControlBlockView();
 						}
-						if (((TaskBlockItem)sender).Action.Equals("Wait")) {
-							ctrl = new LoopControlBlock();
-							ctrl.Style = dict["WaitControlBlockStyle"] as Style;
+						if (((TaskBlockItem)sender).Action.Equals("Wait"))
+						{
+							ctrl = new WaitControlBlockView();
 						}
 						
 						data.SetData("Object", ctrl);
+						
 
 						// Define the drag scope for the adorner
 						DragScope = Application.Current.MainWindow.Content as FrameworkElement;
