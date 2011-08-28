@@ -35,6 +35,8 @@ namespace RobotInitial.Behaviours
 					element.SetValue(Canvas.TopProperty, y);// - (element.Height / 2));
 					element.SetValue(Canvas.ZIndexProperty, 100);
 
+					Console.WriteLine("=>>>>>  At this point the Left is: {0}",Canvas.GetLeft(element));
+
 					// set the value to return to the DoDragDrop call
 					e.Effects = DragDropEffects.Copy;
 				}

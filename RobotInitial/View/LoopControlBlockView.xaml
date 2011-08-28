@@ -7,12 +7,12 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:b="clr-namespace:RobotInitial.Behaviours"
              mc:Ignorable="d" 
-             d:DesignWidth="{Binding NotBound}" d:DesignHeight="{Binding NotBound}">
+             d:DesignWidth="{Binding NotBound}" d:DesignHeight="{Binding NotBound}" >
     <UserControl.DataContext>
         <vm:LoopControlBlockViewModel/>
     </UserControl.DataContext>
 
-    <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto" AllowDrop="True">
+    <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto" AllowDrop="True" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Rectangle Fill="LightSkyBlue" Stroke="Black" Opacity="0.16" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5" />
         <Rectangle Fill="LightSkyBlue" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Left" Margin="0 25 50 25" RadiusY="4.0" RadiusX="4.0"/>
             <ItemsControl ItemsSource="{Binding Children}" Margin="{Binding StackMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">

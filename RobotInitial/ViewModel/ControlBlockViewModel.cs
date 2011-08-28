@@ -18,6 +18,19 @@ namespace RobotInitial.ViewModel
 
 		private ObservableCollection<UIElement> _children = new ObservableCollection<UIElement>();
 		public String Type { get; set; }
+		private double _topOffset = 0;
+		private Thickness _offsetMargin = new Thickness(0, 0, 0, 0);
+		public Thickness OffsetMargin
+		{
+			get
+			{
+				return _offsetMargin;
+			}
+			set
+			{
+				_offsetMargin = value;
+			}
+		}
 
 		public ObservableCollection<UIElement> Children
 		{
@@ -37,6 +50,10 @@ namespace RobotInitial.ViewModel
 			_children.Add(element);
 		}
 
-
+		public void SetOffsetMargin(FrameworkElement element) {
+			_topOffset -= 200;
+			Console.WriteLine("=>>>>>>>>> SET THE OFFSET");
+			OffsetMargin = new Thickness(0,_topOffset,0,0);
+		}
 	}
 }
