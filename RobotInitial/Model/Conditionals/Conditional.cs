@@ -8,5 +8,7 @@ namespace RobotInitial.Model {
         T evaluate(Protocol protocol);
         void initilize();
         void update();
+        //void uninitilize();
+        //bool isInitilized();
     }
 }

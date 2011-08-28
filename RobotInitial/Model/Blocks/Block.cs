@@ -7,9 +7,8 @@ using System.Drawing;
 namespace RobotInitial.Model {
     interface Block {
         Point Location { get; set; }
-        Block Next { get; set; }
-        ParameterList Parameters { get; set; }
-        void perform(Protocol protocol);
-        Block PerformNext { get; }
+        Block Next { get; set; }            //link to the next block
+        void perform(Protocol protocol);    //executes the block, updates NextToPerform
+        Block NextToPerform { get; }        //The block that should be executed after this has finished
     }
 }

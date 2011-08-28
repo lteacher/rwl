@@ -5,10 +5,12 @@ using System.Text;
 using System.Diagnostics;
 
 namespace RobotInitial.Model {
-    public class RandomIRSensor : IRSensorData {
-        private int dist = new Random().Next(100);
-        public int Distance {
-            get { return dist; }
+    public class TestIRSensor : IRSensorData {
+        private static int dist = 100;
+        public int getDistance(int port) {
+            dist -= 10;
+            Debug.WriteLine(dist);
+            return dist;
         }
     }
 
@@ -18,24 +20,46 @@ namespace RobotInitial.Model {
                 + parameters.Power + " " + parameters.Steering + " " + parameters.BrakeAfterMove);
         }
         public IRSensorData readIRSensor() {
-            return new RandomIRSensor();
+            IRSensorData data = new TestIRSensor();
+            return data;
         }
     }
 
 
+    //just trying stuff out
     public class Test {
         public static void test() {
             StartBlock start = new StartBlock();
 
-            Block block = start;
-            for (int i = 0; i < 5; i++) {
-                block.Next = new MoveBlock();
-                block = block.Next;
-                if (block is MoveBlock) (block as MoveBlock).Duration = i;
-            }
+            LoopBlock loop = new LoopBlock();
+            CountConditional count = new CountConditional();
+            count.Limit = 10;
+            loop.Condition = count;
+
+            SwitchBlock<bool> switchb = new SwitchBlock<bool>();
+            switchb.Condition = new RBGConditional();
+
+            MoveBlock truepath = new MoveBlock();
+            truepath.Power = 1337;
+            truepath.BrakeAfterMove = true;
+
+            MoveBlock falsepath = new MoveBlock();
+            falsepath.BrakeAfterMove = false;
+            falsepath.Next = new MoveBlock();
+
+            WaitBlock wait = new WaitBlock();
+            wait.WaitUntil = new TimeConditional();
+
+            loop.LoopPath = switchb;
+            switchb.mapPath(true, truepath);
+            switchb.mapPath(false, falsepath);
+            loop.Next = wait;
+            wait.Next = new MoveBlock();
+            start.Next = loop;
 
             Executor executor = new Executor(start, new TestProtocol());
             executor.execute();
+            Debug.WriteLine("Done");
         }
     }
 }

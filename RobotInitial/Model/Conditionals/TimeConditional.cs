@@ -9,6 +9,10 @@ namespace RobotInitial.Model {
         private Stopwatch timer = new Stopwatch();
         public int Duration { get; set; }
 
+        public TimeConditional() {
+            Duration = 1000;
+        }
+
         public void initilize() {
             timer.Restart();
         }
@@ -17,11 +21,12 @@ namespace RobotInitial.Model {
         }
 
         public bool evaluate(Protocol protocol) {
-            if (timer.ElapsedMilliseconds > Duration) {
+            //will evaulate true when loop is to terminate
+            if (timer.ElapsedMilliseconds < Duration) {
+                return false;
+            } else {
                 timer.Stop();
                 return true;
-            } else {
-                return false;
             }
         }
     }

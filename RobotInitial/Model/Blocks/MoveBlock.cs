@@ -6,36 +6,13 @@ using System.Text;
 namespace RobotInitial.Model {
 
     class MoveBlock : AbstractBlock, MoveParameters {
-        
-        public MoveDirection Direction {
-            set { Parameters[MoveParameter.DIRECTION.ToString()] = value; }
-            get { return (MoveDirection)Parameters[MoveParameter.DIRECTION.ToString()]; }
-        }
 
-        public int Duration {
-            set { Parameters[MoveParameter.DURATION.ToString()] = value; }
-            get { return (int)Parameters[MoveParameter.DURATION.ToString()]; }
-        }
-
-        public MoveDurationUnit DurationUnit {
-            set { Parameters[MoveParameter.DURATIONUNIT.ToString()] = value; }
-            get { return (MoveDurationUnit)Parameters[MoveParameter.DURATIONUNIT.ToString()]; }
-        }
-
-        public int Power {
-            set { Parameters[MoveParameter.POWER.ToString()] = value; }
-            get { return (int)Parameters[MoveParameter.POWER.ToString()]; }
-        }
-
-        public int Steering {
-            set { Parameters[MoveParameter.STEERING.ToString()] = value; }
-            get { return (int)Parameters[MoveParameter.STEERING.ToString()]; }
-        }
-
-        public bool BrakeAfterMove {
-            set { Parameters[MoveParameter.BRAKEAFTERMOVE.ToString()] = value; }
-            get { return (bool)Parameters[MoveParameter.BRAKEAFTERMOVE.ToString()]; }
-        }
+        public MoveDirection Direction { get; set; }
+        public int Duration { get; set; }
+        public int Power { get; set; }
+        public int Steering { get; set; }
+        public bool BrakeAfterMove { get; set; }
+        public MoveDurationUnit DurationUnit { get; set; }
 
         public MoveBlock() {
             Direction = MoveDirection.FORWARD;

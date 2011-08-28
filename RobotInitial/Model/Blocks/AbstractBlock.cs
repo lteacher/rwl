@@ -3,28 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Drawing;
-using System.Diagnostics.Contracts;
 
 namespace RobotInitial.Model {
     abstract class AbstractBlock : Block {
-        public ParameterList Parameters { get; set; }
 
-        public Point Location {
-            get { return (Point)Parameters["Location"]; }
-            set { Parameters["Location"] = value; }
-        }
-
-        public Block Next {
-            get { return Parameters["Next"] as Block; }
-            set { Parameters["Next"] = value; }
-        }
-
-        public AbstractBlock() {
-            Parameters = new ParameterList();
-        }
+        public Point Location { get; set; }
+        public Block Next { get; set; }
 
         public abstract void perform(Protocol protocol);
-        public Block PerformNext { 
+
+        public virtual Block NextToPerform {
             get { return Next; }
         }
     }

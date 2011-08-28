@@ -7,17 +7,15 @@ using System.Threading;
 namespace RobotInitial.Model {
     class WaitBlock : AbstractBlock {
 
-        public Conditional<bool> WaitFor {
-            set { Parameters["WaitFor"] = value; }
-            get { return (Conditional<bool>)Parameters["WaitFor"]; }
-        }
+        public Conditional<bool> WaitUntil { get; set; }
 
         public WaitBlock() {
-            WaitFor = new TimeConditional();
+            WaitUntil = new TimeConditional();
         }
 
         public override void perform(Protocol protocol) {
-            while (WaitFor.evaluate(protocol)) {
+            WaitUntil.initilize();
+            while (!WaitUntil.evaluate(protocol)) {
                 Thread.Sleep(50);   //value may have to be adjusted
             }
         }

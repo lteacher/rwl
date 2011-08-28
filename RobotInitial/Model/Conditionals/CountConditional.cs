@@ -8,6 +8,10 @@ namespace RobotInitial.Model {
         private int count = 0;
         public int Limit { get; set; }
 
+        public CountConditional() {
+            Limit = 5;
+        }
+
         public void initilize() {
             count = 0;
         }
@@ -17,6 +21,7 @@ namespace RobotInitial.Model {
         }
 
         public bool evaluate(Protocol protocol) {
+            //will evaulate true when loop is to terminate
             return count >= Limit;
         }
 

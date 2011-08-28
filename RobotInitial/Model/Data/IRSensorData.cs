@@ -7,6 +7,6 @@ namespace RobotInitial.Model {
     interface IRSensorData {
         //im guessing you get all sensor data in one read?
         //temp, needs to be fixed later on...
-        int Distance { get; }
+        int getDistance(int port);
     }
 }

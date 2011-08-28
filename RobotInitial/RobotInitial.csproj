@@ -69,6 +69,12 @@
     <Compile Include="Command\ExecutionStrategy.cs" />
     <Compile Include="MainWindow_methods.cs" />
     <Compile Include="Model\Blocks\AbstractBlock.cs" />
+    <Compile Include="Model\Conditionals\RBGConditional.cs" />
+    <Compile Include="Model\Conditionals\RNGConditional.cs" />
+    <Compile Include="Model\Conditionals\Tags\Loopable.cs" />
+    <Compile Include="Model\Conditionals\Operators\Not.cs" />
+    <Compile Include="Model\Conditionals\Tags\Switchable.cs" />
+    <Compile Include="Model\Conditionals\Tags\Waitable.cs" />
     <Compile Include="Model\Data\MoveParameters.cs" />
     <Compile Include="Model\CompositeBlocks\AbstractCompositeBlock.cs" />
     <Compile Include="Model\Blocks\Block.cs" />

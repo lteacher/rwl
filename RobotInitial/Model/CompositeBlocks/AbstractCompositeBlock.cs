@@ -5,6 +5,9 @@ using System.Text;
 
 namespace RobotInitial.Model {
     abstract class AbstractCompositeBlock : AbstractBlock, CompositeBlock {
-        //new public Block PerformNext;
+
+        abstract public List<Block> Paths { get; }
+        abstract public Block PathToPerform { get; }
+        abstract override public Block NextToPerform { get; }
     }
 }

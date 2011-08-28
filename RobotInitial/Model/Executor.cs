@@ -14,10 +14,16 @@ namespace RobotInitial.Model {
         }
 
         public void execute() {
-            Block cur = Start;
-            while (cur != null) {
-                cur.perform(Protocol);
-                cur = cur.PerformNext;
+            this.execute(Start);
+        }
+
+        private void execute(Block block) {
+            while (block != null) {
+                block.perform(Protocol);
+                if (block is CompositeBlock) {
+                    this.execute((block as CompositeBlock).PathToPerform);
+                }
+                block = block.NextToPerform;
             }
         }
     }

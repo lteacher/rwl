@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
-    class ParameterList {
+    //was be used as a memento for undo/redo
+    //not used anymore
+    class _ParameterList {
         private Dictionary<String, Object> parameters = new Dictionary<String, Object>();
 
         public Object this[String key] {
