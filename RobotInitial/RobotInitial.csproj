@@ -102,6 +102,14 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\IDialogService.cs" />
+    <Compile Include="Services\IStreamService.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="Services\IUndoService.cs" />
+    <Compile Include="Services\StreamService.cs" />
+    <Compile Include="Services\UndoService.cs" />
+    <Compile Include="Undo\UndoManager.cs" />
+    <Compile Include="Undo\UndoOperation.cs" />
     <Compile Include="ViewModel\BrickTabViewModel.cs" />
     <Compile Include="ViewModel\BrickViewModel.cs" />
     <Compile Include="ViewModel\ClosableViewModel.cs" />

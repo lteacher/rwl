@@ -7,7 +7,7 @@ using RobotInitial.Properties;
 
 namespace RobotInitial.Model
 {
-    class Workspace
+    class Workspace : ICloneable
     {
 
         #region Static Accessors
@@ -59,5 +59,9 @@ namespace RobotInitial.Model
 
         #endregion // Constructors
 
+        public object Clone()
+        {
+            return this;
+        }
     }
 }

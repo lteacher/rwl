@@ -6,6 +6,7 @@ using System.Windows;
 
 using RobotInitial.View;
 using RobotInitial.ViewModel;
+using RobotInitial.Services;
 
 namespace RobotInitial
 {
@@ -19,6 +20,11 @@ namespace RobotInitial
     /// </summary>
 	public partial class App : Application
 	{
+
+        public App() : base()
+        {
+            ServiceLocator.RegisterService<IUndoService>(new UndoService());
+        }
         /// <summary>
         /// OnStartup Event Handler
         /// 
@@ -30,8 +36,8 @@ namespace RobotInitial
         /// <param name="e"></param>
         protected override void  OnStartup(StartupEventArgs e)
         {
-            RobotInitial.Model.Test.test();
- 	       /* base.OnStartup(e);
+           // RobotInitial.Model.Test.test();
+ 	        base.OnStartup(e);
 
             MainWindowView window = new MainWindowView();
             var viewModel = new MainWindowViewModel();
@@ -45,7 +51,7 @@ namespace RobotInitial
             viewModel.RequestClose += handler;
 
             window.DataContext = viewModel;
-            window.Show();*/
+            window.Show();
         }
 	}
 }
