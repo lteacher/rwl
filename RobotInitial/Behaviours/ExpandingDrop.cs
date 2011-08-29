@@ -69,57 +69,9 @@ namespace RobotInitial.Behaviours
 				LoopControlBlockView child = new LoopControlBlockView();
 				targetViewModel.AddChildBlock(child);
 
-				// Setup the measured size
-				child.Measure(new Size(child.MaxWidth,child.MaxHeight));
+				// Expand the block
+				ExpandControlBlock(dropTarget,child);
 
-				// if the child to be added is bigger than the parent then
-				// it the 'Root' parent must refit to the workspace, this
-				// means we need the root control so now we have to find it!
-				FrameworkElement parent = (FrameworkElement)dropTarget.Parent;
-				FrameworkElement treeParent = (FrameworkElement)VisualTreeHelper.GetParent(dropTarget);
-
-				// Find the ultimate parent
-				//Console.WriteLine("******** START ********");
-				double tempChildHeight = child.DesiredSize.Height;
-				double maxChildHeight = tempChildHeight;
-				while(treeParent != null) {
-					treeParent = (FrameworkElement)VisualTreeHelper.GetParent(treeParent);
-					if(treeParent == null) break;
-					if(treeParent.GetType() == typeof(LoopControlBlockView)) {
-						parent = treeParent;
-						maxChildHeight = tempChildHeight;
-						tempChildHeight = parent.DesiredSize.Height;
-					}
-					if(treeParent.GetType() == typeof(WorkspaceView)) break;
-				}
-
-				
-
-				// If the parent height is less than or the same as the child
-				Console.WriteLine("Parent Height: {0}, Child Height: {1}, MaxCHild: {2}", parent.RenderSize.Height, child.DesiredSize.Height,maxChildHeight);
-
-				if(((FrameworkElement)dropTarget.Parent).RenderSize.Height <= child.DesiredSize.Height) {
-					Console.WriteLine("===>>>>  MOVING UP");
-
-					// Get the top point of the root parent
-					double top = Canvas.GetTop(parent);
-
-					// From here if the child is still less than the root parent
-					// then the default increase can be subtracted!
-					if(child.DesiredSize.Height <= parent.RenderSize.Height) {
-						// Also make sure that some other parent doesnt have room
-						Console.WriteLine("The subtraction here is: {0}", parent.RenderSize.Height - maxChildHeight);
-						if(!(parent.RenderSize.Height - maxChildHeight > 50)) {
-							top = top-25;
-						}
-					}
-					// Otherwise we need a bigger offset!
-					else {
-						top = top - (((child.DesiredSize.Height+50) - parent.RenderSize.Height)/2);
-					}
-
-					parent.SetValue(Canvas.TopProperty, top);
-				}
 			}
 			if (sourceViewModel.Type.Equals("Wait"))
 			{
@@ -131,52 +83,9 @@ namespace RobotInitial.Behaviours
 				
 				targetViewModel.AddChildBlock(child);
 
-				// if the child to be added is bigger than the parent then
-				// it the 'Root' parent must refit to the workspace, this
-				// means we need the root control so now we have to find it!
-				FrameworkElement parent = (FrameworkElement)dropTarget.Parent;
-				FrameworkElement treeParent = (FrameworkElement)VisualTreeHelper.GetParent(dropTarget);
+				// TODO, This is wrong switch not implemented
+				ExpandControlBlock(dropTarget, child);
 
-				// Find the ultimate parent
-				//Console.WriteLine("******** START ********");
-				while (treeParent != null)
-				{
-					treeParent = (FrameworkElement)VisualTreeHelper.GetParent(treeParent);
-					if (treeParent == null) break;
-					if (treeParent.GetType() == typeof(LoopControlBlockView))
-					{
-						parent = treeParent;
-					}
-					if (treeParent.GetType() == typeof(WorkspaceView)) break;
-				}
-
-				// Setup the measured size
-				child.Measure(new Size(child.MaxWidth, child.MaxHeight));
-
-				// If the parent height is less than or the same as the child
-				Console.WriteLine("Parent Height: {0}, Child Height: {1}", parent.RenderSize.Height, child.DesiredSize.Height);
-
-				if (((FrameworkElement)dropTarget.Parent).RenderSize.Height <= child.DesiredSize.Height)
-				{
-					Console.WriteLine("===>>>>  MOVING UP");
-
-					// Get the top point of the root parent
-					double top = Canvas.GetTop(parent);
-
-					// From here if the child is still less than the root parent
-					// then the default increase can be subtracted!
-					if (child.DesiredSize.Height <= parent.RenderSize.Height)
-					{
-						top = top - 25;
-					}
-					// Otherwise we need a bigger offset!
-					else
-					{
-						top = top - (((child.DesiredSize.Height + 50) - parent.RenderSize.Height) / 2);
-					}
-
-					parent.SetValue(Canvas.TopProperty, top);
-				}
 			}
 			e.Handled = true;
 		}
@@ -195,6 +104,82 @@ namespace RobotInitial.Behaviours
 			// TODO: Add event handler implementation here.
 			//MessageBox.Show("Mouse Entered!!");
 
+		}
+
+		private void ExpandControlBlock(FrameworkElement dropTarget, FrameworkElement child) {
+			// Setup the measured size
+			child.Measure(new Size(child.MaxWidth, child.MaxHeight));
+
+			// if the child to be added is bigger than the parent then
+			// it the 'Root' parent must refit to the workspace, this
+			// means we need the root control so now we have to find it!
+			FrameworkElement parent = (FrameworkElement)dropTarget.Parent;
+			FrameworkElement treeParent = (FrameworkElement)VisualTreeHelper.GetParent(dropTarget);
+
+			// Find the ultimate parent
+			double tempChildHeight = child.DesiredSize.Height;
+			double maxChildHeight = tempChildHeight;
+			int parentCount = 0;
+			while (treeParent != null)
+			{
+				treeParent = (FrameworkElement)VisualTreeHelper.GetParent(treeParent);
+				if (treeParent == null) break;
+				if (treeParent.GetType() == typeof(LoopControlBlockView) || treeParent.GetType() == typeof(SwitchControlBlockView))
+				{
+					parentCount++;
+					if (tempChildHeight > maxChildHeight) maxChildHeight = tempChildHeight;	
+					tempChildHeight = treeParent.DesiredSize.Height;
+					if(((FrameworkElement)dropTarget.Parent).GetType() == typeof(LoopControlBlockView)) {
+						if (treeParent.GetType() == typeof(LoopControlBlockView))
+						{
+							parent = treeParent;
+						}
+					}
+					else if (((FrameworkElement)dropTarget.Parent).GetType() == typeof(SwitchControlBlockView))
+					{
+						if (treeParent.GetType() == typeof(SwitchControlBlockView))
+						{
+							parent = treeParent;
+						}
+					}
+				}
+				if (treeParent.GetType() == typeof(WorkspaceView)) break;
+			}
+
+			// If the parent height is less than or the same as the child
+			Console.WriteLine("Parent Height: {0}, Child Height: {1}, MaxCHild: {2}", parent.RenderSize.Height, child.DesiredSize.Height, maxChildHeight);
+
+			if (((FrameworkElement)dropTarget.Parent).RenderSize.Height <= child.DesiredSize.Height)
+			{
+				Console.WriteLine("===>>>>  MOVING UP");
+
+				// Get the top point of the root parent
+				double top = Canvas.GetTop(parent);
+
+				// If the parent size minus the new child size will have less than
+				// the minimum top+bottom buffer(50), meaning the child is bigger than the main parent
+				if (!(parent.RenderSize.Height - child.DesiredSize.Height >= 50)) {
+					double offset = ((child.DesiredSize.Height+(parentCount * 50)) - parent.RenderSize.Height)/2;
+					top = top - offset;
+				}
+
+				// Otherwise if the new child is bigger or the same size as any other child so far!
+				else if(child.DesiredSize.Height >= maxChildHeight) {
+					// Make sure that when the max child expands it will have space!
+					// e.g. the parent will fit the max size plus its buffer!
+					if(child.DesiredSize.Height+(parentCount*50) > parent.RenderSize.Height) {
+						double offset = ((child.DesiredSize.Height + (parentCount * 50)) - parent.RenderSize.Height) / 2;
+						top = top - offset;
+					}
+
+				}
+				else if (maxChildHeight + (50) >= parent.RenderSize.Height) {
+					double offset = ((child.DesiredSize.Height + (parentCount * 50)) - parent.RenderSize.Height) / 2;
+					top = top - offset;
+				}
+
+				parent.SetValue(Canvas.TopProperty, top);
+			}
 		}
 
 		/*
