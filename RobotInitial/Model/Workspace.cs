@@ -68,7 +68,7 @@ namespace RobotInitial.Model
 
             clone._startBlock = _startBlock.Clone() as StartBlock;
             foreach (Block block in _unattached) {
-                clone._unattached.Add(block);
+                clone._unattached.Add(block.Clone() as Block);
             }
 
             clone.FileName = this.FileName;
