@@ -5,7 +5,18 @@ using System.Text;
 
 namespace RobotInitial.Model {
     class StartBlock : AbstractBlock {
+
+        public StartBlock() {
+        }
+
+        protected StartBlock(StartBlock other) : base(other) {
+        }
+
         public override void perform(Protocol protocol) {
+        }
+
+        public override object Clone() {
+            return new StartBlock(this);
         }
     }
 }

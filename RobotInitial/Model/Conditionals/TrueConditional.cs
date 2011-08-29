@@ -14,5 +14,9 @@ namespace RobotInitial.Model {
 
         public void update() {
         }
+
+        public Object Clone() {
+            return new TrueConditional();
+        }
     }
 }

@@ -8,6 +8,13 @@ namespace RobotInitial.Model {
 
         public Conditional<bool> Operand { private set; get; }
 
+        public Not() {
+        }
+
+        protected Not(Not other) {
+            this.Operand = (other.Operand == null) ? null : other.Operand.Clone() as Conditional<bool>;
+        }
+
         public bool evaluate(Protocol protocol) {
             return !Operand.evaluate(protocol);
         }
@@ -22,6 +29,10 @@ namespace RobotInitial.Model {
 
         public Not(Conditional<bool> operand) {
             Operand = operand;
+        }
+
+        public object Clone() {
+            return new Not(this);
         }
     }
 }

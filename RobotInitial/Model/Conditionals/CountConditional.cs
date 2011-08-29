@@ -12,6 +12,11 @@ namespace RobotInitial.Model {
             Limit = 5;
         }
 
+        protected CountConditional(CountConditional other) {
+            this.Limit = other.Limit;
+            this.count = other.count;
+        }
+
         public void initilize() {
             count = 0;
         }
@@ -23,6 +28,10 @@ namespace RobotInitial.Model {
         public bool evaluate(Protocol protocol) {
             //will evaulate true when loop is to terminate
             return count >= Limit;
+        }
+
+        public object Clone() {
+            return new CountConditional(this);
         }
 
     }

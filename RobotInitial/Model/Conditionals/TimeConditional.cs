@@ -13,6 +13,10 @@ namespace RobotInitial.Model {
             Duration = 1000;
         }
 
+        protected TimeConditional(TimeConditional other) {
+            this.Duration = other.Duration;
+        }
+
         public void initilize() {
             timer.Restart();
         }
@@ -28,6 +32,10 @@ namespace RobotInitial.Model {
                 timer.Stop();
                 return true;
             }
+        }
+
+        public object Clone() {
+            return new TimeConditional(this);
         }
     }
 }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Drawing;
 
 namespace RobotInitial.Model {
-    interface Block {
+    interface Block : ICloneable {
         Point Location { get; set; }
         Block Next { get; set; }            //link to the next block
         void perform(Protocol protocol);    //executes the block, updates NextToPerform

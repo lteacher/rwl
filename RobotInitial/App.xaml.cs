@@ -36,7 +36,7 @@ namespace RobotInitial
         /// <param name="e"></param>
         protected override void  OnStartup(StartupEventArgs e)
         {
-           // RobotInitial.Model.Test.test();
+            //RobotInitial.Model.Test.test();
  	        base.OnStartup(e);
 
             MainWindowView window = new MainWindowView();

@@ -10,6 +10,13 @@ namespace RobotInitial.Model {
         private bool current;
         private Random rand = new Random();
 
+        public RBGConditional() {
+        }
+
+        protected RBGConditional(RBGConditional other) {
+            this.current = other.current;
+        }
+
         public void initilize() {
             //rand = new Random();  //was giving lame results
         }
@@ -21,6 +28,10 @@ namespace RobotInitial.Model {
 
         public bool evaluate(Protocol protocol) {
             return current;
+        }
+
+        public object Clone() {
+            return new RBGConditional(this);
         }
     }
 }

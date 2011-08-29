@@ -11,6 +11,15 @@ namespace RobotInitial.Model {
         public int Max { get; set; }
         public int Min { get; set; }
 
+        public RNGConditional() {
+        }
+
+        protected RNGConditional(RNGConditional other) {
+            this.Min = other.Min;
+            this.Max = other.Max;
+            this.current = other.current;
+        }
+
         public void initilize() {
             //rand = new Random();
         }
@@ -22,6 +31,10 @@ namespace RobotInitial.Model {
 
         public int evaluate(Protocol protocol) {
             return current;
+        }
+
+        public object Clone() {
+            return new RNGConditional(this);
         }
     }
 }

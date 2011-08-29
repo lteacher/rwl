@@ -5,7 +5,7 @@ using System.Text;
 using System.Diagnostics;
 
 namespace RobotInitial.Model {
-    public class TestIRSensor : IRSensorData {
+    public class TestIRSensor : IRData {
         private static int dist = 100;
         public int getDistance(int port) {
             dist -= 10;
@@ -19,10 +19,13 @@ namespace RobotInitial.Model {
             Debug.WriteLine(parameters.Direction + " " + parameters.Duration + " " + parameters.DurationUnit + " "
                 + parameters.Power + " " + parameters.Steering + " " + parameters.BrakeAfterMove);
         }
-        public IRSensorData readIRSensor() {
-            IRSensorData data = new TestIRSensor();
+        public IRData requestIR() {
+            IRData data = new TestIRSensor();
             return data;
         }
+
+        public IMUData requestIMU() { return null;}
+        public StatusData requestStatus() { return null; }
     }
 
 
@@ -60,6 +63,8 @@ namespace RobotInitial.Model {
             Executor executor = new Executor(start, new TestProtocol());
             executor.execute();
             Debug.WriteLine("Done");
+
+            //start.Clone();
         }
     }
 }

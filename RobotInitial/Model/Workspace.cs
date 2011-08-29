@@ -38,8 +38,8 @@ namespace RobotInitial.Model
 
         #region Fields
 
-        private StartBlock startBlock = new StartBlock();
-        private List<Block> unattached = new List<Block>();
+        private StartBlock _startBlock = new StartBlock();
+        private List<Block> _unattached = new List<Block>();
 
         #endregion // Fields
 
@@ -59,9 +59,24 @@ namespace RobotInitial.Model
 
         #endregion // Constructors
 
+        #region Methods
+
         public object Clone()
         {
-            return this;
+            //Workspace clone = Workspace.CreateNewWorkspace();
+            Workspace clone = new Workspace();
+
+            clone._startBlock = _startBlock.Clone() as StartBlock;
+            foreach (Block block in _unattached) {
+                clone._unattached.Add(block);
+            }
+
+            clone.FileName = this.FileName;
+            clone.IsUntitled = IsUntitled;
+
+            return clone;
         }
+
+        #endregion
     }
 }

@@ -6,6 +6,8 @@ using System.Text;
 namespace RobotInitial.Model {
     interface Protocol {
         void move(MoveParameters parameters);
-        IRSensorData readIRSensor();
+        IRData requestIR();
+        IMUData requestIMU();
+        StatusData requestStatus();
     }
 }

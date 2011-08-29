@@ -23,8 +23,21 @@ namespace RobotInitial.Model {
             BrakeAfterMove = true;
         }
 
+        protected MoveBlock(MoveBlock other) : base(other) {
+            this.Direction = other.Direction;
+            this.Duration = other.Duration;
+            this.Power = other.Power;
+            this.Steering = other.Steering;
+            this.BrakeAfterMove = other.BrakeAfterMove;
+            this.DurationUnit = other.DurationUnit;
+        }
+
         public override void perform(Protocol protocol) {
             protocol.move(this);
+        }
+
+        public override object Clone() {
+            return new MoveBlock(this);
         }
     }
 }

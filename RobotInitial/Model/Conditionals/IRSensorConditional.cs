@@ -24,6 +24,12 @@ namespace RobotInitial.Model {
             EqualityOperator = Operator.LESS;
         }
 
+        protected IRSensorConditional(IRSensorConditional other) {
+            this.EqualityOperator = other.EqualityOperator;
+            this.Distance = other.Distance;
+            this.Port = other.Port;
+        }
+
         public void initilize() {
         }
 
@@ -31,7 +37,7 @@ namespace RobotInitial.Model {
         }
 
         public bool evaluate(Protocol protocol) {
-            IRSensorData data = protocol.readIRSensor();
+            IRData data = protocol.requestIR();
             int actualDistance = data.getDistance(Port);
 
             if (actualDistance < Distance) {
@@ -41,6 +47,10 @@ namespace RobotInitial.Model {
             } else {
                 return (EqualityOperator & Operator.EQUAL) == Operator.EQUAL;
             }
+        }
+
+        public object Clone() {
+            return new IRSensorConditional(this);
         }
     }
 }

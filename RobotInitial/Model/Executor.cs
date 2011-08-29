@@ -21,10 +21,14 @@ namespace RobotInitial.Model {
             while (block != null) {
                 block.perform(Protocol);
                 if (block is CompositeBlock) {
-                    this.execute((block as CompositeBlock).PathToPerform);
+                    this.execute((block as CompositeBlock).InnerPathToPerform);
                 }
                 block = block.NextToPerform;
             }
+        }
+
+        public static void execute(StartBlock start, Protocol protocol) {
+            new Executor(start, protocol).execute();
         }
     }
 }
