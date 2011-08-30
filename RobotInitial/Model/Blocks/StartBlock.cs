@@ -12,7 +12,8 @@ namespace RobotInitial.Model {
         protected StartBlock(StartBlock other) : base(other) {
         }
 
-        public override void perform(Protocol protocol) {
+        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+            performAfter.AddFirst(Next);
         }
 
         public override object Clone() {

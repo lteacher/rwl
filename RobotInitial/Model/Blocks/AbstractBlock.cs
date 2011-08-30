@@ -10,10 +10,6 @@ namespace RobotInitial.Model {
         public Point Location { get; set; }
         public Block Next { get; set; }
 
-        public virtual Block NextToPerform {
-            get { return Next; }
-        }
-
         public AbstractBlock() {
         }
 
@@ -22,7 +18,9 @@ namespace RobotInitial.Model {
             this.Next = (other.Next == null) ? null : other.Next.Clone() as Block;
         }
 
-        public abstract void perform(Protocol protocol);
         public abstract Object Clone();
+
+        public abstract void perform(Protocol protocol, ref LinkedList<Block> performAfter);
+        
     }
 }

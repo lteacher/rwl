@@ -11,15 +11,6 @@ namespace RobotInitial.Model {
 
         private bool initilised = false;
 
-        private Block nextToPerform = null;
-        public override Block NextToPerform {
-            get { return nextToPerform; }
-        }
-
-        public override Block InnerPathToPerform {
-            get { return LoopPath; }
-        }
-
         #endregion
 
         #region Parameter Fields
@@ -42,7 +33,6 @@ namespace RobotInitial.Model {
 
             //Execution Fields not really needed, but will copy so it is a real copy
             this.initilised = other.initilised;
-            this.nextToPerform = other.nextToPerform;
         }
 
         #endregion
@@ -57,7 +47,9 @@ namespace RobotInitial.Model {
             }
         }
 
-        public override void perform(Protocol protocol) {
+        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+            performAfter.AddFirst(LoopPath); //always executed atlteast once...
+
             if (!initilised) {
                 initilised = true;
                 Condition.initilize();
@@ -67,9 +59,9 @@ namespace RobotInitial.Model {
             //using do until logic
             if (Condition.evaluate(protocol)) {
                 initilised = false;
-                nextToPerform = Next;   //exit loop
+                performAfter.AddLast(Next); //terminate loop
             } else {
-                nextToPerform = this;   //evaluate loop again (after ChildToPerform path has been executed)
+                performAfter.AddLast(this); //evaluate loop again (after LoopPath path has been executed)
             }
         }
 

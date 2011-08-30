@@ -18,7 +18,9 @@ namespace RobotInitial.Model {
             this.WaitUntil = (other.WaitUntil == null) ? null : other.WaitUntil.Clone() as Conditional<bool>;
         }
 
-        public override void perform(Protocol protocol) {
+        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+            performAfter.AddFirst(Next);
+
             WaitUntil.initilize();
             while (!WaitUntil.evaluate(protocol)) {
                 Thread.Sleep(50);   //value may have to be adjusted

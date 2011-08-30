@@ -8,15 +8,6 @@ namespace RobotInitial.Model {
 
         #region Execution Fields
 
-        public override Block NextToPerform {
-            get { return Next; }
-        }
-
-        private Block pathToPerform = null;
-        public override Block InnerPathToPerform {
-            get { return pathToPerform; }
-        }
-
         #endregion
 
         #region Parameter Fields
@@ -37,7 +28,6 @@ namespace RobotInitial.Model {
         }
 
         protected SwitchBlock(SwitchBlock<T> other) : base(other) {
-            this.pathToPerform = other.pathToPerform;   //not really needed, execution variable
             this.DefaultPath = other.DefaultPath;       //may only be a shallow copy, should be okay. Anything used as a path map should be immutable anyway.
             this.Condition = (other.Condition == null) ? null : other.Condition.Clone() as Conditional<T>;
 
@@ -54,16 +44,18 @@ namespace RobotInitial.Model {
             mappedPaths[t] = path;
         }
 
-        public override void perform(Protocol protocol) {
+        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
             Condition.initilize();
             Condition.update();
             T result = Condition.evaluate(protocol);
 
             if (mappedPaths.ContainsKey(result)) {
-                pathToPerform = mappedPaths[result];
+                performAfter.AddFirst(mappedPaths[result]);
             } else {
-                pathToPerform = mappedPaths.ContainsKey(DefaultPath) ? mappedPaths[DefaultPath] : mappedPaths.First().Value;
+                performAfter.AddFirst(mappedPaths.ContainsKey(DefaultPath) ? mappedPaths[DefaultPath] : mappedPaths.First().Value);
             }
+
+            performAfter.AddLast(Next);
         }
 
         public override object Clone() {

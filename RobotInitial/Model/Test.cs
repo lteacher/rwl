@@ -48,7 +48,7 @@ namespace RobotInitial.Model {
 
             MoveBlock falsepath = new MoveBlock();
             falsepath.BrakeAfterMove = false;
-            falsepath.Next = new MoveBlock();
+            //falsepath.Next = new MoveBlock();
 
             WaitBlock wait = new WaitBlock();
             wait.WaitUntil = new TimeConditional();

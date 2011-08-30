@@ -14,16 +14,18 @@ namespace RobotInitial.Model {
         }
 
         public void execute() {
-            this.execute(Start);
-        }
+            LinkedList<Block> performAfter = new LinkedList<Block>();
+            Stack<Block> stack = new Stack<Block>();
+            stack.Push(Start);
 
-        private void execute(Block block) {
-            while (block != null) {
-                block.perform(Protocol);
-                if (block is CompositeBlock) {
-                    this.execute((block as CompositeBlock).InnerPathToPerform);
+            while (stack.Count > 0) {
+                Block current = stack.Pop();
+                if (current == null) continue;
+                current.perform(this.Protocol, ref performAfter);
+                while (performAfter.Count > 0) {
+                    stack.Push(performAfter.Last());
+                    performAfter.RemoveLast();
                 }
-                block = block.NextToPerform;
             }
         }
 

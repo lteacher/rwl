@@ -32,8 +32,9 @@ namespace RobotInitial.Model {
             this.DurationUnit = other.DurationUnit;
         }
 
-        public override void perform(Protocol protocol) {
+        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
             protocol.move(this);
+            performAfter.AddFirst(Next);
         }
 
         public override object Clone() {
