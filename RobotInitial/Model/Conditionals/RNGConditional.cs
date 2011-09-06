@@ -7,34 +7,24 @@ namespace RobotInitial.Model {
     class RNGConditional : Conditional<int> {
 
         private int current;
-        private Random rand = new Random();
+        private Random rand;
         public int Max { get; set; }
         public int Min { get; set; }
 
-        public RNGConditional() {
+        internal RNGConditional() {
         }
 
-        protected RNGConditional(RNGConditional other) {
-            this.Min = other.Min;
-            this.Max = other.Max;
-            this.current = other.current;
+        public override void initilize() {
+            rand = new Random();
         }
 
-        public void initilize() {
-            //rand = new Random();
-        }
-
-        public void update() {
+        public override void update() {
             //max is an exclusive bound
             current = rand.Next(Min, Max + 1);
         }
 
-        public int evaluate(Protocol protocol) {
+        public override int evaluate(Protocol protocol) {
             return current;
-        }
-
-        public object Clone() {
-            return new RNGConditional(this);
         }
     }
 }

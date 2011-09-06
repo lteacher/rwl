@@ -24,7 +24,7 @@ namespace RobotInitial.Model {
 
         #region Constructors
 
-        public SwitchBlock() {
+        internal SwitchBlock() {
         }
 
         protected SwitchBlock(SwitchBlock<T> other) : base(other) {

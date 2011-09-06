@@ -21,6 +21,5 @@ namespace RobotInitial.Model {
         public abstract Object Clone();
 
         public abstract void perform(Protocol protocol, ref LinkedList<Block> performAfter);
-        
     }
 }

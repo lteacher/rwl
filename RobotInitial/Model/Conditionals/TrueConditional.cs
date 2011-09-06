@@ -5,18 +5,14 @@ using System.Text;
 
 namespace RobotInitial.Model {
     class TrueConditional : Conditional<bool> {
-        public bool evaluate(Protocol protocol) {
+        public override bool evaluate(Protocol protocol) {
             return true;
         }
 
-        public void initilize() {
+        public override void initilize() {
         }
 
-        public void update() {
-        }
-
-        public Object Clone() {
-            return new TrueConditional();
+        public override void update() {
         }
     }
 }

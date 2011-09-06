@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 
 using RobotInitial.Properties;
+using System.Xml.Serialization;
+using System.IO;
 
 namespace RobotInitial.Model
 {
-    class Workspace : ICloneable
+    public class Workspace : ICloneable, IXmlSerializable
     {
 
         #region Static Accessors
@@ -38,8 +40,9 @@ namespace RobotInitial.Model
 
         #region Fields
 
-        private StartBlock _startBlock = new StartBlock();
+ 
         private List<Block> _unattached = new List<Block>();
+        private StartBlock _startBlock = new StartBlock();
 
         #endregion // Fields
 
@@ -71,12 +74,31 @@ namespace RobotInitial.Model
                 clone._unattached.Add(block.Clone() as Block);
             }
 
-            clone.FileName = this.FileName;
+            clone.FileName = this.FileName; //immutable
             clone.IsUntitled = IsUntitled;
 
             return clone;
         }
 
+        //public void Serialise(Stream stream) {
+        //    XmlSerializer serialiser = new XmlSerializer(this.GetType());
+        //    serialiser.Serialize(stream, this);
+        //}
+
+        public System.Xml.Schema.XmlSchema GetSchema() {
+            return null;
+        }
+
+        public void ReadXml(System.Xml.XmlReader reader) {
+            throw new NotImplementedException();
+        }
+
+        public void WriteXml(System.Xml.XmlWriter writer) {
+            throw new NotImplementedException();
+        }
+
         #endregion
+
+ 
     }
 }

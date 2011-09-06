@@ -8,31 +8,29 @@ namespace RobotInitial.Model {
 
         public Conditional<bool> Operand { private set; get; }
 
-        public Not() {
-        }
-
-        protected Not(Not other) {
-            this.Operand = (other.Operand == null) ? null : other.Operand.Clone() as Conditional<bool>;
-        }
-
-        public bool evaluate(Protocol protocol) {
-            return !Operand.evaluate(protocol);
-        }
-
-        public void initilize() {
-            Operand.initilize();
-        }
-
-        public void update() {
-            Operand.update();
-        }
-
-        public Not(Conditional<bool> operand) {
+        internal Not(Conditional<bool> operand) {
             Operand = operand;
         }
 
-        public object Clone() {
-            return new Not(this);
+        public override bool evaluate(Protocol protocol) {
+            return !Operand.evaluate(protocol);
+        }
+
+        public override void initilize() {
+            Operand.initilize();
+        }
+
+        public override void update() {
+            Operand.update();
+        }
+
+        public override object Clone() {
+            Conditional<bool> clonedOperand = null;
+            if (this.Operand != null) {
+                clonedOperand = this.Operand.Clone() as Conditional<bool>;
+            }
+            Not clone = new Not(clonedOperand);
+            return clone;
         }
     }
 }

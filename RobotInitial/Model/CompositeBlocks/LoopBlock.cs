@@ -22,8 +22,7 @@ namespace RobotInitial.Model {
 
         #region Constructors
 
-        public LoopBlock() {
-            Condition = new CountConditional();
+        internal LoopBlock() {
         }
 
         protected LoopBlock(LoopBlock other)

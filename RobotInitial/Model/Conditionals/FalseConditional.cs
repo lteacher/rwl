@@ -5,18 +5,17 @@ using System.Text;
 
 namespace RobotInitial.Model {
     class FalseConditional : Conditional<bool> {
-        public bool evaluate(Protocol protocol) {
+        internal FalseConditional() {
+        }
+
+        public override bool evaluate(Protocol protocol) {
             return false;
         }
 
-        public void initilize() {
+        public override void initilize() {
         }
 
-        public void update() {
-        }
-
-        public object Clone() {
-            return new FalseConditional();
+        public override void update() {
         }
     }
 }

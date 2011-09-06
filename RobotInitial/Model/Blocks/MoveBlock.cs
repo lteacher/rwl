@@ -6,30 +6,25 @@ using System.Text;
 namespace RobotInitial.Model {
 
     class MoveBlock : AbstractBlock, MoveParameters {
-
-        public MoveDirection Direction { get; set; }
+        public MoveDirection RightDirection { get; set; }
+        public MoveDirection LeftDirection { get; set; }
+        public int RightPower { get; set; }
+        public int LeftPower { get; set; }
         public int Duration { get; set; }
-        public int Power { get; set; }
-        public int Steering { get; set; }
-        public bool BrakeAfterMove { get; set; }
         public MoveDurationUnit DurationUnit { get; set; }
+        public bool BrakeAfterMove { get; set; }
 
-        public MoveBlock() {
-            Direction = MoveDirection.FORWARD;
-            Duration = 1;
-            DurationUnit = MoveDurationUnit.ROTATIONS;
-            Power = 50;
-            Steering = 0;
-            BrakeAfterMove = true;
+        internal MoveBlock() {
         }
 
         protected MoveBlock(MoveBlock other) : base(other) {
-            this.Direction = other.Direction;
+            this.RightDirection = other.RightDirection;
+            this.LeftDirection = other.LeftDirection;
+            this.RightPower = other.RightPower;
+            this.LeftPower = other.LeftPower;
             this.Duration = other.Duration;
-            this.Power = other.Power;
-            this.Steering = other.Steering;
-            this.BrakeAfterMove = other.BrakeAfterMove;
             this.DurationUnit = other.DurationUnit;
+            this.BrakeAfterMove = other.BrakeAfterMove;
         }
 
         public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {

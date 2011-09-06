@@ -68,6 +68,8 @@
     <Compile Include="EventSystem.cs" />
     <Compile Include="Command\ExecutionStrategy.cs" />
     <Compile Include="MainWindow_methods.cs" />
+    <Compile Include="Model\Factory\BlockFactory.cs" />
+    <Compile Include="Model\Factory\DefaultBlockFactory.cs" />
     <Compile Include="Model\Blocks\AbstractBlock.cs" />
     <Compile Include="Model\Conditionals\RBGConditional.cs" />
     <Compile Include="Model\Conditionals\RNGConditional.cs" />
@@ -88,7 +90,6 @@
     <Compile Include="Model\Conditionals\IRSensorConditional.cs" />
     <Compile Include="Model\Conditionals\TimeConditional.cs" />
     <Compile Include="Model\Conditionals\TrueConditional.cs" />
-    <Compile Include="Model\Data\ParameterList.cs" />
     <Compile Include="Model\Data\StatusData.cs" />
     <Compile Include="Model\Executor.cs" />
     <Compile Include="Model\Protocol.cs" />

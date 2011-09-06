@@ -28,11 +28,12 @@ namespace RobotInitial.Model {
     }
 
     interface MoveParameters {
-        MoveDirection Direction { get; }
-        MoveDurationUnit DurationUnit { get; }
+        MoveDirection RightDirection { get; }
+        MoveDirection LeftDirection { get; }
+        int RightPower { get; }
+        int LeftPower { get; }
         int Duration { get; }
-        int Power { get; }
-        int Steering { get; }
+        MoveDurationUnit DurationUnit { get; }
         bool BrakeAfterMove { get; }
     }
 }

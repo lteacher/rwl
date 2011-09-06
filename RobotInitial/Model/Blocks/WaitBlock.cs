@@ -9,8 +9,7 @@ namespace RobotInitial.Model {
 
         public Conditional<bool> WaitUntil { get; set; }
 
-        public WaitBlock() {
-            WaitUntil = new TimeConditional();
+        internal WaitBlock() {
         }
 
         protected WaitBlock(WaitBlock other)

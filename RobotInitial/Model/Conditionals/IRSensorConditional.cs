@@ -5,6 +5,7 @@ using System.Text;
 
 namespace RobotInitial.Model {
     class IRSensorConditional : Conditional<bool> {
+        [Flags]
         public enum Operator {
             EQUAL = 1,
             GREATER = 2,
@@ -16,29 +17,20 @@ namespace RobotInitial.Model {
 
         public Operator EqualityOperator { get; set; }
         public int Distance { get; set; }
-        public int Port { get; set; }
+        public int ListeningPort { get; set; }
 
-        public IRSensorConditional() {
-            Distance = 50;
-            Port = 0;
-            EqualityOperator = Operator.LESS;
+        internal IRSensorConditional() {
         }
 
-        protected IRSensorConditional(IRSensorConditional other) {
-            this.EqualityOperator = other.EqualityOperator;
-            this.Distance = other.Distance;
-            this.Port = other.Port;
+        public override void initilize() {
         }
 
-        public void initilize() {
+        public override void update() {
         }
 
-        public void update() {
-        }
-
-        public bool evaluate(Protocol protocol) {
+        public override bool evaluate(Protocol protocol) {
             IRData data = protocol.requestIR();
-            int actualDistance = data.getDistance(Port);
+            int actualDistance = data.getDistance(ListeningPort);
 
             if (actualDistance < Distance) {
                 return (EqualityOperator & Operator.LESS) == Operator.LESS;
@@ -47,10 +39,6 @@ namespace RobotInitial.Model {
             } else {
                 return (EqualityOperator & Operator.EQUAL) == Operator.EQUAL;
             }
-        }
-
-        public object Clone() {
-            return new IRSensorConditional(this);
         }
     }
 }

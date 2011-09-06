@@ -5,6 +5,7 @@ using System.Text;
 using System.Diagnostics;
 
 namespace RobotInitial.Model {
+    /* old tests, before factory
     public class TestIRSensor : IRData {
         private static int dist = 100;
         public int getDistance(int port) {
@@ -66,5 +67,5 @@ namespace RobotInitial.Model {
 
             //start.Clone();
         }
-    }
+    }*/
 }

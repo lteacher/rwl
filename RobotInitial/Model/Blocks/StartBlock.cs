@@ -6,7 +6,7 @@ using System.Text;
 namespace RobotInitial.Model {
     class StartBlock : AbstractBlock {
 
-        public StartBlock() {
+        internal StartBlock() {
         }
 
         protected StartBlock(StartBlock other) : base(other) {

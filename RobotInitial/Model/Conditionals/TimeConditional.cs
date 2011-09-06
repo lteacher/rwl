@@ -6,36 +6,28 @@ using System.Diagnostics;
 
 namespace RobotInitial.Model {
     class TimeConditional : Conditional<bool> {
-        private Stopwatch timer = new Stopwatch();
+        private Stopwatch timer;
         public int Duration { get; set; }
 
-        public TimeConditional() {
-            Duration = 1000;
+        internal TimeConditional() {
         }
 
-        protected TimeConditional(TimeConditional other) {
-            this.Duration = other.Duration;
+        public override void initilize() {
+            timer = new Stopwatch();
+            timer.Start();
         }
 
-        public void initilize() {
-            timer.Restart();
+        public override void update() {
         }
 
-        public void update() {
-        }
+        public override bool evaluate(Protocol protocol) {
+            bool done = timer.ElapsedMilliseconds >= Duration;
 
-        public bool evaluate(Protocol protocol) {
-            //will evaulate true when loop is to terminate
-            if (timer.ElapsedMilliseconds < Duration) {
-                return false;
-            } else {
-                timer.Stop();
-                return true;
+            if (done) {
+                timer.Stop();   //probably not necessary :)
             }
-        }
 
-        public object Clone() {
-            return new TimeConditional(this);
+            return done; //evaulate true when loop is to terminate
         }
     }
 }

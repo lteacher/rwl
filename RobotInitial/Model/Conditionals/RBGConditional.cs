@@ -8,30 +8,22 @@ namespace RobotInitial.Model {
     class RBGConditional : Conditional<bool> {
 
         private bool current;
-        private Random rand = new Random();
+        private Random rand;
 
-        public RBGConditional() {
+        internal RBGConditional() {
         }
 
-        protected RBGConditional(RBGConditional other) {
-            this.current = other.current;
+        public override void initilize() {
+            rand = new Random();
         }
 
-        public void initilize() {
-            //rand = new Random();  //was giving lame results
-        }
-
-        public void update() {
+        public override void update() {
             //max is an exclusive bound
             current = rand.Next(0, 2) == 1;
         }
 
-        public bool evaluate(Protocol protocol) {
+        public override bool evaluate(Protocol protocol) {
             return current;
-        }
-
-        public object Clone() {
-            return new RBGConditional(this);
         }
     }
 }
