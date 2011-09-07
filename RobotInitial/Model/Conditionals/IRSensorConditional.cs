@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     class IRSensorConditional : Conditional<bool> {
         [Flags]
         public enum Operator {

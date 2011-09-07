@@ -5,6 +5,7 @@ using System.Text;
 using System.Diagnostics;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     class TimeConditional : Conditional<bool> {
         private Stopwatch timer;
         public int Duration { get; set; }

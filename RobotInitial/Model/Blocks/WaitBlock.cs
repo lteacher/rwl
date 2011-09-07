@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     class WaitBlock : AbstractBlock {
 
         public Conditional<bool> WaitUntil { get; set; }

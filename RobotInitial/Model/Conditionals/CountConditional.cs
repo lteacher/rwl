@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     class CountConditional : Conditional<bool> {
         private int count = 0;
         public int Limit { get; set; }

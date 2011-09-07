@@ -92,6 +92,7 @@
     <Compile Include="Model\Conditionals\TrueConditional.cs" />
     <Compile Include="Model\Data\StatusData.cs" />
     <Compile Include="Model\Executor.cs" />
+    <Compile Include="Model\ModelSerialiser.cs" />
     <Compile Include="Model\Protocol.cs" />
     <Compile Include="Model\Blocks\StartBlock.cs" />
     <Compile Include="Model\CompositeBlocks\SwitchBlock.cs" />

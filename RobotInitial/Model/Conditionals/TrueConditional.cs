@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     class TrueConditional : Conditional<bool> {
         public override bool evaluate(Protocol protocol) {
             return true;

@@ -5,6 +5,7 @@ using System.Text;
 using System.Drawing;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     abstract class AbstractBlock : Block {
 
         public Point Location { get; set; }

@@ -5,6 +5,7 @@ using System.Text;
 
 namespace RobotInitial.Model {
     //do until loop
+    [Serializable()]
     class LoopBlock : AbstractCompositeBlock {
 
         #region Execution Fields

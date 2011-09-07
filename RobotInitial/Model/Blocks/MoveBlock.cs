@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
-
+    [Serializable()]
     class MoveBlock : AbstractBlock, MoveParameters {
         public MoveDirection RightDirection { get; set; }
         public MoveDirection LeftDirection { get; set; }

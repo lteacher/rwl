@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     abstract class AbstractCompositeBlock : AbstractBlock, CompositeBlock {
 
         abstract public List<Block> Paths { get; }

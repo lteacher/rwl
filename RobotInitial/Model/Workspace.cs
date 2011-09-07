@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 
 using RobotInitial.Properties;
-using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 namespace RobotInitial.Model
 {
-    public class Workspace : ICloneable, IXmlSerializable
+    [Serializable()]
+    public class Workspace : ICloneable
     {
 
         #region Static Accessors
@@ -40,7 +41,6 @@ namespace RobotInitial.Model
 
         #region Fields
 
- 
         private List<Block> _unattached = new List<Block>();
         private StartBlock _startBlock = new StartBlock();
 
@@ -80,25 +80,14 @@ namespace RobotInitial.Model
             return clone;
         }
 
-        //public void Serialise(Stream stream) {
-        //    XmlSerializer serialiser = new XmlSerializer(this.GetType());
-        //    serialiser.Serialize(stream, this);
-        //}
-
-        public System.Xml.Schema.XmlSchema GetSchema() {
-            return null;
+        public void Serialise(Stream stream) {
+            ModelSerialiser.serialise(stream, this);
         }
 
-        public void ReadXml(System.Xml.XmlReader reader) {
-            throw new NotImplementedException();
+        public static Workspace Deserialise(Stream stream) {
+            return ModelSerialiser.deserialise(stream) as Workspace;
         }
-
-        public void WriteXml(System.Xml.XmlWriter writer) {
-            throw new NotImplementedException();
-        }
-
+                
         #endregion
-
- 
     }
 }

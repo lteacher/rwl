@@ -5,6 +5,7 @@ using System.Text;
 
 namespace RobotInitial.Model {
     //random boolean generator
+    [Serializable()]
     class RBGConditional : Conditional<bool> {
 
         private bool current;

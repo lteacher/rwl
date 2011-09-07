@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
+    [Serializable()]
     class FalseConditional : Conditional<bool> {
         internal FalseConditional() {
         }
