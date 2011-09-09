@@ -67,6 +67,11 @@
     <Compile Include="Components.cs" />
     <Compile Include="EventSystem.cs" />
     <Compile Include="Command\ExecutionStrategy.cs" />
+    <Compile Include="Lynx Server\EndState.cs" />
+    <Compile Include="Lynx Server\Lynx Server.cs" />
+    <Compile Include="Lynx Server\LynxProtocol.cs" />
+    <Compile Include="Lynx Server\Request Handler.cs" />
+    <Compile Include="Lynx Server\Virtual Machine.cs" />
     <Compile Include="MainWindow_methods.cs" />
     <Compile Include="Model\Factory\BlockFactory.cs" />
     <Compile Include="Model\Factory\DefaultBlockFactory.cs" />

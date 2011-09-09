@@ -42,7 +42,7 @@ namespace RobotInitial.Model
         #region Fields
 
         private List<Block> _unattached = new List<Block>();
-        private StartBlock _startBlock = new StartBlock();
+        public StartBlock _startBlock = new StartBlock();
 
         #endregion // Fields
 
