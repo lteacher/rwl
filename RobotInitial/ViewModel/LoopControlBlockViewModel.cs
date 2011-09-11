@@ -11,7 +11,7 @@ namespace RobotInitial.ViewModel
 {
 	class LoopControlBlockViewModel : ControlBlockViewModel
 	{
-
+		private ObservableCollection<UIElement> _children = new ObservableCollection<UIElement>();
 		private double _mainHeight = 100; // Default maximum 
 		private double _mainWidth = 75;
 		
@@ -83,8 +83,26 @@ namespace RobotInitial.ViewModel
 		public void ExpandControl() {
 			MessageBox.Show("Count is currently: " + Children.Count);
 		}
-		
 
+		public ObservableCollection<UIElement> Children
+		{
+			get { return _children; }
+		}
+
+		public void AddChildBlock(FrameworkElement element)
+		{
+			if (Children.Count == 0)
+			{
+				element.Margin = new Thickness(50, 0, 50, 0);
+			}
+			else
+			{
+				element.Margin = new Thickness(-25, 0, 50, 0);
+			}
+
+			// Add a child to the collection
+			_children.Add(element);
+		}
 
 	}
 }

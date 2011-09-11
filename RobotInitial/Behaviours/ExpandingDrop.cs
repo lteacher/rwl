@@ -62,12 +62,36 @@ namespace RobotInitial.Behaviours
 			ControlBlockViewModel sourceViewModel = (ControlBlockViewModel)dropSource.DataContext;
 			if(sourceViewModel.Type.Equals("Move"))
 			{	
-			    targetViewModel.AddChildBlock(new MoveControlBlockView());
+				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
+				{
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock((new MoveControlBlockView()));
+				}
+				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
+				{
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock((new MoveControlBlockView()));
+
+				}
 			}
 			if (sourceViewModel.Type.Equals("Loop"))
 			{
 				LoopControlBlockView child = new LoopControlBlockView();
-				targetViewModel.AddChildBlock(child);
+				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel)) {
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+				}
+				else if(targetViewModel.GetType() == typeof(SwitchControlBlockViewModel)) {
+					double top = (double)dropTarget.Parent.GetValue(Canvas.TopProperty);
+
+					FrameworkElement dropParent = (FrameworkElement)dropTarget.Parent;
+
+					Console.Write("E getPosition: {0}, Top: {2},  target rendersize: {1}", e.GetPosition(dropTarget).Y,  (dropParent.ActualHeight / 2) , top);
+
+					if (e.GetPosition(dropTarget).Y > top + (dropParent.RenderSize.Height / 2)) {
+						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_BOTTOM);
+					} else {
+						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_TOP);
+					}
+
+				}
 
 				// Expand the block
 				ExpandControlBlock(dropTarget,child);
@@ -75,13 +99,28 @@ namespace RobotInitial.Behaviours
 			}
 			if (sourceViewModel.Type.Equals("Wait"))
 			{
-				targetViewModel.AddChildBlock(new WaitControlBlockView());
+				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
+				{
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock((new WaitControlBlockView()));
+				}
+				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
+				{
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock((new WaitControlBlockView()));
+				}
 			}
 			if (sourceViewModel.Type.Equals("Switch"))
 			{
 				SwitchControlBlockView child = new SwitchControlBlockView();
-				
-				targetViewModel.AddChildBlock(child);
+
+				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
+				{
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+				}
+				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
+				{
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+				}
+
 
 				// TODO, This is wrong switch not implemented
 				ExpandControlBlock(dropTarget, child);
