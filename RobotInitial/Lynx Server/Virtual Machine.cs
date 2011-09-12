@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace RobotInitial.Lynx_Server {
 
-    public sealed class Virtual_Machine {
+    sealed class Virtual_Machine {
 
         #region Singleton Pattern
         private static volatile Virtual_Machine instance;
