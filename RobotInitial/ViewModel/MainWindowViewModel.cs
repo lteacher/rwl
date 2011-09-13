@@ -26,6 +26,9 @@ namespace RobotInitial.ViewModel
         RelayCommand _saveAsWorkspaceCommand;
         RelayCommand _closeWorkspaceCommand;
 
+        RelayCommand _undoCommand;
+        RelayCommand _redoCommand;
+
         #endregion // Commands
 
         #region Collections
@@ -132,18 +135,50 @@ namespace RobotInitial.ViewModel
 
         #endregion // CloseWorkspaceCommand
 
+        #region UndoCommand
+
+        public ICommand UndoCommand
+        {
+            get
+            {
+                if (_undoCommand == null)
+                {
+                    _undoCommand = new RelayCommand(param => this.GetCurrentWorkspace().Undo());
+                }
+                return _undoCommand;
+            }
+        }
+
+        #endregion // UndoCommand
+
+        #region RedoCommand
+        
+        public ICommand RedoCommand
+        {
+            get
+            {
+                if (_redoCommand == null)
+                {
+                    _redoCommand = new RelayCommand(param => this.GetCurrentWorkspace().Redo());
+                }
+                return _redoCommand;
+            }
+        }
+        
+        #endregion // RedoCommand
+
         #endregion // Command Definitions
 
         #region Property Bindings
-        
+
         public bool IsRedoEnabled
         {
-            get { return _redoEnabled; }
+            get { return GetCurrentWorkspace().IsRedoEnabled; }
         }
 
         public bool IsUndoEnabled
         {
-            get { return _undoEnabled; }
+            get { return GetCurrentWorkspace().IsUndoEnabled; }
         }
 
         #endregion // Property Bindings
@@ -184,6 +219,20 @@ namespace RobotInitial.ViewModel
                     workspace.RequestClose -= this.OnWorkspaceRequestClose;
                 }
             }
+        }
+
+        void OnWorkspacePropertyChanged(object sender, EventArgs e)
+        {
+            Debug.WriteLine("Property Changed: " + e);
+            if (e.ToString().Equals("IsUndoEnabled"))
+            {
+                OnPropertyChanged("IsUndoEnabled");
+            }
+            else if (e.ToString().Equals("IsRedoEnabled"))
+            {
+                OnPropertyChanged("IsRedoEnabled");
+            }
+
         }
 
         void OnWorkspaceRequestClose(object sender, EventArgs e)
@@ -256,6 +305,7 @@ namespace RobotInitial.ViewModel
             Workspace workspaceModel = Workspace.CreateNewWorkspace();
             WorkspaceViewModel workspace = new WorkspaceViewModel(workspaceModel);
             this.Workspaces.Add(workspace);
+            workspace.PropertyChanged += new PropertyChangedEventHandler(OnWorkspacePropertyChanged);
             this.SetActiveWorkspace(workspace);
         }
 
@@ -305,6 +355,12 @@ namespace RobotInitial.ViewModel
         {
             // Save Workspace.
 
+        }
+
+        WorkspaceViewModel GetCurrentWorkspace()
+        {
+            ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Workspaces);
+            return collectionView.CurrentItem as WorkspaceViewModel;
         }
 
 

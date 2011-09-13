@@ -4,10 +4,13 @@ using System.Linq;
 using System.Text;
 
 using RobotInitial.Properties;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.IO;
 
 namespace RobotInitial.Model
 {
-    class Workspace
+    [Serializable()]
+    public class Workspace : ICloneable
     {
 
         #region Static Accessors
@@ -38,7 +41,8 @@ namespace RobotInitial.Model
 
         #region Fields
 
-
+        private List<Block> _unattached = new List<Block>();
+        internal StartBlock _startBlock = new StartBlock();
 
         #endregion // Fields
 
@@ -58,5 +62,32 @@ namespace RobotInitial.Model
 
         #endregion // Constructors
 
+        #region Methods
+
+        public object Clone()
+        {
+            //Workspace clone = Workspace.CreateNewWorkspace();
+            Workspace clone = new Workspace();
+
+            clone._startBlock = _startBlock.Clone() as StartBlock;
+            foreach (Block block in _unattached) {
+                clone._unattached.Add(block.Clone() as Block);
+            }
+
+            clone.FileName = this.FileName; //immutable
+            clone.IsUntitled = IsUntitled;
+
+            return clone;
+        }
+
+        public void Serialise(Stream stream) {
+            ModelSerialiser.serialise(stream, this);
+        }
+
+        public static Workspace Deserialise(Stream stream) {
+            return ModelSerialiser.deserialise(stream) as Workspace;
+        }
+                
+        #endregion
     }
 }
