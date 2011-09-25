@@ -19,7 +19,7 @@ namespace RobotInitial.Lynx_Server {
             Virtual_Machine VM = Virtual_Machine.Instance;
             NetworkStream clientStream = client.GetStream();
 
-            if (!VM.Initialise(client, Thread.CurrentThread.ManagedThreadId)) {
+            if (!VM.Initialise()) {
                 //Reject connection, virtual machine is busy
                 Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection refused, Virtual Machine busy");
                 clientStream.WriteByte(0);
@@ -32,11 +32,12 @@ namespace RobotInitial.Lynx_Server {
                 clientStream.WriteByte(1);
                 
                 //Deserialise the workspace object from the client stream
-                Workspace program = Workspace.Deserialise(clientStream);
+                StartBlock program = StartBlock.deserialise(clientStream);
+                Protocol lynxProtocol = new LynxProtocol();
 
                 //Load the program onto the virtual machine then spawn another thread so we can 
                 //continue revieving communication from the client.
-                VM.LoadProgram(program);
+                VM.LoadProgram(program, lynxProtocol);
                 Thread programThread = new Thread(VM.RunProgram);
                 programThread.Start();
 
@@ -56,7 +57,12 @@ namespace RobotInitial.Lynx_Server {
                         }
 
                         //Reset the VM so another program can run and exit request thread
-                        VM.Reset();
+                        try {
+                            VM.Reset();
+                        } catch (VirtualMachineOwnershipException) {
+                            Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Cannot release VM: Ownership Exception");
+                        }
+
                         keepLooping = false;
                     }
 

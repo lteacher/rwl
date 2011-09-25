@@ -75,6 +75,7 @@
     <Compile Include="Lynx Server\LynxProtocol.cs" />
     <Compile Include="Lynx Server\Request Handler.cs" />
     <Compile Include="Lynx Server\Virtual Machine.cs" />
+    <Compile Include="Lynx Server\VirtualMachineOwnershipException.cs" />
     <Compile Include="MainWindow_methods.cs" />
     <Compile Include="Model\Factory\BlockFactory.cs" />
     <Compile Include="Model\Factory\DefaultBlockFactory.cs" />

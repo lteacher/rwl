@@ -1,3 +1,4 @@
 ﻿namespace RobotInitial.Lynx_Server {
-    enum EndState { Completed, TerminatedByClient, TerminatedByHardware };
+    public enum EndState { None, Completed, TerminatedByClient, TerminatedByHardware };
+    public enum Shutdown { None, Software, Hardware };
 }

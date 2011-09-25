@@ -2,6 +2,7 @@
 using System.Net.Sockets;
 using RobotInitial.Model;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace RobotInitial.Lynx_Server {
 
@@ -30,63 +31,89 @@ namespace RobotInitial.Lynx_Server {
 
         //Volatile varibles must be read from memory and updated in a single command/cycle
         volatile Boolean runningProgram = false;
-        volatile Boolean terminate = false;
+        volatile Shutdown terminate;
 
         int runningProgramID;
-        Workspace program;       
+        private StartBlock Start;
+        private Protocol Protocol;     
         public EndState state;
 
         object initialiseLock = new Object();
         object runningLock = new Object();
 
-        public Boolean Initialise(TcpClient client, int threadID) {
+        public Boolean Initialise() {
             lock (initialiseLock) {
                 if (runningProgram) {
                     return false;
                 } else {
                     runningProgram = true;
-                    program = null;
-                    this.runningProgramID = threadID;
+                    Start = null;
+                    Protocol = null;
+                    terminate = Shutdown.None;
+                    state = EndState.None;
+                    runningProgramID = Thread.CurrentThread.ManagedThreadId;
                 }
             }
 
             return true;     
         }
 
-        public void LoadProgram(Workspace program) {
+        public void LoadProgram(StartBlock start, Protocol protocol) {
             lock (runningLock) {
-                this.program = program;
+                this.Start = start;
+                this.Protocol = protocol;
             }            
         }
 
-        public void TerminateProgram() {
-            terminate = true;
+        //Hardware & Software reset of program
+        public void TerminateProgram(Shutdown terminate) {
+            //Calling thread must currently have ownership of the VM
+            if(Thread.CurrentThread.ManagedThreadId == runningProgramID){
+                this.terminate = terminate;
+            }else{
+                throw new VirtualMachineOwnershipException();
+            }
         }
 
         public void Reset() {
-            runningProgram = false;
+            //Calling thread must currently have ownership of the VM
+            if(Thread.CurrentThread.ManagedThreadId == runningProgramID){
+                runningProgram = false;
+            }else{
+                throw new VirtualMachineOwnershipException();
+            } 
         }
 
         public void RunProgram() {
             lock (runningLock) {
-                //Grab the start block from the workspace
-                LinkedList<Block> ProgramList = new LinkedList<Block>();
-                LynxProtocol protocol = new LynxProtocol();
-                Block currentBlock;
+                LinkedList<Block> performAfter = new LinkedList<Block>();
+                Stack<Block> stack = new Stack<Block>();
+                stack.Push(Start);
 
-                program._startBlock.perform(protocol, ref ProgramList);
+                while (stack.Count > 0) {
+                    //Check hardware/software shutdowns
+                    if (terminate != Shutdown.None){
 
-                while (ProgramList.Count > 0) {
-                    if (terminate) {
-                        state = EndState.TerminatedByClient;
-                        return;
+                        if(terminate == Shutdown.Software){
+                            state = EndState.TerminatedByClient;
+                        }else{
+                            state = EndState.TerminatedByHardware;
+                        }
+
+                        break;
                     }
 
-                    //Pop the first item on the stack/list and run it
-                    currentBlock = ProgramList.First.Value;
-                    ProgramList.RemoveFirst();
-                    currentBlock.perform(protocol, ref ProgramList);
+                    //Run through next program instruction
+                    Block current = stack.Pop();
+                    if (current == null) continue;
+                    current.perform(this.Protocol, ref performAfter);
+                    while (performAfter.Count > 0) 
+                        stack.Push(performAfter.Last.Value);
+                        performAfter.RemoveLast();
+                    }
                 }
+
+            
             }
         }
 
@@ -140,3 +167,22 @@ namespace RobotInitial.Lynx_Server {
     //        }
     //    }
     //}
+
+    //Grab the start block from the workspace
+                //LinkedList<Block> ProgramList = new LinkedList<Block>();
+                //LynxProtocol protocol = new LynxProtocol();
+                //Block currentBlock;
+
+                //program._startBlock.perform(protocol, ref ProgramList);
+
+                //while (ProgramList.Count > 0) {
+                //    if (terminate) {
+                //        state = EndState.TerminatedByClient;
+                //        return;
+                //    }
+
+                //    //Pop the first item on the stack/list and run it
+                //    currentBlock = ProgramList.First.Value;
+                //    ProgramList.RemoveFirst();
+                //    currentBlock.perform(protocol, ref ProgramList);
+                //}
