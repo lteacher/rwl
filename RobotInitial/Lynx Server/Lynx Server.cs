@@ -15,11 +15,15 @@ namespace RobotInitial.Lynx_Server
 
         private static TextWriter logFile = File.AppendText("log.txt");
 
-        public Lynx_Server(){
+        public Lynx_Server(){                      
+        }
+
+        public void start() {
             //Listen for connects on Any of the devices network connections
             tcpListener = new TcpListener(IPAddress.Any, 7331);
+            tcpListener.Start();
 
-            while (true){             
+            while (true) {
                 //Check for TCP/IP connection requests
                 client = tcpListener.AcceptTcpClient();
 
@@ -27,7 +31,7 @@ namespace RobotInitial.Lynx_Server
                 currentRequest = new Request_Handler(client);
                 requestThread = new Thread(currentRequest.processRequest);
                 requestThread.Start();
-            }            
+            }  
         }
 
         public static void Log(string message){

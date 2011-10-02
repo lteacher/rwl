@@ -66,6 +66,8 @@
     <Compile Include="Command\CommandBehavior.cs" />
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
+    <Compile Include="Communications\Network.cs" />
+    <Compile Include="Communications\RWL Exceptions.cs" />
     <Compile Include="Components.cs" />
     <Compile Include="Controls\TaskBlockItem.cs" />
     <Compile Include="EventSystem.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Lynx Server\Lynx Server.cs" />
     <Compile Include="Lynx Server\LynxProtocol.cs" />
     <Compile Include="Lynx Server\Request Handler.cs" />
+    <Compile Include="Lynx Server\ServerTest.cs" />
     <Compile Include="Lynx Server\Virtual Machine.cs" />
     <Compile Include="Lynx Server\VirtualMachineOwnershipException.cs" />
     <Compile Include="MainWindow_methods.cs" />

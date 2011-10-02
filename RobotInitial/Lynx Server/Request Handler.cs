@@ -21,18 +21,21 @@ namespace RobotInitial.Lynx_Server {
 
             if (!VM.Initialise()) {
                 //Reject connection, virtual machine is busy
-                Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection refused, Virtual Machine busy");
+                //Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection refused, Virtual Machine busy");
+                Console.Write("Connection rejected: VM busy \n");
                 clientStream.WriteByte(0);
                 client.Close();
                 return;
 
             } else {
                 //Virtual machine is free and has been allocated to this request
-                Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection Accepted");
+                //Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection Accepted");
+                Console.Write("Connection accepted \n");
                 clientStream.WriteByte(1);
                 
                 //Deserialise the workspace object from the client stream
                 StartBlock program = StartBlock.deserialise(clientStream);
+                Console.Write("Program recieved \n");
                 Protocol lynxProtocol = new LynxProtocol();
 
                 //Load the program onto the virtual machine then spawn another thread so we can 

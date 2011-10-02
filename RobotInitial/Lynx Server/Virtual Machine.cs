@@ -86,11 +86,13 @@ namespace RobotInitial.Lynx_Server {
 
         public void RunProgram() {
             lock (runningLock) {
+                Console.Write("Running program \n");
                 LinkedList<Block> performAfter = new LinkedList<Block>();
                 Stack<Block> stack = new Stack<Block>();
                 stack.Push(Start);
 
                 while (stack.Count > 0) {
+                    //Console.Write("Program Line Run \n");
                     //Check hardware/software shutdowns
                     if (terminate != Shutdown.None){
 
@@ -107,7 +109,7 @@ namespace RobotInitial.Lynx_Server {
                     Block current = stack.Pop();
                     if (current == null) continue;
                     current.perform(this.Protocol, ref performAfter);
-                    while (performAfter.Count > 0) 
+                    while (performAfter.Count > 0){ 
                         stack.Push(performAfter.Last.Value);
                         performAfter.RemoveLast();
                     }

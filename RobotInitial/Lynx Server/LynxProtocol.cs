@@ -7,7 +7,7 @@ using RobotInitial.Model;
 namespace RobotInitial.Lynx_Server {
     class LynxProtocol : Protocol {
         public void move(MoveParameters parameters) {
-            throw new NotImplementedException();
+            Console.Write("MOVED \n");
         }
 
         public IRData requestIR() {
