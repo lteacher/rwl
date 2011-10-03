@@ -7,15 +7,16 @@ using System.Threading;
 
 namespace RobotInitial.Lynx_Server {
     class ServerTest {
-        static void Main() {
-            Thread ServerThread;
-            Lynx_Server server = new Lynx_Server();
+		//static void Main() {
+		//    Thread ServerThread;
+		//    Lynx_Server server = new Lynx_Server();
 
-            ServerThread = new Thread(server.start);
-            ServerThread.Start();
-            Console.Write("Server started \n");
+		//    ServerThread = new Thread(server.start);
+		//    ServerThread.Start();
+		//    Console.Write("Server started \n");
 
 
+            StartBlock start = new StartBlock();
             //StartBlock start = new StartBlock();
 
             //LoopBlock loop = new LoopBlock();
@@ -34,14 +35,13 @@ namespace RobotInitial.Lynx_Server {
             //move.DurationUnit = MoveDurationUnit.DEGREES;
             //move.Duration = 360.0f;
             loop.LoopPath = move;
-            start.Next = loop;
 
-            Console.Write("Contacting Server \n");
-            Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
+		//    Console.Write("Contacting Server \n");
+		//    Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
 
-            //Keep Console Open
-            while (true) {
-            }
-        }
+		//    //Keep Console Open
+		//    while (true) {
+		//    }
+		//}
     }
 }

@@ -15,8 +15,6 @@ namespace RobotInitial.ViewModel
 	// by the LoopControlBlockView and SwitchControlBlockView
 	class ControlBlockViewModel : ViewModelBase
 	{
-
-		private ObservableCollection<UIElement> _children = new ObservableCollection<UIElement>();
 		public String Type { get; set; }
 		private double _topOffset = 0;
 		private Thickness _offsetMargin = new Thickness(0, 0, 0, 0);
@@ -30,24 +28,6 @@ namespace RobotInitial.ViewModel
 			{
 				_offsetMargin = value;
 			}
-		}
-
-		public ObservableCollection<UIElement> Children
-		{
-			get { return _children; }
-		}
-
-		public void AddChildBlock(FrameworkElement element)
-		{
-			if (Children.Count == 0) {
-				element.Margin = new Thickness(50,0,50,0);
-			}
-			else {
-				element.Margin = new Thickness(-25,0,50,0);
-			}
-			
-			// Add a child to the collection
-			_children.Add(element);
 		}
 
 		public void SetOffsetMargin(FrameworkElement element) {
