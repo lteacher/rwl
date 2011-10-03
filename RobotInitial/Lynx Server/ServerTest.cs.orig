@@ -7,16 +7,16 @@ using System.Threading;
 
 namespace RobotInitial.Lynx_Server {
     class ServerTest {
-        static void Main() {
-            Thread ServerThread;
-            Lynx_Server server = new Lynx_Server();
+		//static void Main() {
+		//    Thread ServerThread;
+		//    Lynx_Server server = new Lynx_Server();
 
-            ServerThread = new Thread(server.start);
-            ServerThread.Start();
-            Console.Write("Server started \n");
+		//    ServerThread = new Thread(server.start);
+		//    ServerThread.Start();
+		//    Console.Write("Server started \n");
 
 
-            //StartBlock start = new StartBlock();
+<<<<<<< HEAD
             //StartBlock start = new StartBlock();
 
             //LoopBlock loop = new LoopBlock();
@@ -36,13 +36,33 @@ namespace RobotInitial.Lynx_Server {
             //move.Duration = 360.0f;
             loop.LoopPath = move;
             start.Next = loop;
+=======
+		//    StartBlock start = new StartBlock();
 
-            Console.Write("Contacting Server \n");
-            Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
+		//    LoopBlock loop = new LoopBlock();
+		//    CountConditional count = new CountConditional();
+		//    count.Limit = 10;
+		//    loop.Condition = count;
 
+		//    MoveBlock truepath = new MoveBlock();
+		//    loop.LoopPath = truepath;
+		//    start.Next = loop;
+>>>>>>> origin/mvvm_refactor
+
+		//    Console.Write("Contacting Server \n");
+		//    Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
+
+<<<<<<< HEAD
             //Keep Console Open
             while (true) {
             }
         }
+=======
+
+		//    //Keep Console Open
+		//    while (true) {
+		//    }
+		//}
+>>>>>>> origin/mvvm_refactor
     }
 }

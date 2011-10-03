@@ -114,7 +114,7 @@ namespace RobotInitial.Lynx_Server {
             System.Diagnostics.Debug.Write(leftMsg);
             System.Diagnostics.Debug.Write(rightMsg);
 
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public IRData requestIR() {
