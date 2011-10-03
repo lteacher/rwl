@@ -14,10 +14,9 @@
 
     <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto" AllowDrop="True" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Rectangle Fill="Yellow" Stroke="Black" Opacity="0.16" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5" />
-        <!--<Rectangle Fill="Yellow" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Left" Margin="-25 25 50 25" RadiusY="4.0" RadiusX="4.0"/>-->
         <Rectangle Fill="Yellow" Stroke="Black" Width="25" Height="175" HorizontalAlignment="Left" Margin="0 25 50 25" RadiusY="4.0" RadiusX="4.0"/>
-        <StackPanel Height="Auto" VerticalAlignment="Center">
-        	<ItemsControl ItemsSource="{Binding ChildrenTop}" Margin="{Binding TopStackMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <StackPanel Height="Auto"  VerticalAlignment="Center">
+        	<ItemsControl Name="ChildrenTop" ItemsSource="{Binding ChildrenTop}" Margin="{Binding TopStackMargin}" HorizontalAlignment="Left" VerticalAlignment="Top">
         		<ItemsControl.Template>
         			<ControlTemplate TargetType="{x:Type ItemsControl}">
         				<Border>
@@ -31,7 +30,7 @@
         			</ItemsPanelTemplate>
         		</ItemsControl.ItemsPanel>
         	</ItemsControl>
-        	<ItemsControl ItemsSource="{Binding ChildrenBottom}" Margin="{Binding BottomStackMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ItemsControl Name="ChildrenBottom" ItemsSource="{Binding ChildrenBottom}" Margin="{Binding BottomStackMargin}" HorizontalAlignment="Left" VerticalAlignment="Bottom">
         		<ItemsControl.Template>
         			<ControlTemplate TargetType="{x:Type ItemsControl}">
         				<Border>

@@ -89,9 +89,6 @@
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\WaitControlBlockViewModel.cs" />
     <Compile Include="ViewModel\WorkspaceViewModel.cs" />
-    <Compile Include="View\ControlBlockTest.xaml.cs">
-      <DependentUpon>ControlBlockTest.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\ControlBlockView.cs" />
     <Compile Include="View\LoopControlBlockView.xaml.cs">
       <DependentUpon>LoopControlBlockView.xaml</DependentUpon>
@@ -105,7 +102,6 @@
     <Compile Include="View\TaskBlockTabView.xaml.cs">
       <DependentUpon>TaskBlockTabView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\TestControl.cs" />
     <Compile Include="View\WaitControlBlockView.xaml.cs">
       <DependentUpon>WaitControlBlockView.xaml</DependentUpon>
     </Compile>
@@ -117,10 +113,6 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\ControlBlockTest.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\LoopControlBlockView.xaml">
       <SubType>Designer</SubType>
