@@ -14,9 +14,7 @@ namespace RobotInitial.Model {
         private ModelSerialiser() {
         }
 
-        //appends onto the end of the stream.
         internal static void serialise(Stream stream, object ob) {
-            stream.Position = stream.Length;
             try {
                 formatter.Serialize(stream, ob);
             } catch (SerializationException e) {
@@ -28,15 +26,13 @@ namespace RobotInitial.Model {
             //stream.Flush(); 
         }
 
-        //deserialises from the start of the stream
         internal static object deserialise(Stream stream) {
-            stream.Position = 0;
             object ob;
 
             try {
                 ob = formatter.Deserialize(stream);
             } catch (SerializationException e) {
-                Console.WriteLine("Failed to deserialize. Reason: " + e.Message);
+                Debug.WriteLine("Failed to deserialize. Reason: " + e.Message);
                 throw;
             }
 
