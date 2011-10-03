@@ -5,9 +5,9 @@ using System.Text;
 
 namespace RobotInitial.Model {
     enum Axis {
-        X,
-        Y,
-        Z
+        X = 0,
+        Y = 1,
+        Z = 2
     }
 
     interface IMUData {

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Lynx_Server {
-    class VirtualMachineOwnershipException : ApplicationException  {
-    }
+    //already defined in "Communications/RWL Exceptions.cs"?
+    //was preventing me from compiling, so I commented it out. -seth
+    //class VirtualMachineOwnershipException : ApplicationException  {
+    //}
 }

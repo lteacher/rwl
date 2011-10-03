@@ -36,6 +36,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>RobotInitial.Lynx_Server.ServerTest</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Drawing" />
     <Reference Include="Microsoft.Expression.Interactions" />
@@ -102,7 +105,7 @@
     <Compile Include="Model\Conditionals\IRSensorConditional.cs" />
     <Compile Include="Model\Conditionals\TimeConditional.cs" />
     <Compile Include="Model\Conditionals\TrueConditional.cs" />
-    <Compile Include="Model\Data\StatusData.cs" />
+    <Compile Include="Model\Data\Status.cs" />
     <Compile Include="Model\Executor.cs" />
     <Compile Include="Model\ModelSerialiser.cs" />
     <Compile Include="Model\Protocol.cs" />

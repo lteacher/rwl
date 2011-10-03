@@ -10,7 +10,7 @@ namespace RobotInitial.Model {
         public MoveDirection LeftDirection { get; set; }
         public int RightPower { get; set; }
         public int LeftPower { get; set; }
-        public int Duration { get; set; }
+        public float Duration { get; set; }
         public MoveDurationUnit DurationUnit { get; set; }
         public bool BrakeAfterMove { get; set; }
 

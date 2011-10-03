@@ -16,20 +16,28 @@ namespace RobotInitial.Lynx_Server {
             Console.Write("Server started \n");
 
 
-            StartBlock start = new StartBlock();
+            //StartBlock start = new StartBlock();
 
-            LoopBlock loop = new LoopBlock();
-            CountConditional count = new CountConditional();
-            count.Limit = 10;
-            loop.Condition = count;
+            //LoopBlock loop = new LoopBlock();
+            //CountConditional count = new CountConditional();
+            //count.Limit = 10;
+            //loop.Condition = count;
+            //MoveBlock truepath = new MoveBlock();
+            //loop.LoopPath = truepath;
+            //start.Next = loop;
 
-            MoveBlock truepath = new MoveBlock();
-            loop.LoopPath = truepath;
+            DefaultBlockFactory fact = DefaultBlockFactory.Instance;
+
+            StartBlock start = fact.createStartBlock();
+            LoopBlock loop = fact.createLoopBlock();
+            MoveBlock move = fact.createMoveBlock();
+            //move.DurationUnit = MoveDurationUnit.DEGREES;
+            //move.Duration = 360.0f;
+            loop.LoopPath = move;
             start.Next = loop;
 
             Console.Write("Contacting Server \n");
             Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
-
 
             //Keep Console Open
             while (true) {
