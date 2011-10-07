@@ -77,7 +77,13 @@
     <Compile Include="Command\ExecutionStrategy.cs" />
     <Compile Include="Lynx Server\EndState.cs" />
     <Compile Include="Lynx Server\Lynx Server.cs" />
-    <Compile Include="Lynx Server\LynxProtocol.cs" />
+    <Compile Include="Lynx Server\Protocol\LynxStatus.cs" />
+    <Compile Include="Lynx Server\Protocol\LynxMessage.cs" />
+    <Compile Include="Lynx Server\Protocol\LynxCommand.cs" />
+    <Compile Include="Lynx Server\Protocol\LynxIMUData.cs" />
+    <Compile Include="Lynx Server\Protocol\LynxIRData.cs" />
+    <Compile Include="Lynx Server\Protocol\LynxProtocol.cs" />
+    <Compile Include="Vector3.cs" />
     <Compile Include="Lynx Server\Request Handler.cs" />
     <Compile Include="Lynx Server\ServerTest.cs" />
     <Compile Include="Lynx Server\Virtual Machine.cs" />
@@ -105,7 +111,6 @@
     <Compile Include="Model\Conditionals\IRSensorConditional.cs" />
     <Compile Include="Model\Conditionals\TimeConditional.cs" />
     <Compile Include="Model\Conditionals\TrueConditional.cs" />
-    <Compile Include="Model\Data\Status.cs" />
     <Compile Include="Model\Executor.cs" />
     <Compile Include="Model\ModelSerialiser.cs" />
     <Compile Include="Model\Protocol.cs" />

@@ -8,6 +8,6 @@ namespace RobotInitial.Model {
         void move(MoveParameters parameters);
         IRData requestIR();
         IMUData requestIMU();
-        Status requestStatus();
+        int requestStatus();
     }
 }
