@@ -29,9 +29,13 @@ namespace RobotInitial.Lynx_Server {
             port.Close();
         }
 
-        //FIXME: possibly too simplistic, probably will have to do some error checking and such
-        private LynxMessage sendMessage(LynxMessage message) {
+        
+        private void sendMessage(LynxMessage message) {
             port.WriteLine(message.ToString());
+        }
+
+        //FIXME: possibly too simplistic, probably will have to do some error checking and such
+        private LynxMessage getResponse() {
             return new LynxMessage(port.ReadLine());    //blocking call
         }
 
@@ -69,12 +73,14 @@ namespace RobotInitial.Lynx_Server {
             LynxMessage  rightMsg = new LynxMessage(args);
 
             sendMessage(leftMsg);
-            sendMessage(rightMsg);//ignoring response atm, but will be blocked anyway
+            sendMessage(rightMsg);
+            getResponse();
+            getResponse();//block until both complete
         }
 
         public IRData requestIR() {
-            LynxMessage req = new LynxMessage((byte)LynxCommand.REQIR);
-            LynxMessage resp = sendMessage(req);
+            sendMessage(new LynxMessage((byte)LynxCommand.REQIR));
+            LynxMessage resp = getResponse();
 
             int[] distances = new int[resp.Length];
             for (int i = 0; i < distances.Length; ++i) {
@@ -84,8 +90,9 @@ namespace RobotInitial.Lynx_Server {
         }
 
         public IMUData requestIMU() {
-            LynxMessage req = new LynxMessage((byte)LynxCommand.REQIMU);
-            LynxMessage resp = sendMessage(req);
+            sendMessage(new LynxMessage((byte)LynxCommand.REQIMU));
+            LynxMessage resp = getResponse();
+
             return new LynxIMUData(
                 new Vector3(resp.getArg(0), resp.getArg(1), resp.getArg(2)),
                 new Vector3(resp.getArg(3), resp.getArg(4), resp.getArg(5)),
@@ -93,8 +100,8 @@ namespace RobotInitial.Lynx_Server {
         }
 
         public int requestStatus() {
-            LynxMessage req = new LynxMessage((byte)LynxCommand.REQSTATUS);
-            LynxMessage resp = sendMessage(req);
+            sendMessage(new LynxMessage((byte)LynxCommand.REQSTATUS));
+            LynxMessage resp = getResponse();
             return (resp.getArg(0) << 8) | resp.getArg(1);
         }
     }
