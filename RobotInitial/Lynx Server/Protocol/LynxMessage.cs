@@ -23,7 +23,7 @@ namespace RobotInitial.Lynx_Server {
         }
 
         public LynxMessage(params byte[] args) {
-            this.args = args;
+            this.args = args.Clone() as byte[];
             this.CommandType = LEGOCOMMANDSET;
             this.CheckSum = (byte)(Length ^ CommandType);    //"checksum is a logical XOR of each piece of information, including the length"
             foreach (byte arg in args) {

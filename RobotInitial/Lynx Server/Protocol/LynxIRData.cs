@@ -19,7 +19,7 @@ namespace RobotInitial.Lynx_Server{
         private int[] distances;
 
         public LynxIRData(params int[] args) {
-            distances = args;   //args would have to be passed by value since it is a params, we can just copy a reference to the (new) array
+            distances = args.Clone() as int[];
         }
 
         public int getDistance(int port) {

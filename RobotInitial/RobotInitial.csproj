@@ -37,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>RobotInitial.App</StartupObject>
+    <StartupObject>RobotInitial.Lynx_Server.ServerTest</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Drawing" />
