@@ -130,6 +130,7 @@
     <Compile Include="ViewModel\LoopControlBlockViewModel.cs" />
     <Compile Include="ViewModel\MoveControlBlockViewModel.cs" />
     <Compile Include="ViewModel\SwitchControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\SwitchTabBlockViewModel.cs" />
     <Compile Include="ViewModel\TaskBlockTabViewModel.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IStreamService.cs" />
@@ -154,6 +155,9 @@
     </Compile>
     <Compile Include="View\SwitchControlBlockView.xaml.cs">
       <DependentUpon>SwitchControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SwitchTabBlockView.xaml.cs">
+      <DependentUpon>SwitchTabBlockView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TaskBlockTabView.xaml.cs">
       <DependentUpon>TaskBlockTabView.xaml</DependentUpon>
@@ -193,6 +197,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SwitchControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SwitchTabBlockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

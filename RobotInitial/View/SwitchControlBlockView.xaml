@@ -7,7 +7,7 @@
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:b="clr-namespace:RobotInitial.Behaviours"
              mc:Ignorable="d" 
-            d:DesignWidth="{Binding Width}" d:DesignHeight="{Binding Height}">
+            d:DesignWidth="{Binding Width}" d:DesignHeight="{Binding Height}" ClipToBounds="True">
     <UserControl.DataContext>
         <vm:SwitchControlBlockViewModel/>
     </UserControl.DataContext>

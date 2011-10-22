@@ -14,13 +14,22 @@ namespace RobotInitial.ViewModel
     {
 
         #region Fields
-
         Workspace _workspace;
         readonly UndoManager _undoManager;
+		int _minWidth = 2000;
+		int _minHeight = 2000;
 
         #endregion // Fields
 
         #region Properties
+
+		public int Width {
+			get { return _minWidth; }
+		}
+
+		public int Height {
+			get { return _minHeight; }
+		}
 
         public bool IsUndoEnabled
         {
@@ -44,6 +53,10 @@ namespace RobotInitial.ViewModel
         {
             _undoManager.Redo(out _workspace);
         }
+
+		public WorkspaceViewModel() {
+
+		}
 
         public WorkspaceViewModel(Workspace workspace)
         {

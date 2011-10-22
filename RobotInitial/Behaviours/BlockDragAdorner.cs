@@ -34,7 +34,8 @@ namespace RobotInitial
 			if(viewModel.Type == "Move") _child = new MoveControlBlockView();
 			if(viewModel.Type == "Loop") _child = new LoopControlBlockView();
 			if(viewModel.Type == "Wait") _child = new WaitControlBlockView();
-			if(viewModel.Type == "Switch") _child = new SwitchControlBlockView();
+			//if (viewModel.Type == "Switch") _child = new SwitchControlBlockView();
+			if (viewModel.Type == "Switch") _child = new SwitchTabBlockView();
 
 			_child.Opacity = opacity;
 
