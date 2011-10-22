@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 using System.Windows.Media;
 using System.Diagnostics;
 using System.Windows.Input;
+using RobotInitial.View;
 
 namespace RobotInitial.ViewModel
 {
@@ -126,15 +127,26 @@ namespace RobotInitial.ViewModel
 			if (element.DesiredSize.Height > _maxSizes[_caseIndex]) _maxSizes[_caseIndex] = element.DesiredSize.Height;
 			if (Children.Count == 0)
 			{
-				element.Margin = new Thickness(50, 0, 50, 0);
+				ArrowConnector connector1 = new ArrowConnector();
+				connector1.Margin = new Thickness(25, 0, 0, 0);
+				Children.Add(connector1);
+				element.Margin = new Thickness(0, 0, 0, 0);
+				Children.Add(element);
+				ArrowConnector connector2 = new ArrowConnector();
+				connector2.Margin = new Thickness(0, 0, 25, 0);
+				Children.Add(connector2);
 			}
 			else
 			{
 				element.Margin = new Thickness(-25, 0, 50, 0);
+				ArrowConnector connector = new ArrowConnector();
+				connector.Margin = new Thickness(-75, 0, 0, 0);
+				Children.Add(element);
+				Children.Add(connector);
 			}
 
 			// Add a child to the collection
-			Children.Add(element);
+			//Children.Add(element);
 			NotifyPropertyChanged("Children");
 			NotifyPropertyChanged("StackMargin");
 		}

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Media;
+using RobotInitial.View;
 
 namespace RobotInitial.ViewModel
 {
@@ -93,15 +94,23 @@ namespace RobotInitial.ViewModel
 		{
 			if (Children.Count == 0)
 			{
-				element.Margin = new Thickness(50, 0, 50, 0);
+				ArrowConnector connector1 = new ArrowConnector();
+				connector1.Margin = new Thickness(25, 0, 0, 0);
+				_children.Add(connector1);
+				element.Margin = new Thickness(0, 0, 0, 0);
+				_children.Add(element);
+				ArrowConnector connector2 = new ArrowConnector();
+				connector2.Margin = new Thickness(0, 0, 25, 0);
+				_children.Add(connector2);
 			}
 			else
 			{
 				element.Margin = new Thickness(-25, 0, 50, 0);
+				ArrowConnector connector = new ArrowConnector();
+				connector.Margin = new Thickness(-75, 0, 0, 0);
+				_children.Add(element);
+				_children.Add(connector);
 			}
-
-			// Add a child to the collection
-			_children.Add(element);
 		}
 
 	}
