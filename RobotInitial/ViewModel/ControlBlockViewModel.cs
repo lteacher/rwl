@@ -32,7 +32,6 @@ namespace RobotInitial.ViewModel
 
 		public void SetOffsetMargin(FrameworkElement element) {
 			_topOffset -= 200;
-			Console.WriteLine("=>>>>>>>>> SET THE OFFSET");
 			OffsetMargin = new Thickness(0,_topOffset,0,0);
 		}
 	}

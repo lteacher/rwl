@@ -10,17 +10,19 @@
              xmlns:e="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:b="clr-namespace:RobotInitial.Behaviours"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Loaded="UserControl_Loaded">
+             d:DesignHeight="800" d:DesignWidth="600" Loaded="UserControl_Loaded">
     <UserControl.DataContext>
-        <vm:WorkspaceViewModel />
+        <vm:WorkspaceViewModel/>
     </UserControl.DataContext>
     
-    <ScrollViewer HorizontalScrollBarVisibility="Visible">
+    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Canvas Background="#FFFFE5E5" Width="{Binding Width}" Height="{Binding Height}">
-	    <e:Interaction.Behaviors>
-			<b:DropToWorkspace/>
-		</e:Interaction.Behaviors>
-		<local:GridMask RowWidth="25" ColWidth="25"/>
-	</Canvas>
+	        <!--<e:Interaction.Behaviors>
+			    <b:DropToWorkspace/>
+		    </e:Interaction.Behaviors>-->
+		    <local:GridMask RowWidth="25" ColWidth="25"/>
+            <ContentControl Content="{Binding Sequence}" Canvas.Top="{Binding SequenceY}"/>
+
+	    </Canvas>
     </ScrollViewer>
 </UserControl>

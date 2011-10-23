@@ -64,6 +64,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviours\DragWithAdornment.cs" />
+    <Compile Include="Behaviours\DropToSequence.cs" />
     <Compile Include="Behaviours\DropToWorkspace.cs" />
     <Compile Include="Behaviours\ExpandingDrop.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="ViewModel\ControlBlockViewModel.cs" />
     <Compile Include="ViewModel\LoopControlBlockViewModel.cs" />
     <Compile Include="ViewModel\MoveControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\SequenceViewModel.cs" />
     <Compile Include="ViewModel\SwitchControlBlockViewModel.cs" />
     <Compile Include="ViewModel\SwitchTabBlockViewModel.cs" />
     <Compile Include="ViewModel\TaskBlockTabViewModel.cs" />
@@ -155,6 +157,9 @@
     </Compile>
     <Compile Include="View\MoveControlBlockView.xaml.cs">
       <DependentUpon>MoveControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SequenceView.xaml.cs">
+      <DependentUpon>SequenceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SwitchControlBlockView.xaml.cs">
       <DependentUpon>SwitchControlBlockView.xaml</DependentUpon>
@@ -200,6 +205,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="View\MoveControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SequenceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

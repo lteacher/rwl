@@ -303,9 +303,10 @@ namespace RobotInitial.ViewModel
         void CreateNewWorkspace()
         {
             Workspace workspaceModel = Workspace.CreateNewWorkspace();
-            WorkspaceViewModel workspace = new WorkspaceViewModel(workspaceModel);
+			//WorkspaceViewModel workspace = new WorkspaceViewModel(workspaceModel);
+			WorkspaceViewModel workspace = new WorkspaceViewModel();
             this.Workspaces.Add(workspace);
-            workspace.PropertyChanged += new PropertyChangedEventHandler(OnWorkspacePropertyChanged);
+            //workspace.PropertyChanged += new PropertyChangedEventHandler(OnWorkspacePropertyChanged);
             this.SetActiveWorkspace(workspace);
         }
 
@@ -325,7 +326,8 @@ namespace RobotInitial.ViewModel
             // Show Dialog (this is a non-trivial task in MVVM)
             // Get filename from dialog
             Workspace workspaceModel = Workspace.LoadWorkspace("rawr.rwl");
-            WorkspaceViewModel workspace = new WorkspaceViewModel(workspaceModel);
+			//WorkspaceViewModel workspace = new WorkspaceViewModel(workspaceModel);
+			WorkspaceViewModel workspace = new WorkspaceViewModel();
             this.Workspaces.Add(workspace);
             this.SetActiveWorkspace(workspace);
         }
