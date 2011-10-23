@@ -22,7 +22,7 @@ namespace RobotInitial.Model {
     enum MoveDurationUnit {
         ENCODERCOUNT,
         DEGREES,
-        ROTATIONS,
+        //ROTATIONS,
         MILLISECONDS,
         UNLIMITED
     }

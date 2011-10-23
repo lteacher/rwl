@@ -5,6 +5,6 @@ using System.Text;
 
 namespace RobotInitial.Model {
     interface IRData {
-        int getDistance(int port);
+        int GetDistance(int port);
     }
 }

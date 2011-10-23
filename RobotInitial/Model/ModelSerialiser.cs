@@ -14,7 +14,7 @@ namespace RobotInitial.Model {
         private ModelSerialiser() {
         }
 
-        internal static void serialise(Stream stream, object ob) {
+        internal static void Serialise(Stream stream, object ob) {
             try {
                 formatter.Serialize(stream, ob);
             } catch (SerializationException e) {
@@ -26,7 +26,7 @@ namespace RobotInitial.Model {
             //stream.Flush(); 
         }
 
-        internal static object deserialise(Stream stream) {
+        internal static object Deserialise(Stream stream) {
             object ob;
 
             try {

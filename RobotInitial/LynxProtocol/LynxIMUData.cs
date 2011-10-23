@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using RobotInitial.Model;
 
-namespace RobotInitial.Lynx_Server {
+namespace RobotInitial.LynxProtocol {
     struct LynxIMUData : IMUData {
 
         public Vector3 Accelerometer { get; private set; }

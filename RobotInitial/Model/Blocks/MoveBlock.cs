@@ -27,8 +27,8 @@ namespace RobotInitial.Model {
             this.BrakeAfterMove = other.BrakeAfterMove;
         }
 
-        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
-            protocol.move(this);
+        public override void Perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+            protocol.Move(this);
             performAfter.AddFirst(Next);
         }
 

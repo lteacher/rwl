@@ -15,16 +15,16 @@ namespace RobotInitial.Model {
         internal RNGConditional() {
         }
 
-        public override void initilize() {
+        public override void Initilize() {
             rand = new Random();
         }
 
-        public override void update() {
+        public override void Update() {
             //max is an exclusive bound
             current = rand.Next(Min, Max + 1);
         }
 
-        public override int evaluate(Protocol protocol) {
+        public override int Evaluate(Protocol protocol) {
             return current;
         }
     }

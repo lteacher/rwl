@@ -5,10 +5,10 @@ using System.Text;
 
 namespace RobotInitial.Model {
     interface BlockFactory {
-        StartBlock createStartBlock();
-        MoveBlock createMoveBlock();
-        WaitBlock createWaitBlock();
-        LoopBlock createLoopBlock();
-        SwitchBlock<T> createSwitchBlock<T>();
+        StartBlock CreateStartBlock();
+        MoveBlock CreateMoveBlock();
+        WaitBlock CreateWaitBlock();
+        LoopBlock CreateLoopBlock();
+        SwitchBlock<T> CreateSwitchBlock<T>();
     }
 }

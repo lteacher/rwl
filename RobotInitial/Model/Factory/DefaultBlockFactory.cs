@@ -16,11 +16,11 @@ namespace RobotInitial.Model {
             get { return instance; }
         }
 
-        public StartBlock createStartBlock() {
+        public StartBlock CreateStartBlock() {
             return new StartBlock();
         }
 
-        public MoveBlock createMoveBlock() {
+        public MoveBlock CreateMoveBlock() {
             MoveBlock block = new MoveBlock();
             block.LeftDirection = MoveDirection.FORWARD;
             block.RightDirection = MoveDirection.FORWARD;
@@ -32,7 +32,7 @@ namespace RobotInitial.Model {
             return block;
         }
 
-        public WaitBlock createWaitBlock() {
+        public WaitBlock CreateWaitBlock() {
             WaitBlock block = new WaitBlock();
             TimeConditional cond = new TimeConditional();
             cond.Duration = 1000;
@@ -40,7 +40,7 @@ namespace RobotInitial.Model {
             return block;
         }
 
-        public LoopBlock createLoopBlock() {
+        public LoopBlock CreateLoopBlock() {
             LoopBlock block = new LoopBlock();
             CountConditional cond = new CountConditional();
             cond.Limit = 5;
@@ -48,7 +48,7 @@ namespace RobotInitial.Model {
             return block;
         }
 
-        public SwitchBlock<T> createSwitchBlock<T>() {
+        public SwitchBlock<T> CreateSwitchBlock<T>() {
             SwitchBlock<T> block = new SwitchBlock<T>();
             Type type = typeof(T);
 

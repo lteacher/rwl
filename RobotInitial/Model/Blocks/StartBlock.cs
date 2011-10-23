@@ -16,7 +16,7 @@ namespace RobotInitial.Model {
         protected StartBlock(StartBlock other) : base(other) {
         }
 
-        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+        public override void Perform(Protocol protocol, ref LinkedList<Block> performAfter) {
             performAfter.AddFirst(Next);
         }
 
@@ -25,13 +25,13 @@ namespace RobotInitial.Model {
         }
 
         //to send the program over the network
-        public void serialise(Stream stream) {
+        public void Serialise(Stream stream) {
             MemoryStream memoryStream = new MemoryStream();
             serialiser.Serialize(memoryStream, this);
             Network.send(memoryStream, stream);
         }
 
-        public static StartBlock deserialise(Stream stream) {
+        public static StartBlock Deserialise(Stream stream) {
              MemoryStream memoryStream = Network.recieve(stream);
              return serialiser.Deserialize(memoryStream) as StartBlock;
         }

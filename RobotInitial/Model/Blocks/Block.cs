@@ -8,6 +8,6 @@ namespace RobotInitial.Model {
     interface Block : ICloneable {
         Point Location { get; set; }
         Block Next { get; set; }                    //link to the next block
-        void perform(Protocol protocol, ref LinkedList<Block> performAfter);    
+        void Perform(Protocol protocol, ref LinkedList<Block> performAfter);    
     }
 }

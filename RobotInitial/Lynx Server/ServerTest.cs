@@ -29,11 +29,18 @@ namespace RobotInitial.Lynx_Server {
 
             DefaultBlockFactory fact = DefaultBlockFactory.Instance;
 
-            StartBlock start = fact.createStartBlock();
-            LoopBlock loop = fact.createLoopBlock();
-            MoveBlock move = fact.createMoveBlock();
+            StartBlock start = fact.CreateStartBlock();
+            LoopBlock loop = fact.CreateLoopBlock();
+            MoveBlock move = fact.CreateMoveBlock();
+            //move.DurationUnit = MoveDurationUnit.ENCODERCOUNT;
+            //move.Duration = 5000;
             //move.DurationUnit = MoveDurationUnit.DEGREES;
-            //move.Duration = 360.0f;
+            //move.Duration = 180.0f;
+            //move.DurationUnit = MoveDurationUnit.UNLIMITED;
+            //move.Duration = 3000;
+            //move.DurationUnit = MoveDurationUnit.MILLISECONDS;
+            //move.LeftDirection = MoveDirection.STOP;
+            //move.RightDirection = MoveDirection.STOP;
             loop.LoopPath = move;
             start.Next = loop;
 
