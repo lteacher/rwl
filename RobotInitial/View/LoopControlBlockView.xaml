@@ -14,7 +14,7 @@
 
     <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto" AllowDrop="True" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Rectangle Fill="LightSkyBlue" Stroke="Black" Opacity="0.16" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5" />
-        <Rectangle Fill="LightSkyBlue" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Left" Margin="0 25 50 25" RadiusY="4.0" RadiusX="4.0"/>
+        <Rectangle Fill="LightSkyBlue" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Left" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0"/>
             <ItemsControl ItemsSource="{Binding Children}" Margin="{Binding StackMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ItemsControl.Template>
                     <ControlTemplate TargetType="ItemsControl">
@@ -29,7 +29,7 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
-        <Rectangle Fill="LightSkyBlue" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Right" Margin="50 25 0 25" RadiusY="4.0" RadiusX="4.0" />
+        <Rectangle Fill="LightSkyBlue" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Right" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0" />
         <i:Interaction.Behaviors>
             <b:BlockExpand/>
         </i:Interaction.Behaviors>

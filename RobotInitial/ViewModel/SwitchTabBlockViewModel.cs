@@ -25,8 +25,12 @@ namespace RobotInitial.ViewModel
 		public double Height { get; set; } 
 		public double Width { get; set; }
 		public Thickness StackMargin { 
-			get { 
-				return new Thickness(0, 25 + (_maximumElementSize - _maxSizes[_caseIndex])/2, 0, 25+(_maximumElementSize - _maxSizes[_caseIndex])/2);
+			get {
+				if(Children.Count == 0) { 
+					return new Thickness(37.5, 25 + (_maximumElementSize - _maxSizes[_caseIndex])/2, 37.5, 25+(_maximumElementSize - _maxSizes[_caseIndex])/2);
+				}else {
+					return new Thickness(25, 25 + (_maximumElementSize - _maxSizes[_caseIndex]) / 2, 25, 25 + (_maximumElementSize - _maxSizes[_caseIndex]) / 2);
+				}
 			} 
 		}
 
@@ -115,34 +119,68 @@ namespace RobotInitial.ViewModel
 			get { return _cases[_caseIndex]; }
 		}
 
-		public void AddChildBlock(FrameworkElement element)
+		public void AddChildBlock(FrameworkElement sourceView, FrameworkElement newElement, double xLocation)
 		{
 
-			element.Measure(new Size(element.MaxWidth, element.MaxHeight));
+			newElement.Measure(new Size(newElement.MaxWidth, newElement.MaxHeight));
 
 			// Set the ultime maximum element size if its ever increased
-			if (element.DesiredSize.Height > _maximumElementSize) _maximumElementSize = element.DesiredSize.Height;
+			if (newElement.DesiredSize.Height > _maximumElementSize) _maximumElementSize = newElement.DesiredSize.Height;
 
 			// Set the case specific max element size
-			if (element.DesiredSize.Height > _maxSizes[_caseIndex]) _maxSizes[_caseIndex] = element.DesiredSize.Height;
+			if (newElement.DesiredSize.Height > _maxSizes[_caseIndex]) _maxSizes[_caseIndex] = newElement.DesiredSize.Height;
 			if (Children.Count == 0)
 			{
-				ArrowConnector connector1 = new ArrowConnector();
-				connector1.Margin = new Thickness(25, 0, 0, 0);
-				Children.Add(connector1);
-				element.Margin = new Thickness(0, 0, 0, 0);
-				Children.Add(element);
-				ArrowConnector connector2 = new ArrowConnector();
-				connector2.Margin = new Thickness(0, 0, 25, 0);
-				Children.Add(connector2);
+				Children.Add(new ArrowConnector());
+				Children.Add(newElement);
+				Children.Add(new ArrowConnector());
 			}
 			else
 			{
-				element.Margin = new Thickness(-25, 0, 50, 0);
-				ArrowConnector connector = new ArrowConnector();
-				connector.Margin = new Thickness(-75, 0, 0, 0);
-				Children.Add(element);
-				Children.Add(connector);
+				int dropIndex = 0;
+				// Get the dropping location
+				for (int i = 0; i < Children.Count - 1; i++)
+				{
+					if (Children[i].GetType() == typeof(ArrowConnector)) continue;
+
+					Point childLeft = Children[i].TransformToAncestor(sourceView).Transform(new Point(0, 0));
+
+
+					// For the first element
+					if (i == 1)
+					{
+						if (xLocation < childLeft.X + Children[i].RenderSize.Width / 2)
+						{
+							dropIndex = 1;
+							break;
+						}
+					}
+
+					if (i == Children.Count - 2)
+					{
+						if (xLocation >= childLeft.X + Children[i].RenderSize.Width / 2)
+						{
+							dropIndex = Children.Count;
+							break;
+						}
+					}
+
+					if (Children.Count > 3)
+					{
+
+						Point childRight = Children[i + 2].TransformToAncestor(sourceView).Transform(new Point(0, 0));
+
+						if (xLocation >= childLeft.X + Children[i].RenderSize.Width / 2 &&
+							xLocation < childRight.X + Children[i + 2].RenderSize.Width / 2)
+						{
+							dropIndex = i + 2;
+							break;
+						}
+					}
+				}
+
+				Children.Insert(dropIndex, newElement);
+				Children.Insert(dropIndex + 1, new ArrowConnector());
 			}
 
 			// Add a child to the collection

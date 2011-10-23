@@ -126,7 +126,8 @@ namespace RobotInitial.Behaviours
 
 				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
 				{
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget,child, e.GetPosition(dropTarget).X);
 				}
 				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
 				{
@@ -152,7 +153,7 @@ namespace RobotInitial.Behaviours
 				}
 				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel))
 				{
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(child);
+					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
 				}
 			}
 			if (sourceViewModel.Type.Equals("Loop"))
@@ -164,7 +165,8 @@ namespace RobotInitial.Behaviours
 				setWorkspaceAndParent(dropTarget, child);
 
 				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel)) {
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child, e.GetPosition(dropTarget).X);
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
 				}
 				else if(targetViewModel.GetType() == typeof(SwitchControlBlockViewModel)) {
 					// Set the parent for the child for checking the Y value
@@ -189,7 +191,7 @@ namespace RobotInitial.Behaviours
 				}
 				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel))
 				{
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(child);
+					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
 				}
 
 				// Expand the block
@@ -205,7 +207,9 @@ namespace RobotInitial.Behaviours
 
 				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
 				{
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child, e.GetPosition(dropTarget).X);
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
 				}
 				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
 				{
@@ -230,7 +234,7 @@ namespace RobotInitial.Behaviours
 					}
 				}
 				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel)) {
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(child);
+					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
 				}
 			}
 			//if (sourceViewModel.Type.Equals("Switch"))
@@ -280,7 +284,9 @@ namespace RobotInitial.Behaviours
 
 				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
 				{
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
+					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child, e.GetPosition(dropTarget).X);
+					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
 				}
 				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
 				{
@@ -306,7 +312,7 @@ namespace RobotInitial.Behaviours
 				}
 				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel))
 				{
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(child);
+					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
 				}
 
 				// Expand the block

@@ -7,12 +7,14 @@ using System.Windows.Shapes;
 using System.Windows;
 using System.Windows.Media;
 using RobotInitial.View;
+using System.Windows.Controls;
+using System.ComponentModel;
 
 namespace RobotInitial.ViewModel
 {
-	class LoopControlBlockViewModel : ControlBlockViewModel
+	class LoopControlBlockViewModel : ControlBlockViewModel, INotifyPropertyChanged
 	{
-		private ObservableCollection<UIElement> _children = new ObservableCollection<UIElement>();
+		private ObservableCollection<FrameworkElement> _children = new ObservableCollection<FrameworkElement>();
 		private double _mainHeight = 100; // Default maximum 
 		private double _mainWidth = 75;
 		
@@ -20,7 +22,7 @@ namespace RobotInitial.ViewModel
 		public double Width { get; set; }
 		public Thickness StackMargin { 
 			get { 
-				if(Children.Count == 0) return new Thickness(0,25,0,25);
+				if(Children.Count == 0) return new Thickness(37.5,25,37.5,25);
 				return new Thickness(25,25,25,25);
 			} 
 		}
@@ -51,65 +53,82 @@ namespace RobotInitial.ViewModel
 			// Set the default Height and Width
 			Height = 75;
 			Width = 75;
-			
-			Rectangle r = new Rectangle();
-			r.Fill = Brushes.Black;
-			r.Width = 75;
-			r.Height = 75;
-			r.Margin = new Thickness(25,0,25,0);
-			r.HorizontalAlignment = HorizontalAlignment.Center;
-			r.VerticalAlignment = VerticalAlignment.Center;
-
-			Rectangle v = new Rectangle();
-			v.Fill = Brushes.Red;
-			v.Width = 75;
-			v.Height = 75;
-			v.Margin = new Thickness(25, 0, 25, 0);
-			v.HorizontalAlignment = HorizontalAlignment.Center;
-			v.VerticalAlignment = VerticalAlignment.Center;
-
-			Rectangle z = new Rectangle();
-			z.Fill = Brushes.Green;
-			z.Width = 75;
-			z.Height = 75;
-			z.Margin = new Thickness(25, 0, 25, 0);
-			z.HorizontalAlignment = HorizontalAlignment.Center;
-			z.VerticalAlignment = VerticalAlignment.Center;
-
-			//AddChildBlock(r);
-			//AddChildBlock(v);
-			//AddChildBlock(z);
 		}
 		
 		public void ExpandControl() {
 			MessageBox.Show("Count is currently: " + Children.Count);
 		}
 
-		public ObservableCollection<UIElement> Children
+		public ObservableCollection<FrameworkElement> Children
 		{
 			get { return _children; }
 		}
 
-		public void AddChildBlock(FrameworkElement element)
+		public void AddChildBlock(FrameworkElement sourceView, FrameworkElement newElement, double xLocation)
 		{
 			if (Children.Count == 0)
 			{
-				ArrowConnector connector1 = new ArrowConnector();
-				connector1.Margin = new Thickness(25, 0, 0, 0);
-				_children.Add(connector1);
-				element.Margin = new Thickness(0, 0, 0, 0);
-				_children.Add(element);
-				ArrowConnector connector2 = new ArrowConnector();
-				connector2.Margin = new Thickness(0, 0, 25, 0);
-				_children.Add(connector2);
+				_children.Add(new ArrowConnector());
+				_children.Add(newElement);
+				_children.Add(new ArrowConnector());
 			}
 			else
 			{
-				element.Margin = new Thickness(-25, 0, 50, 0);
-				ArrowConnector connector = new ArrowConnector();
-				connector.Margin = new Thickness(-75, 0, 0, 0);
-				_children.Add(element);
-				_children.Add(connector);
+				int dropIndex = 0;
+				// Get the dropping location
+				for(int i=0; i< _children.Count-1; i++) {
+					if (_children[i].GetType() == typeof(ArrowConnector)) continue;
+
+					Point childLeft = _children[i].TransformToAncestor(sourceView).Transform(new Point(0, 0));
+					
+
+					// For the first element
+					if(i == 1) {
+						if (xLocation < childLeft.X + _children[i].RenderSize.Width / 2)
+						{
+							dropIndex = 1;
+							break;
+						}
+					}
+
+					if (i == _children.Count-2)
+					{
+						if (xLocation >= childLeft.X + _children[i].RenderSize.Width/2) {
+							dropIndex = _children.Count;
+							break;
+						}
+					}
+
+					if(_children.Count > 3) {
+
+						Point childRight = _children[i + 2].TransformToAncestor(sourceView).Transform(new Point(0, 0));
+
+						if (xLocation >= childLeft.X + _children[i].RenderSize.Width / 2 &&
+							xLocation < childRight.X + _children[i + 2].RenderSize.Width / 2)
+						{
+							dropIndex = i + 2;
+							break;
+						}
+					}
+				}
+
+				_children.Insert(dropIndex,newElement);
+				_children.Insert(dropIndex + 1, new ArrowConnector());
+			}
+			NotifyPropertyChanged("StackMargin");	
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		/// <summary>
+		/// Notifies the property changed.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		private void NotifyPropertyChanged(string property)
+		{
+			if (PropertyChanged != null)
+			{
+				PropertyChanged(this, new PropertyChangedEventArgs(property));
 			}
 		}
 
