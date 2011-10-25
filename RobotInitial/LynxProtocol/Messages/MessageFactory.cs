@@ -5,7 +5,7 @@ using System.Text;
 using RobotInitial.Model;
 
 namespace RobotInitial.LynxProtocol {
-    interface LynxMessageFactory {
+    interface MessageFactory {
         LynxMessage CreateMoveMsg(MoveParameters parameters, Side side);
         LynxMessage CreateBrakeMsg(Side side);
         LynxMessage CreateStatusReq(Side side);

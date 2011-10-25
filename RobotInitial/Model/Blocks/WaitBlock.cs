@@ -23,7 +23,11 @@ namespace RobotInitial.Model {
 
             WaitUntil.Initilize();
             while (!WaitUntil.Evaluate(protocol)) {
-                Thread.Sleep(50);   //value may have to be adjusted
+                //sleeping may potentially reduce the reponsiveness of the conditional which could
+                //obviously cause problems.... ie the robot crashing into the wall
+                //because the IR sensor wasn't polled often enough. But I don't really know if this would be an issue. 
+                //This just has to be tested.
+                //Thread.Sleep(10);
             }
         }
 

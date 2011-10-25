@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.LynxProtocol {
-    enum RawCurrentDirection : byte {
+    enum PassCurrentDirection : byte {
         STOPPED = 0,
         FORWARD = 1,
         REVERSE = 2

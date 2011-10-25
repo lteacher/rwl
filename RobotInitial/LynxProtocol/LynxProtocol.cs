@@ -11,10 +11,12 @@ namespace RobotInitial.LynxProtocol {
 
         #region Fields
 
-        private const int WAITCOMPLETIONINTERVAL = 25;
-        private readonly LynxMessageFactory factory = new RawMessageFactory();
-        private Stopwatch aliveTimer = new Stopwatch();
-        private const int LIFETIME = 1000;
+        private const int CONTINUOUSREQUESTDELAY = 400;
+        private readonly MessageFactory factory = new LynxMessageFactory();
+        private volatile Thread continuousMovementThread = null;
+        private LynxMessage currentContCmdL = null;
+        private LynxMessage currentContCmdR = null;
+        private Object continuousLock = new Object();
 
         #endregion
 
@@ -23,119 +25,134 @@ namespace RobotInitial.LynxProtocol {
         public void Move(MoveParameters parameters) {
             LynxMessage l = factory.CreateMoveMsg(parameters, Side.LEFT);
             LynxMessage r = factory.CreateMoveMsg(parameters, Side.RIGHT);
-            SendIfAlive(l, false);
-            SendIfAlive(r, false);
-
-            switch (parameters.DurationUnit) {
-                case MoveDurationUnit.UNLIMITED:
-                    break;
-                case MoveDurationUnit.MILLISECONDS:
-                    Thread.Sleep((int)parameters.Duration);
-                    SendIfAlive(factory.CreateBrakeMsg(Side.LEFT), false);
-                    SendIfAlive(factory.CreateBrakeMsg(Side.RIGHT), false);
-                    break;
-                case MoveDurationUnit.DEGREES:
-                case MoveDurationUnit.ENCODERCOUNT:
-                default:
-                    WaitForCompletion();
-                    break;
+            
+            if (parameters.DurationUnit == MoveDurationUnit.UNLIMITED) {
+                StartContinuousMovement(l, r);
+            } else {
+                StopContinuousMovement();
+                SendMovement(l, r);
+                WaitForCompletion();
             }
         }
 
         public IRData RequestIR() {
-            LynxMessage r = SendIfAlive(factory.CreateIRReq(), true);
+            LynxMessage r = LynxMessagePort.Instance.Send(factory.CreateIRReq(), true);
 
-            int[] distances = new int[r.Length];
+            int[] distances = new int[r.Length - 1];
             for (int i = 0; i < distances.Length; ++i) {
-                distances[i] = r.GetArg(i);
+                distances[i] = r.GetArg(i + 1);
             }
 
             return new LynxIRData(distances);
         }
 
         public IMUData RequestIMU() {
-            LynxMessage r = SendIfAlive(factory.CreateIMUReq(), true);
+            LynxMessage r = LynxMessagePort.Instance.Send(factory.CreateIMUReq(), true);
             return new LynxIMUData(
-                new Vector3(r.GetArg(0), r.GetArg(1), r.GetArg(2)),
-                new Vector3(r.GetArg(3), r.GetArg(4), r.GetArg(5)),
-                new Vector3(r.GetArg(6), r.GetArg(7), r.GetArg(8)));
+                new Vector3(r.GetArg(1), r.GetArg(2), r.GetArg(3)),
+                new Vector3(r.GetArg(4), r.GetArg(5), r.GetArg(6)),
+                new Vector3(r.GetArg(7), r.GetArg(8), r.GetArg(9)));
         }
 
-        //use Current Direction?
+        //need to test how the robot reacts to the reset commands before I can write this
+        public void OnExecutionStart() {
+            Console.WriteLine("PLEASE WRITE THE INITILISATION CODE");
+            //send reset
+            //wait for ready
+        }
+
+        public void OnExecutionFinish() {
+            StopContinuousMovement();
+        }
+
+        //the lynx status doesn't contain any useful info for the program
         public int RequestStatus() {
-            throw new NotImplementedException();
-        }
-
-        #endregion
-
-        #region KeepAlive Stuff
-
-        public void KeepAlive() {
-            lock (aliveTimer) {
-                aliveTimer.Restart();
-            }
-            RequestStatus(Side.LEFT);
-            RequestStatus(Side.RIGHT);
-        }
-
-        public bool IsAlive() {
-            bool result;
-            lock (aliveTimer) {
-                result = aliveTimer.IsRunning && aliveTimer.ElapsedMilliseconds <= LIFETIME;
-            }
-            return result;
+            return 0;
         }
 
         #endregion
 
         #region Helper Methods
 
-        //all messages sent through this method
-        //for easy keep alive management
-        private LynxMessage SendIfAlive(LynxMessage m, bool isRequest) {
-            if (this.IsAlive()) {
-                return LynxMessagePort.Instance.Send(m, isRequest);
-            } else {
-                Console.WriteLine("Protocol was not kept alive");
-                throw new LynxIsNotAliveException();
-            }
-        }
-
         private void WaitForCompletion() {
-            bool lDone = false;
-            bool rDone = false;
-            while (!rDone || !lDone) {
-                if (!lDone) {
-                    lDone = (RequestStatus(Side.LEFT) & LynxStatus.COMMAND_INCOMPLETE) == 0;
+            //continuously poll until both motors return the complete status
+            bool leftIncomplete = true;
+            bool rightIncomplete = true;
+            while (leftIncomplete || rightIncomplete) {
+                if (leftIncomplete) {
+                    leftIncomplete = RequestStatus(Side.LEFT).HasFlag(LynxStatus.COMMAND_INCOMPLETE);
                 }
-                if (!rDone) {
-                    rDone = (RequestStatus(Side.RIGHT) & LynxStatus.COMMAND_INCOMPLETE) == 0;
+                if (rightIncomplete) {
+                    rightIncomplete = RequestStatus(Side.RIGHT).HasFlag(LynxStatus.COMMAND_INCOMPLETE);
                 }
-                Thread.Sleep(WAITCOMPLETIONINTERVAL);
             }
         }
 
+        private void SendMovement(LynxMessage left, LynxMessage right) {
+            //This lock prevent left and right messages from being inturrupted by a status request generated from the continuous movement thread.
+            //The port locks on itself while a messsage is being sent.
+            //C# locks are re-entrant locks.
+            lock (LynxMessagePort.Instance) {
+                LynxMessagePort.Instance.Send(left, false);
+                LynxMessagePort.Instance.Send(right, false);
+            }
+        }
 
         private LynxStatus RequestStatus(Side side) {
-            LynxMessage resp = SendIfAlive(factory.CreateStatusReq(side), true);
+            LynxMessage resp = LynxMessagePort.Instance.Send(factory.CreateStatusReq(side), true);
             return (LynxStatus)((resp.GetArg(0) << 8) | resp.GetArg(1));
         }
 
         #endregion
-        /*
-        //hack to simulate keepalive
-        public LynxProtocol() {
-            this.KeepAlive();
-            new Thread(this.DeleteThisHack).Start();
+
+        #region Continuous Movement Methods
+
+        private void StartContinuousMovement(LynxMessage left, LynxMessage right) {
+            bool leftDif = !left.Equals(currentContCmdL);
+            bool rightDif = !right.Equals(currentContCmdR);
+
+            if (leftDif && rightDif) {
+                //send both with this method so they don't get inturrupted
+                SendMovement(left, right);
+                currentContCmdL = left;
+                currentContCmdR = right;
+            } else {
+                if (leftDif) {
+                    LynxMessagePort.Instance.Send(left, false);
+                    currentContCmdL = left;
+                } else if (rightDif) {
+                    LynxMessagePort.Instance.Send(right, false);
+                    currentContCmdR = right;
+                }
+            }
+
+            if (continuousMovementThread == null) {
+                continuousMovementThread = new Thread(ContinuousMovementThread);
+                continuousMovementThread.Start();
+            }
         }
 
-        private void DeleteThisHack() {
-            while (true) {
-                //Console.WriteLine("before Alive? " + this.IsAlive());
-                this.KeepAlive();
-                //Console.WriteLine("after Alive? " + this.IsAlive());
-                Thread.Sleep(50);
+        private void StopContinuousMovement() {
+            continuousMovementThread = null;
+            currentContCmdL = null;
+            currentContCmdR = null;
+        }
+
+        private void ContinuousMovementThread() {
+            //This thread stops if the continuousMovementThread was set to null,
+            //or in the unlikely event a new thread was started before this was able to stop 
+            //(which is only possible if it was set it to null and then a new thread was started before the old one could finish)
+            //The lock prevents request spam if multiple threads were created, if that unlikely event were to occur.
+            lock (continuousLock) {
+                while (Thread.CurrentThread.Equals(continuousMovementThread)) {
+                    RequestStatus(Side.LEFT);
+                    RequestStatus(Side.RIGHT);
+                    Thread.Sleep(CONTINUOUSREQUESTDELAY);
+                }
             }
-        }*/
+        }
+
+        #endregion
+
     }
 }

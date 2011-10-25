@@ -35,19 +35,27 @@ namespace RobotInitial.Model {
 
             try {
                 block.Perform(Protocol, ref performAfter);
+                while (performAfter.Count > 0) {
+                    if (performAfter.Last() != null) {
+                        execStack.Push(performAfter.Last());
+                    }
+                    performAfter.RemoveLast();
+                }
             } catch (Exception e) {
                 //Console.WriteLine("Program threw exception, stop execution");
                 //program threw Exception, stop execution
-                execStack.Clear();
+                StopExecution();
                 return;
             }
 
-            while (performAfter.Count > 0) {
-                if (performAfter.Last() != null) {
-                    execStack.Push(performAfter.Last());
-                }
-                performAfter.RemoveLast();
+            if (IsDone()) {
+                StopExecution();
             }
+        }
+
+        public void StopExecution() {
+            execStack.Clear();
+            Protocol.OnExecutionFinish();
         }
 
         public void ExecuteAll() {

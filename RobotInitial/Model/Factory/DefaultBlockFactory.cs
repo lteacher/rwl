@@ -26,7 +26,8 @@ namespace RobotInitial.Model {
             block.RightDirection = MoveDirection.FORWARD;
             block.LeftPower = 50;
             block.RightPower = 50;
-            block.Duration = 500;
+            block.LeftDuration = 500;
+            block.RightDuration = 500;
             block.DurationUnit = MoveDurationUnit.ENCODERCOUNT;
             block.BrakeAfterMove = true;
             return block;

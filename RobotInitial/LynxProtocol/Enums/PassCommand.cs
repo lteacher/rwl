@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.LynxProtocol {
-    enum RawCommand : byte {
+    enum PassCommand : byte {
         WRITE_CONTROL = 1,
         WRITE_RAW = 2,
         WRITE_FORWARD_ENC_CNT = 3,
@@ -24,8 +24,8 @@ namespace RobotInitial.LynxProtocol {
         READ_STATUS = 255
     }
 
-    static class RawCommandExt {
-        public static bool IsRequest(this RawCommand command) {
+    static class PassCommandExt {
+        public static bool IsRequest(this PassCommand command) {
             return (byte)command >= 128;
         }
     }

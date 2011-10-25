@@ -9,6 +9,7 @@ namespace RobotInitial.Model {
         IRData RequestIR();
         IMUData RequestIMU();
         int RequestStatus();
-        //void KeepAlive();
+        void OnExecutionStart();
+        void OnExecutionFinish();
     }
 }

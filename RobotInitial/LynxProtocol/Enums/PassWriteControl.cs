@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.LynxProtocol {
-    enum RawWriteControl : byte {
+    enum PassWriteControl : byte {
         COAST = 0,
         BRAKE = 1,
         RESET = 2,

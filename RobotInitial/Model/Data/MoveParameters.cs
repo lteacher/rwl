@@ -32,7 +32,8 @@ namespace RobotInitial.Model {
         MoveDirection LeftDirection { get; }
         int RightPower { get; }
         int LeftPower { get; }
-        float Duration { get; }
+        float RightDuration { get; }
+        float LeftDuration { get; }
         MoveDurationUnit DurationUnit { get; }
         bool BrakeAfterMove { get; }
     }

@@ -17,6 +17,7 @@ namespace RobotInitial.Model {
         }
 
         public override void Perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+            protocol.OnExecutionStart();
             performAfter.AddFirst(Next);
         }
 

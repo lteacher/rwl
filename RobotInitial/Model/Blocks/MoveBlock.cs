@@ -6,23 +6,53 @@ using System.Text;
 namespace RobotInitial.Model {
     [Serializable()]
     class MoveBlock : AbstractBlock, MoveParameters {
+        private const int MINPOWER = 0;
+        private const int MAXPOWER = 100;
+        
         public MoveDirection RightDirection { get; set; }
         public MoveDirection LeftDirection { get; set; }
-        public int RightPower { get; set; }
-        public int LeftPower { get; set; }
-        public float Duration { get; set; }
         public MoveDurationUnit DurationUnit { get; set; }
         public bool BrakeAfterMove { get; set; }
+
+        int rightPower;
+        public int RightPower {
+            get { return rightPower; }
+            set { rightPower = Clamp(value, MINPOWER, MAXPOWER); }
+        }
+
+        int leftPower;
+        public int LeftPower {
+            get { return leftPower; }
+            set { leftPower = Clamp(value, MINPOWER, MAXPOWER); }
+        }
+
+        float leftDuration;
+        public float LeftDuration {
+            get { return leftDuration; }
+            set { leftDuration = Math.Max(value, 0f); }
+        }
+
+        float rightDuration;
+        public float RightDuration {
+            get { return rightDuration; }
+            set { rightDuration = Math.Max(value, 0f); }
+        }
+
+        private int Clamp(int value, int min, int max)  {
+            return Math.Max(min, Math.Min(max, value));
+        }
 
         internal MoveBlock() {
         }
 
-        protected MoveBlock(MoveBlock other) : base(other) {
+        protected MoveBlock(MoveBlock other)
+            : base(other) {
             this.RightDirection = other.RightDirection;
             this.LeftDirection = other.LeftDirection;
             this.RightPower = other.RightPower;
             this.LeftPower = other.LeftPower;
-            this.Duration = other.Duration;
+            this.RightDuration = other.RightDuration;
+            this.LeftDuration = other.LeftDuration;
             this.DurationUnit = other.DurationUnit;
             this.BrakeAfterMove = other.BrakeAfterMove;
         }

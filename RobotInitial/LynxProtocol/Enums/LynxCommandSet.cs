@@ -8,7 +8,7 @@ namespace RobotInitial.LynxProtocol {
         LEFTPASS = 1,
         RIGHTPASS = 2,
         MAZE = 3,
-        LEGO = 4
+        BASE = 4
     }
 
     static class LynxCommandExt {
