@@ -7,7 +7,7 @@
              xmlns:vm="clr-namespace:RobotInitial.ViewModel"
              xmlns:vw="clr-namespace:RobotInitial.View"
              xmlns:cmd="clr-namespace:RobotInitial.Command"
-             xmlns:e="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:b="clr-namespace:RobotInitial.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="600" Loaded="UserControl_Loaded">
@@ -22,7 +22,10 @@
 		    </e:Interaction.Behaviors>-->
 		    <local:GridMask RowWidth="25" ColWidth="25"/>
             <ContentControl Content="{Binding Sequence}" Canvas.Top="{Binding SequenceY}"/>
-
-	    </Canvas>
+            <i:Interaction.Behaviors>
+                <b:OpenPropertiesView/>
+            </i:Interaction.Behaviors>
+        </Canvas>
+        
     </ScrollViewer>
 </UserControl>

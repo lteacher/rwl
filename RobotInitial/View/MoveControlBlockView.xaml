@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:RobotInitial.ViewModel"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="clr-namespace:RobotInitial.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="75" d:DesignWidth="75">
     <UserControl.DataContext>
@@ -12,5 +14,8 @@
     <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto">  
         <Rectangle Height="59" Width="59" Fill="Green" Stroke="Black" StrokeThickness="1" RadiusX="18" RadiusY="18"/>
         <Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
+        <i:Interaction.Behaviors>
+            <b:OpenPropertiesView/>
+        </i:Interaction.Behaviors>
     </Grid>
 </UserControl>

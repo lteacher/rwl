@@ -20,6 +20,13 @@ namespace RobotInitial.ViewModel
 		
 		public double Height { get; set; } 
 		public double Width { get; set; }
+
+		private LoopPropertiesView _propertiesView = new LoopPropertiesView();
+
+		public LoopPropertiesView PropertiesView {
+			get { return _propertiesView; }
+		}
+
 		public Thickness StackMargin { 
 			get { 
 				if(Children.Count == 0) return new Thickness(37.5,25,37.5,25);

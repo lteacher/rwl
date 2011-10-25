@@ -7,6 +7,7 @@ using System.Collections.ObjectModel;
 using System.Windows.Shapes;
 using System.Windows.Media;
 using System.ComponentModel;
+using RobotInitial.View;
 
 namespace RobotInitial.ViewModel
 {
@@ -20,6 +21,7 @@ namespace RobotInitial.ViewModel
 		private double bottomMaxChildHeight = 0;
 		private ObservableCollection<FrameworkElement> _childrenTop = new ObservableCollection<FrameworkElement>();
 		private ObservableCollection<FrameworkElement> _childrenBottom = new ObservableCollection<FrameworkElement>();
+
 
 		public SwitchControlBlockViewModel() {
 			Type = "Switch";

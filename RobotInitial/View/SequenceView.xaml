@@ -32,6 +32,7 @@
         <Rectangle Fill="DimGray" Stroke="Black" Opacity="0.8" Width="25" Height="75" HorizontalAlignment="Right" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0" />
         <i:Interaction.Behaviors>
             <b:DropToSequence/>
+            <b:OpenPropertiesView/>
         </i:Interaction.Behaviors>
     </Grid>
 </UserControl>

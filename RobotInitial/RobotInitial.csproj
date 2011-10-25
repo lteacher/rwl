@@ -67,6 +67,7 @@
     <Compile Include="Behaviours\DropToSequence.cs" />
     <Compile Include="Behaviours\DropToWorkspace.cs" />
     <Compile Include="Behaviours\ExpandingDrop.cs" />
+    <Compile Include="Behaviours\OpenPropertiesView.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
@@ -129,10 +130,13 @@
     </Compile>
     <Compile Include="ViewModel\ControlBlockViewModel.cs" />
     <Compile Include="ViewModel\LoopControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\LoopPropertiesViewModel.cs" />
     <Compile Include="ViewModel\MoveControlBlockViewModel.cs" />
     <Compile Include="ViewModel\MovePropertiesViewModel.cs" />
+    <Compile Include="ViewModel\PropertiesTabViewModel.cs" />
     <Compile Include="ViewModel\SequenceViewModel.cs" />
     <Compile Include="ViewModel\SwitchControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\SwitchPropertiesViewModel.cs" />
     <Compile Include="ViewModel\SwitchTabBlockViewModel.cs" />
     <Compile Include="ViewModel\TaskBlockTabViewModel.cs" />
     <Compile Include="Services\IDialogService.cs" />
@@ -153,9 +157,15 @@
     <Compile Include="View\ArrowConnector.xaml.cs">
       <DependentUpon>ArrowConnector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\BlankPropertiesView.xaml.cs">
+      <DependentUpon>BlankPropertiesView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ControlBlockView.cs" />
     <Compile Include="View\LoopControlBlockView.xaml.cs">
       <DependentUpon>LoopControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\LoopPropertiesView.xaml.cs">
+      <DependentUpon>LoopPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MoveControlBlockView.xaml.cs">
       <DependentUpon>MoveControlBlockView.xaml</DependentUpon>
@@ -168,6 +178,9 @@
     </Compile>
     <Compile Include="View\SwitchControlBlockView.xaml.cs">
       <DependentUpon>SwitchControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SwitchPropertiesView.xaml.cs">
+      <DependentUpon>SwitchPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SwitchTabBlockView.xaml.cs">
       <DependentUpon>SwitchTabBlockView.xaml</DependentUpon>
@@ -194,7 +207,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\BlankPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\LoopControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\LoopPropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -225,6 +246,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SwitchControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SwitchPropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

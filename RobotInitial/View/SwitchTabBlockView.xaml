@@ -50,6 +50,7 @@
                  MouseDown="Ellipse_BottomButtonDown" Opacity="{Binding BottomButtonOpacity}"/>
         <i:Interaction.Behaviors>
             <b:BlockExpand/>
+            <b:OpenPropertiesView/>
         </i:Interaction.Behaviors>
     </Grid>
 </UserControl>

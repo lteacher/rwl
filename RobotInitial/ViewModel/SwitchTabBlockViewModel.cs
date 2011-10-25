@@ -21,7 +21,13 @@ namespace RobotInitial.ViewModel
 		private double _mainHeight = 100; // Default maximum 
 		private double _mainWidth = 75;
 		private double _maximumElementSize = 0;
-		
+
+		private SwitchPropertiesView _propertiesView = new SwitchPropertiesView();
+
+		public SwitchPropertiesView PropertiesView {
+			get { return _propertiesView; }
+		}
+
 		public double Height { get; set; } 
 		public double Width { get; set; }
 		public Thickness StackMargin { 

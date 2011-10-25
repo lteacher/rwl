@@ -5,10 +5,14 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:p="clr-namespace:RobotInitial.Properties"
     xmlns:vw="clr-namespace:RobotInitial.View"
+    xmlns:vm="clr-namespace:RobotInitial.ViewModel"
 	mc:Ignorable="d"
 	x:Class="RobotInitial.View.PropertiesTabView"
 	x:Name="UserControl"
 	d:DesignWidth="992" d:DesignHeight="218">
+    <UserControl.DataContext>
+        <vm:PropertiesTabViewModel/>
+    </UserControl.DataContext>
 
 	<Grid x:Name="LayoutRoot">
 		<TabControl>
@@ -16,7 +20,8 @@
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <Grid Background="#FFE5E5E5">
                         <!--<Rectangle Fill="Green" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8" Opacity="0.7"/>-->
-                        <vw:WaitPropertiesView VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                        <!--<vw:SwitchPropertiesView VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />-->
+                        <ContentControl Content="{Binding BlockProperties}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
                     </Grid>
                 </ScrollViewer>
             </TabItem>
