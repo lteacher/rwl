@@ -14,24 +14,19 @@ using System.Windows.Shapes;
 
 namespace RobotInitial.View
 {
-    /// <summary>
-    /// Interaction logic for WorkspaceView.xaml
-    /// </summary>
-    public partial class WorkspaceView : UserControl
-    {
-        public WorkspaceView()
-        {
-            InitializeComponent();
-        }
+	/// <summary>
+	/// Interaction logic for SequenceView.xaml
+	/// </summary>
+	public partial class SequenceView : UserControl
+	{
+		public SequenceView()
+		{
+			InitializeComponent();
+		}
 
 		private void UserControl_Loaded(object sender, RoutedEventArgs e)
 		{
 
 		}
-
-		private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
-		{
-
-		}
-    }
+	}
 }

@@ -44,9 +44,7 @@ namespace RobotInitial.Behaviours
 					{
 						
 						Rectangle rect = new Rectangle();
-						//ControlBlock ctrl = null;
 						FrameworkElement ctrl = null;
-						//ControlBlockViewModel ctrlVM
 
 						if (((TaskBlockItem)sender).Action.Equals("Move"))
 						{
@@ -57,7 +55,8 @@ namespace RobotInitial.Behaviours
 						}
 						if (((TaskBlockItem)sender).Action.Equals("Switch"))
 						{
-							ctrl = new SwitchControlBlockView();
+							//ctrl = new SwitchControlBlockView();
+							ctrl = new SwitchTabBlockView();
 						}
 						if (((TaskBlockItem)sender).Action.Equals("Wait"))
 						{

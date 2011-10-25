@@ -4,19 +4,22 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:p="clr-namespace:RobotInitial.Properties"
+    xmlns:vw="clr-namespace:RobotInitial.View"
 	mc:Ignorable="d"
 	x:Class="RobotInitial.View.PropertiesTabView"
 	x:Name="UserControl"
-	d:DesignWidth="992" d:DesignHeight="187.55">
+	d:DesignWidth="992" d:DesignHeight="218">
 
 	<Grid x:Name="LayoutRoot">
 		<TabControl>
 			<TabItem Header="{x:Static p:Resources.tabProperties}">
-				<Grid Background="#FFE5E5E5"/>
-			</TabItem>
-			<TabItem Header="{x:Static p:Resources.tabSomethingElse}">
-				<Grid Background="#FFE5E5E5"/>
-			</TabItem>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                    <Grid Background="#FFE5E5E5">
+                        <!--<Rectangle Fill="Green" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8" Opacity="0.7"/>-->
+                        <vw:WaitPropertiesView VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
 		</TabControl>
 	</Grid>
 </UserControl>

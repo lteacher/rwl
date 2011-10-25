@@ -64,6 +64,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Behaviours\DragWithAdornment.cs" />
+    <Compile Include="Behaviours\DropToSequence.cs" />
     <Compile Include="Behaviours\DropToWorkspace.cs" />
     <Compile Include="Behaviours\ExpandingDrop.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
@@ -132,7 +133,10 @@
     <Compile Include="ViewModel\ControlBlockViewModel.cs" />
     <Compile Include="ViewModel\LoopControlBlockViewModel.cs" />
     <Compile Include="ViewModel\MoveControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\MovePropertiesViewModel.cs" />
+    <Compile Include="ViewModel\SequenceViewModel.cs" />
     <Compile Include="ViewModel\SwitchControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\SwitchTabBlockViewModel.cs" />
     <Compile Include="ViewModel\TaskBlockTabViewModel.cs" />
     <Compile Include="Services\IDialogService.cs" />
     <Compile Include="Services\IStreamService.cs" />
@@ -147,7 +151,11 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\ViewModelBase.cs" />
     <Compile Include="ViewModel\WaitControlBlockViewModel.cs" />
+    <Compile Include="ViewModel\WaitPropertiesViewModel.cs" />
     <Compile Include="ViewModel\WorkspaceViewModel.cs" />
+    <Compile Include="View\ArrowConnector.xaml.cs">
+      <DependentUpon>ArrowConnector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ControlBlockView.cs" />
     <Compile Include="View\LoopControlBlockView.xaml.cs">
       <DependentUpon>LoopControlBlockView.xaml</DependentUpon>
@@ -155,14 +163,26 @@
     <Compile Include="View\MoveControlBlockView.xaml.cs">
       <DependentUpon>MoveControlBlockView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\MovePropertiesView.xaml.cs">
+      <DependentUpon>MovePropertiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SequenceView.xaml.cs">
+      <DependentUpon>SequenceView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SwitchControlBlockView.xaml.cs">
       <DependentUpon>SwitchControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\SwitchTabBlockView.xaml.cs">
+      <DependentUpon>SwitchTabBlockView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\TaskBlockTabView.xaml.cs">
       <DependentUpon>TaskBlockTabView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WaitControlBlockView.xaml.cs">
       <DependentUpon>WaitControlBlockView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\WaitPropertiesView.xaml.cs">
+      <DependentUpon>WaitPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\WorkspaceView.xaml.cs">
       <DependentUpon>WorkspaceView.xaml</DependentUpon>
@@ -172,6 +192,10 @@
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\ArrowConnector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\LoopControlBlockView.xaml">
       <SubType>Designer</SubType>
@@ -195,7 +219,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\MovePropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SequenceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\SwitchControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\SwitchTabBlockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -212,6 +248,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\WaitControlBlockView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\WaitPropertiesView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -235,14 +275,17 @@
   <ItemGroup>
     <Resource Include="Content\Images\image0.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\.NETFramework\v4.0\Microsoft.Expression.Blend.WPF.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">
