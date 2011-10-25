@@ -16,6 +16,9 @@ namespace RobotInitial.ViewModel
 			get { return _propertiesView; }
 		}
 
+		// For convenience return the model here
+		public MoveBlock ModelBlock { get { return ((MovePropertiesViewModel)_propertiesView.DataContext).MoveModel; } }
+
 		public MoveControlBlockViewModel() {
 			Type = "Move";
 		}

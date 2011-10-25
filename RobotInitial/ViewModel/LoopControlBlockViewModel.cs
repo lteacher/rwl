@@ -9,6 +9,7 @@ using System.Windows.Media;
 using RobotInitial.View;
 using System.Windows.Controls;
 using System.ComponentModel;
+using RobotInitial.Model;
 
 namespace RobotInitial.ViewModel
 {
@@ -26,6 +27,9 @@ namespace RobotInitial.ViewModel
 		public LoopPropertiesView PropertiesView {
 			get { return _propertiesView; }
 		}
+
+		// For convenience return the model here
+		public LoopBlock ModelBlock { get { return ((LoopPropertiesViewModel)_propertiesView.DataContext).LoopModel; } }
 
 		public Thickness StackMargin { 
 			get { 
