@@ -9,7 +9,8 @@
     <UserControl.DataContext>
         <vm:MoveControlBlockViewModel/>
     </UserControl.DataContext>
-    <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto">
-        <Rectangle Height="75" Width="75" Fill="Green" Stroke="Black" RadiusY="4.0" RadiusX="4.0"/>
+    <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto">  
+        <Rectangle Height="59" Width="59" Fill="Green" Stroke="Black" StrokeThickness="1" RadiusX="18" RadiusY="18"/>
+        <Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
     </Grid>
 </UserControl>

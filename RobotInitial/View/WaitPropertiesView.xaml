@@ -11,16 +11,23 @@
     <Grid MinWidth="900" MinHeight="170" >
         <Rectangle Fill="Red" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8" Opacity="0.7"/>
         <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontSize="18.667" FontFamily="Copperplate Gothic Bold" FontWeight="Bold" TextDecorations="Underline" Margin="0,8,0,0" Height="22"><Run Language="en-au" Text="Wait Block Properties"/></TextBlock>
-        <Grid HorizontalAlignment="Left" Margin="53,59.71,0,0" VerticalAlignment="Top">
-            <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="98,0,82.043,0" d:LayoutOverrides="Width" Height="22"><Run Language="en-au" Text="CONDITION"/></TextBlock>
+        <Grid Margin="8,8,433.165,8">
+        	<Grid VerticalAlignment="Center" HorizontalAlignment="Center" Height="50.84" Width="332.669">
+        		<TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="98,0,82.043,0" d:LayoutOverrides="Width" Height="22"><Run Language="en-au" Text="CONDITION"/></TextBlock>
+        		<Label Content="WHILE" HorizontalAlignment="Left" Margin="0,22,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
+        		<ComboBox Margin="57.053,22,152.617,0" VerticalAlignment="Top" d:LayoutOverrides="HorizontalAlignment"/>
+        		<ComboBox Margin="0,22,0,0" VerticalAlignment="Top" HorizontalAlignment="Right" Width="148.617" d:LayoutOverrides="HorizontalAlignment"/>
 
+        	</Grid>
         </Grid>
-        <Grid Margin="0,0,145,0" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="0" Height="22" HorizontalAlignment="Center"><Run Language="en-au" Text="TIMER"/></TextBlock>
-            <Label Content="WAIT FOR " HorizontalAlignment="Left" Margin="0,22,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
-            <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" VerticalAlignment="Top" Margin="93.003,22,0,0" Height="28.58" Width="66.553"/>
-            <Label Content="SECONDS" Margin="163.556,22,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold" HorizontalAlignment="Left" Width="95.684"/>
+        <Grid Margin="449.67,8,8,8">
+        	<Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+        		<TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="82,0,98.043,0" d:LayoutOverrides="Width" Height="22"><Run Language="en-au" Text="TIMER"/></TextBlock>
+        		<Label Content="WAIT FOR" HorizontalAlignment="Left" Margin="0,18.38,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
+        		<TextBox TextWrapping="Wrap" Margin="82,22,100.729,6.62" d:LayoutOverrides="Width, Height"/>
+        		<Label Content="SECONDS" HorizontalAlignment="Right" Margin="0,22,24.559,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
 
+        	</Grid>
         </Grid>
 
     </Grid>
