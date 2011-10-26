@@ -93,9 +93,12 @@
     <Compile Include="LynxProtocol\LynxProtocol.cs" />
     <Compile Include="LynxProtocol\Enums\PassWriteControl.cs" />
     <Compile Include="LynxProtocol\Enums\Side.cs" />
+<<<<<<< HEAD
     <Compile Include="Validation\NumericOnlyRule.cs" />
+=======
     <Compile Include="Model\Conditionals\Operators\And.cs" />
     <Compile Include="Model\Conditionals\Operators\Or.cs" />
+>>>>>>> origin/model_viewmodel_linkage
     <Compile Include="Vector3.cs" />
     <Compile Include="Lynx Server\Request Handler.cs" />
     <Compile Include="Lynx Server\ServerTest.cs" />

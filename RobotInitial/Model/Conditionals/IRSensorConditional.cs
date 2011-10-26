@@ -18,7 +18,7 @@ namespace RobotInitial.Model {
 
         public Operator EqualityOperator { get; set; }
         public int Distance { get; set; }
-        public int ListeningPort { get; set; }
+        public int IRSensorNumber { get; set; }
 
         internal IRSensorConditional() {
         }
@@ -31,7 +31,7 @@ namespace RobotInitial.Model {
 
         public override bool Evaluate(Protocol protocol) {
             IRData data = protocol.RequestIR();
-            int actualDistance = data.GetDistance(ListeningPort);
+            int actualDistance = data.GetDistance(IRSensorNumber);
 
             if (actualDistance < Distance) {
                 return (EqualityOperator & Operator.LESS) == Operator.LESS;

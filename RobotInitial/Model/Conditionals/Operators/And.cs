@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
-    interface IRData {
-        int GetDistance(int sensorNumber);
+    class And {
     }
 }

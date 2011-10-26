@@ -17,6 +17,8 @@ namespace RobotInitial.ViewModel
 	class SwitchTabBlockViewModel : ControlBlockViewModel, INotifyPropertyChanged
 	{
 		private ObservableCollection<ObservableCollection<UIElement>> _cases = new ObservableCollection<ObservableCollection<UIElement>>();
+        public ObservableCollection<ObservableCollection<UIElement>> Cases { get { return _cases; } }
+
 		private ObservableCollection<double> _maxSizes = new ObservableCollection<double>();
 		private int _caseIndex = 0;
 		private double _mainHeight = 100; // Default maximum 

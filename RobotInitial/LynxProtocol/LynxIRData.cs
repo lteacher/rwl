@@ -6,14 +6,6 @@ using RobotInitial.Model;
 
 namespace RobotInitial.LynxProtocol {
     struct LynxIRData : IRData {
-        enum Port {
-            FRONT,
-            FRONTLEFT,
-            REARLEFT,
-            FRONTRIGHT,
-            REARRIGHT,
-            REAR
-        }
 
         //private const int NUMOFPORTS = 6;
         private int[] distances;
