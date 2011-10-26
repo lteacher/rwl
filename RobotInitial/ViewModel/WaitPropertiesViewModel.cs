@@ -10,18 +10,123 @@ namespace RobotInitial.ViewModel
 {
 	class WaitPropertiesViewModel : ViewModelBase, INotifyPropertyChanged
 	{
-		private WaitBlock _waitModel = new WaitBlock();
-		public WaitBlock WaitModel { get { return _waitModel; } }	
+		private WaitBlock _waitModel = DefaultBlockFactory.Instance.CreateWaitBlock();
+		public WaitBlock WaitModel { get { return _waitModel; } }
+
+		// Timer Condition
+		private TimeConditional _timeCondition;
+
+		// IR Condition
+		private IRSensorConditional _irSensor = new IRSensorConditional();
+
+		// Timer Condition Duration property
+		public double TimeDuration { 
+			get { return _timeCondition.Duration/1000; }
+			set { _timeCondition.Duration = (int)value*1000; }
+		}
+
+		// Condition types and its property
 		private ObservableCollection<string> _condTypes = new ObservableCollection<string>();
 		public ObservableCollection<string> CondTypes {
 			get { return _condTypes; }
 		}
 
-		public int SelectedCond { get; set; }
+		// Condition options and its property
+		private ObservableCollection<ObservableCollection<string>> _condOptions = new ObservableCollection<ObservableCollection<string>>();
+		public ObservableCollection<string> CondOptions {
+			get { return _condOptions[SelectedCond]; }
+		}
 
+		// Condition operators and its property
+		private ObservableCollection<ObservableCollection<string>> _condOperators = new ObservableCollection<ObservableCollection<string>>();
+		public ObservableCollection<string> CondOperators {
+			get { return _condOperators[SelectedCond]; }
+		}
+
+		private int _selectedCond = 0;
+
+		// Track the selected index
+		public int SelectedCond { 
+			get { return _selectedCond; }
+			set {
+				_selectedCond = value;
+				if(CondMode) {
+					// Check which condition selected
+					switch(value) {
+						case 0: // IR Sensor - Front
+							_irSensor.ListeningPort = value;
+							break;
+						case 1: // IR Sensor - Front Left
+							_irSensor.ListeningPort = value;
+							break;
+						case 2: // IR Sensor - Front Right
+							_irSensor.ListeningPort = value;
+							break;
+						case 3: // IR Sensor - Rear
+							_irSensor.ListeningPort = value;
+							break;
+						case 4: // IR Sensor - Rear Left
+							_irSensor.ListeningPort = value;
+							break;
+						case 5: // IR Sensor - Rear Right
+							_irSensor.ListeningPort = value;
+							break;
+					}
+				}
+			}
+		}
+
+		// The selected operator
+		private int _selectedOperator = 0;
+
+		// Handle the selected operator
+		public int SelectedOperator {
+			get { return _selectedOperator; }
+			set {
+				_selectedOperator = value;
+				if(CondMode) {
+					// Selected value is an IRSensor value
+					if (SelectedCond >= 0 && SelectedCond <= 5) {
+						switch(value) {
+							case 0: // Equal To (==)
+								_irSensor.EqualityOperator = IRSensorConditional.Operator.EQUAL;
+								break;
+							case 1: // Not Equal To (!=)
+								_irSensor.EqualityOperator = IRSensorConditional.Operator.NOTEQUAL;
+								break;
+							case 2: // Less Than (<)
+								_irSensor.EqualityOperator = IRSensorConditional.Operator.LESS;
+								break;
+							case 3: // Less Than or Equal To (<=)
+								_irSensor.EqualityOperator = IRSensorConditional.Operator.EQUALORLESS;
+								break;
+							case 4: // Greater Than (>)
+								_irSensor.EqualityOperator = IRSensorConditional.Operator.GREATER;
+								break;
+							case 5: // Greater Than or Equal To (>=)
+								_irSensor.EqualityOperator = IRSensorConditional.Operator.EQUALORGREATER;
+								break;
+						}
+					}
+				}
+			}
+		}
+
+		// Operator number e.g. distance
+		public int OperatorNumber {
+			get {
+				return _irSensor.Distance;
+			}
+			set {
+				_irSensor.Distance = value;
+			}
+		}
+
+		// Binding for radiobuttons, requires annoying logic
 		private bool _condMode = false;
 		private bool _timerMode = true;
 
+		// Condition mode selected
 		public bool CondMode { 
 			get { 
 				return _condMode;
@@ -30,11 +135,14 @@ namespace RobotInitial.ViewModel
 				if(_timerMode) {
 					_timerMode = false;
 					_condMode = true;
+					WaitModel.WaitUntil = _irSensor;
 					NotifyPropertyChanged("TimerMode");
+					NotifyPropertyChanged("CondMode");
 				}
 			}
 		}
 
+		// Timer mode selected
 		public bool TimerMode {
 			get {
 				return _timerMode;
@@ -43,13 +151,39 @@ namespace RobotInitial.ViewModel
 				if (_condMode) {
 					_condMode = false;
 					_timerMode = true;
+					WaitModel.WaitUntil = _timeCondition;
 					NotifyPropertyChanged("CondMode");
+					NotifyPropertyChanged("TimerMode");
 				}
 			}
 		}
 
 		public WaitPropertiesViewModel() {
-			_condTypes.Add("IR Sensor");
+			// the default condition for a wait block is a TimeCondition
+			_timeCondition = (TimeConditional)WaitModel.WaitUntil;
+
+			// Initiliase the condition types
+			_condTypes.Add("IR Sensor - Front");
+			_condTypes.Add("IR Sensor - Front Left");
+			_condTypes.Add("IR Sensor - Front Right");
+			_condTypes.Add("IR Sensor - Rear");
+			_condTypes.Add("IR Sensor - Rear Left");
+			_condTypes.Add("IR Sensor - Rear Right");
+
+			// Initialise the condition options, the in order of above
+			ObservableCollection<string> sensorOptions = new ObservableCollection<string>();
+			sensorOptions.Add("Range");
+			_condOptions.Add(sensorOptions);
+
+			// Initialise the condition operators, the in order of above
+			ObservableCollection<string> sensorOperators = new ObservableCollection<string>();
+			sensorOperators.Add("Equal To (==)");
+			sensorOperators.Add("Not Equal To (!=)");
+			sensorOperators.Add("Less Than (<)");
+			sensorOperators.Add("Less Than or Equal To (<=)");
+			sensorOperators.Add("Greater Than (>)");
+			sensorOperators.Add("Greater Than or Equal To (>=)");
+			_condOperators.Add(sensorOperators);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

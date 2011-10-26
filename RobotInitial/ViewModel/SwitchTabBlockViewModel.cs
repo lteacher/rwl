@@ -10,6 +10,7 @@ using System.Windows.Media;
 using System.Diagnostics;
 using System.Windows.Input;
 using RobotInitial.View;
+using RobotInitial.Model;
 
 namespace RobotInitial.ViewModel
 {
@@ -23,6 +24,9 @@ namespace RobotInitial.ViewModel
 		private double _maximumElementSize = 0;
 
 		private SwitchPropertiesView _propertiesView = new SwitchPropertiesView();
+
+		// For convenience return the model here
+		public SwitchBlock<bool> ModelBlock { get { return ((SwitchPropertiesViewModel)_propertiesView.DataContext).SwitchModel; } }
 
 		public SwitchPropertiesView PropertiesView {
 			get { return _propertiesView; }

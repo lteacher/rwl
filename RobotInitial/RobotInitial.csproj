@@ -92,6 +92,7 @@
     <Compile Include="LynxProtocol\LynxProtocol.cs" />
     <Compile Include="LynxProtocol\Enums\PassWriteControl.cs" />
     <Compile Include="LynxProtocol\Enums\Side.cs" />
+    <Compile Include="Validation\NumericOnlyRule.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="Lynx Server\Request Handler.cs" />
     <Compile Include="Lynx Server\ServerTest.cs" />

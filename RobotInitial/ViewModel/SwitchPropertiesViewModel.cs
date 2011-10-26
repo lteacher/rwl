@@ -6,8 +6,8 @@ using RobotInitial.Model;
 
 namespace RobotInitial.ViewModel {
 	class SwitchPropertiesViewModel : ViewModelBase {
-		//private SwitchBlock _loopModel = new SwitchBlock();
-		//public LoopBlock LoopModel { get { return _loopModel; } }
+		private SwitchBlock<bool> _switchModel = new SwitchBlock<bool>();
+		public SwitchBlock<bool> SwitchModel { get { return _switchModel; } }
 
 		public SwitchPropertiesViewModel() {
 

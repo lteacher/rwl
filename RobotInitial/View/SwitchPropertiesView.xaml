@@ -9,7 +9,7 @@
         <vm:SwitchPropertiesViewModel/>
     </UserControl.DataContext>
     <Grid MinWidth="900" MinHeight="170" >
-        <Rectangle Fill="Yellow" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8" Opacity="0.7"/>
+        <Rectangle Fill="Yellow" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
         <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontSize="18.667" FontFamily="Copperplate Gothic Bold" FontWeight="Bold" TextDecorations="Underline" Margin="0,8,0,0" Height="22"><Run Language="en-au" Text="Switch Block Properties"/></TextBlock>
         <Grid Margin="0">
             <Grid Margin="208.666,43.58,206.666,8" VerticalAlignment="Center" HorizontalAlignment="Center">

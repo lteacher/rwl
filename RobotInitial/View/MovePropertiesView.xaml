@@ -9,7 +9,7 @@
         <vm:MovePropertiesViewModel/>
     </UserControl.DataContext>
     <Grid MinWidth="900" MinHeight="170" >
-		<Rectangle Fill="Green" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8" Opacity="0.7"/>
+		<Rectangle Fill="Green" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
 		<TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontSize="18.667" FontFamily="Copperplate Gothic Bold" FontWeight="Bold" TextDecorations="Underline" Margin="0,8,0,0" Height="22"><Run Language="en-au" Text="Move Block Properties"/></TextBlock>
 		<Grid Margin="326.319,30,326.319,3.278" HorizontalAlignment="Center" VerticalAlignment="Center">
 			<TextBlock TextWrapping="Wrap" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" Width="247.362" Margin="0,8,0,109.758" Height="22" VerticalAlignment="Top"><Run Language="en-au" Text="DURATION"/></TextBlock>
