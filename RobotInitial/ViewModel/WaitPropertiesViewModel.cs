@@ -34,20 +34,26 @@ namespace RobotInitial.ViewModel
 		// Condition options and its property
 		private ObservableCollection<ObservableCollection<string>> _condOptions = new ObservableCollection<ObservableCollection<string>>();
 		public ObservableCollection<string> CondOptions {
-			get { return _condOptions[SelectedCond]; }
+			get { return _condOptions[0]; }
 		}
 
 		// Condition operators and its property
 		private ObservableCollection<ObservableCollection<string>> _condOperators = new ObservableCollection<ObservableCollection<string>>();
 		public ObservableCollection<string> CondOperators {
-			get { return _condOperators[SelectedCond]; }
+			get { return _condOperators[0]; }
 		}
 
 		private int _selectedCond = 0;
 
 		// Track the selected index
-		public int SelectedCond { 
-			get { return _selectedCond; }
+		public int SelectedCond {
+			get {
+				if (WaitModel.WaitUntil is IRSensorConditional) {
+					_selectedCond = ((IRSensorConditional)WaitModel.WaitUntil).IRSensorNumber;
+				}
+
+				return _selectedCond;
+			}
 			set {
 				_selectedCond = value;
 				if(CondMode) {
@@ -81,7 +87,17 @@ namespace RobotInitial.ViewModel
 
 		// Handle the selected operator
 		public int SelectedOperator {
-			get { return _selectedOperator; }
+			get {
+				if (WaitModel.WaitUntil is IRSensorConditional) {
+					if (_irSensor.EqualityOperator == IRSensorConditional.Operator.EQUAL) _selectedOperator = 0;
+					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.NOTEQUAL) _selectedOperator = 1;
+					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.LESS) _selectedOperator = 2;
+					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.EQUALORLESS) _selectedOperator = 3;
+					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.GREATER) _selectedOperator = 4;
+					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.EQUALORGREATER) _selectedOperator = 5;
+				}
+				return _selectedOperator;
+			}
 			set {
 				_selectedOperator = value;
 				if(CondMode) {
