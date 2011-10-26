@@ -47,17 +47,17 @@ namespace RobotInitial.Model {
             }
         }
 
-        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+        public override void Perform(Protocol protocol, ref LinkedList<Block> performAfter) {
             performAfter.AddFirst(LoopPath); //always executed atlteast once...
 
             if (!initilised) {
                 initilised = true;
-                Condition.initilize();
+                Condition.Initilize();
             }
-            Condition.update();
+            Condition.Update();
 
             //using do until logic
-            if (Condition.evaluate(protocol)) {
+            if (Condition.Evaluate(protocol)) {
                 initilised = false;
                 performAfter.AddLast(Next); //terminate loop
             } else {

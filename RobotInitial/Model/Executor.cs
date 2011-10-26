@@ -6,7 +6,6 @@ using System.Text;
 namespace RobotInitial.Model {
     class ModelExecutor {
         private Stack<Block> execStack = new Stack<Block>();
-        private LinkedList<Block> performAfter = new LinkedList<Block>();
 
         public StartBlock Start { get; private set; }
         public Protocol Protocol { get; private set; }
@@ -17,39 +16,56 @@ namespace RobotInitial.Model {
             execStack.Push(Start);
         }
 
-        public void reset() {
+        public void Reset() {
             execStack.Clear();
             execStack.Push(Start);
         }
 
-        public bool isDone() {
+        public bool IsDone() {
             return execStack.Count <= 0;
         }
 
-        public void executeOneBlock() {
-            if (isDone()) {
+        public void ExecuteOneBlock() {
+            if (IsDone()) {
                 return;
             }
 
+            LinkedList<Block> performAfter = new LinkedList<Block>();
             Block block = execStack.Pop();
-            block.perform(Protocol, ref performAfter);
 
-            while (performAfter.Count > 0) {
-                if (performAfter.Last() != null) {
-                    execStack.Push(performAfter.Last());
+            try {
+                block.Perform(Protocol, ref performAfter);
+                while (performAfter.Count > 0) {
+                    if (performAfter.Last() != null) {
+                        execStack.Push(performAfter.Last());
+                    }
+                    performAfter.RemoveLast();
                 }
-                performAfter.RemoveLast();
+            } catch (Exception e) {
+                //Console.WriteLine("Program threw exception, stop execution");
+                //program threw Exception, stop execution
+                StopExecution();
+                return;
+            }
+
+            if (IsDone()) {
+                StopExecution();
             }
         }
 
-        public void executeAll() {
-            while (!isDone()) {
-                executeOneBlock();
+        public void StopExecution() {
+            execStack.Clear();
+            Protocol.OnExecutionFinish();
+        }
+
+        public void ExecuteAll() {
+            while (!IsDone()) {
+                ExecuteOneBlock();
             }
         }
 
-        public static void executeAll(StartBlock start, Protocol protocol) {
-            new ModelExecutor(start, protocol).executeAll();
+        public static void ExecuteAll(StartBlock start, Protocol protocol) {
+            new ModelExecutor(start, protocol).ExecuteAll();
         }
     }
 }

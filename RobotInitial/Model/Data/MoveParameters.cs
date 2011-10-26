@@ -22,7 +22,7 @@ namespace RobotInitial.Model {
     enum MoveDurationUnit {
         ENCODERCOUNT,
         DEGREES,
-        ROTATIONS,
+        //ROTATIONS,
         MILLISECONDS,
         UNLIMITED
     }
@@ -32,7 +32,8 @@ namespace RobotInitial.Model {
         MoveDirection LeftDirection { get; }
         int RightPower { get; }
         int LeftPower { get; }
-        float Duration { get; }
+        float RightDuration { get; }
+        float LeftDuration { get; }
         MoveDurationUnit DurationUnit { get; }
         bool BrakeAfterMove { get; }
     }

@@ -27,10 +27,10 @@ namespace LynxTest2.Communications {
             Console.Write("Response recieved: " + response + "\n");
 
             if (response == 1) {
-                program.serialise(clientStream);
+                program.Serialise(clientStream);
                 Console.Write("Program sent \n");
             } else {
-                throw new LynxBusyException();
+                throw new RobotInitial.LynxBusyException();
             }
 
         }

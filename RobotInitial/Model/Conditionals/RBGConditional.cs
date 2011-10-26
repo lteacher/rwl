@@ -14,16 +14,16 @@ namespace RobotInitial.Model {
         internal RBGConditional() {
         }
 
-        public override void initilize() {
+        public override void Initilize() {
             rand = new Random();
         }
 
-        public override void update() {
+        public override void Update() {
             //max is an exclusive bound
             current = rand.Next(0, 2) == 1;
         }
 
-        public override bool evaluate(Protocol protocol) {
+        public override bool Evaluate(Protocol protocol) {
             return current;
         }
     }

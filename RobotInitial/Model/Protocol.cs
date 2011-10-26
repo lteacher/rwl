@@ -5,9 +5,11 @@ using System.Text;
 
 namespace RobotInitial.Model {
     interface Protocol {
-        void move(MoveParameters parameters);
-        IRData requestIR();
-        IMUData requestIMU();
-        int requestStatus();
+        void Move(MoveParameters parameters);
+        IRData RequestIR();
+        IMUData RequestIMU();
+        int RequestStatus();
+        void OnExecutionStart();
+        void OnExecutionFinish();
     }
 }

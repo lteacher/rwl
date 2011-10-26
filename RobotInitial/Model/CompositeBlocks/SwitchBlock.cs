@@ -41,14 +41,14 @@ namespace RobotInitial.Model {
 
         #region Methods
 
-        public void mapPath(T t, Block path) {
+        public void MapPath(T t, Block path) {
             mappedPaths[t] = path;
         }
 
-        public override void perform(Protocol protocol, ref LinkedList<Block> performAfter) {
-            Condition.initilize();
-            Condition.update();
-            T result = Condition.evaluate(protocol);
+        public override void Perform(Protocol protocol, ref LinkedList<Block> performAfter) {
+            Condition.Initilize();
+            Condition.Update();
+            T result = Condition.Evaluate(protocol);
 
             if (mappedPaths.ContainsKey(result)) {
                 performAfter.AddFirst(mappedPaths[result]);

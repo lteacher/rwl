@@ -13,15 +13,15 @@ namespace RobotInitial.Model {
         internal TimeConditional() {
         }
 
-        public override void initilize() {
+        public override void Initilize() {
             timer = new Stopwatch();
             timer.Start();
         }
 
-        public override void update() {
+        public override void Update() {
         }
 
-        public override bool evaluate(Protocol protocol) {
+        public override bool Evaluate(Protocol protocol) {
             bool done = timer.ElapsedMilliseconds >= Duration;
 
             if (done) {

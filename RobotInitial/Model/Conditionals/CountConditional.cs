@@ -12,15 +12,15 @@ namespace RobotInitial.Model {
         internal CountConditional() {
         }
 
-        public override void initilize() {
+        public override void Initilize() {
             count = 0;
         }
 
-        public override void update() {
+        public override void Update() {
             ++count;
         }
 
-        public override bool evaluate(Protocol protocol) {
+        public override bool Evaluate(Protocol protocol) {
             //will evaulate true when loop is to terminate
             return count >= Limit;
         }

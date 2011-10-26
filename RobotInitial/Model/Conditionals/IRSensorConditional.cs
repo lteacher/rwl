@@ -23,15 +23,15 @@ namespace RobotInitial.Model {
         internal IRSensorConditional() {
         }
 
-        public override void initilize() {
+        public override void Initilize() {
         }
 
-        public override void update() {
+        public override void Update() {
         }
 
-        public override bool evaluate(Protocol protocol) {
-            IRData data = protocol.requestIR();
-            int actualDistance = data.getDistance(ListeningPort);
+        public override bool Evaluate(Protocol protocol) {
+            IRData data = protocol.RequestIR();
+            int actualDistance = data.GetDistance(ListeningPort);
 
             if (actualDistance < Distance) {
                 return (EqualityOperator & Operator.LESS) == Operator.LESS;

@@ -12,16 +12,16 @@ namespace RobotInitial.Model {
             Operand = operand;
         }
 
-        public override bool evaluate(Protocol protocol) {
-            return !Operand.evaluate(protocol);
+        public override bool Evaluate(Protocol protocol) {
+            return !Operand.Evaluate(protocol);
         }
 
-        public override void initilize() {
-            Operand.initilize();
+        public override void Initilize() {
+            Operand.Initilize();
         }
 
-        public override void update() {
-            Operand.update();
+        public override void Update() {
+            Operand.Update();
         }
 
         public override object Clone() {

@@ -81,11 +81,11 @@ namespace RobotInitial.Model
         }
 
         public void Serialise(Stream stream) {
-            ModelSerialiser.serialise(stream, this);
+            ModelSerialiser.Serialise(stream, this);
         }
 
         public static Workspace Deserialise(Stream stream) {
-            return ModelSerialiser.deserialise(stream) as Workspace;
+            return ModelSerialiser.Deserialise(stream) as Workspace;
         }
                 
         #endregion

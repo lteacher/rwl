@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using RobotInitial.Model;
 
-namespace RobotInitial.Lynx_Server{
+namespace RobotInitial.LynxProtocol {
     struct LynxIRData : IRData {
         enum Port {
             FRONT,
+            FRONTLEFT,
+            REARLEFT,
             FRONTRIGHT,
             REARRIGHT,
-            REAR,
-            REARLEFT,
-            FRONTLEFT
+            REAR
         }
 
         //private const int NUMOFPORTS = 6;
@@ -22,7 +22,7 @@ namespace RobotInitial.Lynx_Server{
             distances = args.Clone() as int[];
         }
 
-        public int getDistance(int port) {
+        public int GetDistance(int port) {
             return (port >= 0 && port < distances.Length) ? distances[port] : -1;
         }
     }

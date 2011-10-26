@@ -27,6 +27,9 @@ namespace RobotInitial.Lynx_Server {
             }
 
         }
+
+        private Virtual_Machine() { }
+
         #endregion
 
         //Volatile varibles must be read from memory and updated in a single command/cycle
@@ -89,7 +92,7 @@ namespace RobotInitial.Lynx_Server {
                 Console.Write("Running program \n");
                 ModelExecutor executor = new ModelExecutor(Start, Protocol);
 
-                while (!executor.isDone()) {
+                while (!executor.IsDone()) {
                     //Console.Write("Program Line Run \n");
                     //Check hardware/software shutdowns
                     if (terminate != Shutdown.None){
@@ -104,7 +107,7 @@ namespace RobotInitial.Lynx_Server {
                     }
 
                     //Run through next program instruction
-                    executor.executeOneBlock();
+                    executor.ExecuteOneBlock();
                 }
             }
         }

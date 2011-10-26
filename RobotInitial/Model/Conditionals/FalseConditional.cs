@@ -9,14 +9,14 @@ namespace RobotInitial.Model {
         internal FalseConditional() {
         }
 
-        public override bool evaluate(Protocol protocol) {
+        public override bool Evaluate(Protocol protocol) {
             return false;
         }
 
-        public override void initilize() {
+        public override void Initilize() {
         }
 
-        public override void update() {
+        public override void Update() {
         }
     }
 }

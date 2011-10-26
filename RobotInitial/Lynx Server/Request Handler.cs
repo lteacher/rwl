@@ -34,9 +34,9 @@ namespace RobotInitial.Lynx_Server {
                 clientStream.WriteByte(1);
                 
                 //Deserialise the workspace object from the client stream
-                StartBlock program = StartBlock.deserialise(clientStream);
+                StartBlock program = StartBlock.Deserialise(clientStream);
                 Console.Write("Program recieved \n");
-                Protocol lynxProtocol = new LynxProtocol();
+                Protocol lynxProtocol = new RobotInitial.LynxProtocol.LynxProtocol();
 
                 //Load the program onto the virtual machine then spawn another thread so we can 
                 //continue revieving communication from the client.
