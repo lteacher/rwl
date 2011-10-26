@@ -17,17 +17,17 @@
         		<TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="186.583,0,117.96,0" Height="22"><Run Language="en-au" Text="CONDITION"/></TextBlock>
         		<Label Content="UNTIL" HorizontalAlignment="Left" Margin="10.138,19.665,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
         		<ComboBox IsEnabled="{Binding CondMode}" Margin="67.053,22,171.783,0" VerticalAlignment="Top" ItemsSource="{Binding CondTypes}" SelectedIndex="{Binding SelectedCond}" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment" />
-        		<ComboBox IsEnabled="{Binding CondMode}" SelectedIndex="0" Margin="0,22,65,0" ItemsSource="{Binding CondOptions}" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold" HorizontalAlignment="Right" Width="104.95" d:LayoutOverrides="HorizontalAlignment"/>
+        		<ComboBox Visibility="{Binding Visibility}" IsEnabled="{Binding CondMode}" SelectedIndex="0" Margin="0,22,65,0" ItemsSource="{Binding CondOptions}" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold" HorizontalAlignment="Right" Width="104.95" d:LayoutOverrides="HorizontalAlignment"/>
         		<RadioButton Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="171.5,4.04,0,0" IsChecked="{Binding CondMode}"/>
-        		<ComboBox IsEnabled="{Binding CondMode}" SelectedIndex="{Binding SelectedOperator}" Margin="0,49.66,64.986,0" ItemsSource="{Binding CondOperators}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="279.491" FontFamily="Comic Sans MS" FontWeight="Bold"/>
-        		<TextBox IsEnabled="{Binding CondMode}"  TextWrapping="Wrap" Margin="0,0,7.722,15.314" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" Width="56.389" VerticalAlignment="Bottom">
+                <ComboBox Visibility="{Binding Visibility}" IsEnabled="{Binding CondMode}" SelectedIndex="{Binding SelectedOperator}" Margin="0,49.66,64.986,0" ItemsSource="{Binding CondOperators}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="279.491" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+                <TextBox Visibility="{Binding Visibility}" IsEnabled="{Binding CondMode}"  TextWrapping="Wrap" Margin="0,0,7.722,15.314" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" Width="56.389" VerticalAlignment="Bottom">
         			<Binding Path="OperatorNumber" UpdateSourceTrigger="PropertyChanged">
         				<Binding.ValidationRules>
         					<RobotInitial_Validation:NumericOnlyRule/>
         				</Binding.ValidationRules>
         			</Binding>
         		</TextBox>
-        		<Label Content="IS" HorizontalAlignment="Left" Margin="40.498,46.998,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
+                <Label Visibility="{Binding Visibility}" Content="IS" HorizontalAlignment="Left" Margin="40.498,46.998,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
 
         	</Grid>
         </Grid>
