@@ -16,8 +16,8 @@ namespace RobotInitial.ViewModel
 {
 	class SwitchTabBlockViewModel : ControlBlockViewModel, INotifyPropertyChanged
 	{
-		private ObservableCollection<ObservableCollection<UIElement>> _cases = new ObservableCollection<ObservableCollection<UIElement>>();
-        public ObservableCollection<ObservableCollection<UIElement>> Cases { get { return _cases; } }
+        private ObservableCollection<ObservableCollection<FrameworkElement>> _cases = new ObservableCollection<ObservableCollection<FrameworkElement>>();
+        public ObservableCollection<ObservableCollection<FrameworkElement>> Cases { get { return _cases; } }
 
 		private ObservableCollection<double> _maxSizes = new ObservableCollection<double>();
 		private int _caseIndex = 0;
@@ -80,8 +80,8 @@ namespace RobotInitial.ViewModel
 			Width = 75;
 
 			// Initialise the cases, initially there is just 2 as default
-			_cases.Add(new ObservableCollection<UIElement>());
-			_cases.Add(new ObservableCollection<UIElement>());
+            _cases.Add(new ObservableCollection<FrameworkElement>());
+            _cases.Add(new ObservableCollection<FrameworkElement>());
 
 			// Set the max sizes
 			_maxSizes.Add(0);
@@ -98,7 +98,7 @@ namespace RobotInitial.ViewModel
 			MessageBox.Show("Count is currently: " + Children.Count);
 		}
 
-		public ObservableCollection<UIElement> Children
+        public ObservableCollection<FrameworkElement> Children
 		{
 			get { return _cases[_caseIndex]; }
 		}

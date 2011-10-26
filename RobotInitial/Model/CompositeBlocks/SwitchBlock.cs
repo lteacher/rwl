@@ -41,6 +41,10 @@ namespace RobotInitial.Model {
 
         #region Methods
 
+        //public Block GetPath(T val) {
+        //    return mappedPaths[val];
+        //}
+
         public void MapPath(T t, Block path) {
             mappedPaths[t] = path;
         }

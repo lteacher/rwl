@@ -13,119 +13,107 @@ using System.Collections.ObjectModel;
 using RobotInitial.View;
 using System.Windows.Controls;
 
-namespace RobotInitial.ViewModel
-{
-    class WorkspaceViewModel : ClosableViewModel, INotifyPropertyChanged
-    {
+namespace RobotInitial.ViewModel {
+    class WorkspaceViewModel : ClosableViewModel, INotifyPropertyChanged {
 
         #region Fields
         Workspace _workspace;
         readonly UndoManager _undoManager;
-		double _minWidth = Application.Current.MainWindow.RenderSize.Width;
-		double _minHeight =  Application.Current.MainWindow.RenderSize.Height;
-		private SequenceView _sequence = new SequenceView(); 
+        double _minWidth = Application.Current.MainWindow.RenderSize.Width;
+        double _minHeight = Application.Current.MainWindow.RenderSize.Height;
+        private SequenceView _sequence = new SequenceView();
 
         #endregion // Fields
 
         #region Properties
 
-		public double Width {
-			get { return _minWidth; }
-			set { _minWidth = value; }
-		}
+        public double Width {
+            get { return _minWidth; }
+            set { _minWidth = value; }
+        }
 
-		public SequenceView Sequence {
-			get { return _sequence; }
-		}
+        public SequenceView Sequence {
+            get { return _sequence; }
+        }
 
-		public double Height {
-			get { return _minHeight; }
-			set { _minHeight = value; }
-		}
+        public double Height {
+            get { return _minHeight; }
+            set { _minHeight = value; }
+        }
 
-		public double SequenceY {
-			get { return ((int)(Height/2)/25)*25; }
-		}
+        public double SequenceY {
+            get { return ((int)(Height / 2) / 25) * 25; }
+        }
 
-        public bool IsUndoEnabled
-        {
+        public bool IsUndoEnabled {
             get { return _undoManager.IsUndoEnabled; }
         }
 
-        public bool IsRedoEnabled
-        {
+        public bool IsRedoEnabled {
             get { return _undoManager.IsRedoEnabled; }
         }
 
         #endregion // Properties
 
 
-        public void Undo()
-        {
+        public void Undo() {
             _undoManager.Undo(out _workspace);
         }
 
-        public void Redo()
-        {
+        public void Redo() {
             _undoManager.Redo(out _workspace);
         }
 
-		public WorkspaceViewModel() {
-			//base.DisplayName = _workspace.FileName;
-			_undoManager = ServiceLocator.GetService<IUndoService>().CreateUndoManager();
-			_undoManager.UndoStackChanged += new EventHandler(OnUndoChanged);
-			_undoManager.RedoStackChanged += new EventHandler(OnRedoChanged);
+        public WorkspaceViewModel() {
+            //base.DisplayName = _workspace.FileName;
+            _undoManager = ServiceLocator.GetService<IUndoService>().CreateUndoManager();
+            _undoManager.UndoStackChanged += new EventHandler(OnUndoChanged);
+            _undoManager.RedoStackChanged += new EventHandler(OnRedoChanged);
 
-			OnUndoChanged(null, null);
-			OnRedoChanged(null, null);
+            OnUndoChanged(null, null);
+            OnRedoChanged(null, null);
 
-			Application.Current.MainWindow.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
-			_sequence.SizeChanged += new SizeChangedEventHandler(Sequence_SizeChanged);
-		}
+            Application.Current.MainWindow.SizeChanged += new SizeChangedEventHandler(MainWindow_SizeChanged);
+            _sequence.SizeChanged += new SizeChangedEventHandler(Sequence_SizeChanged);
+        }
 
-		//public WorkspaceViewModel(Workspace workspace)
-		//{
-		//    _workspace = workspace;
-            
-		//}
+        //public WorkspaceViewModel(Workspace workspace)
+        //{
+        //    _workspace = workspace;
 
-		private void MainWindow_SizeChanged(object sender, EventArgs e) {
-			//Application.Current.MainWindow.InvalidateVisual();
-			Width = Application.Current.MainWindow.RenderSize.Width;
-			Height = Application.Current.MainWindow.RenderSize.Height;
-			NotifyPropertyChanged("Width");
-			NotifyPropertyChanged("Height");		
-		}
+        //}
 
-		private void Sequence_SizeChanged(object sender, EventArgs e)
-		{
-			//Application.Current.MainWindow.InvalidateVisual();
-			Width = Application.Current.MainWindow.RenderSize.Width;
-			Height = Application.Current.MainWindow.RenderSize.Height;
-			NotifyPropertyChanged("Width");
-			NotifyPropertyChanged("Height");
-		}
+        private void MainWindow_SizeChanged(object sender, EventArgs e) {
+            //Application.Current.MainWindow.InvalidateVisual();
+            Width = Application.Current.MainWindow.RenderSize.Width;
+            Height = Application.Current.MainWindow.RenderSize.Height;
+            NotifyPropertyChanged("Width");
+            NotifyPropertyChanged("Height");
+        }
 
-        private void OnUndoChanged(object sender, EventArgs e)
-        {
+        private void Sequence_SizeChanged(object sender, EventArgs e) {
+            //Application.Current.MainWindow.InvalidateVisual();
+            Width = Application.Current.MainWindow.RenderSize.Width;
+            Height = Application.Current.MainWindow.RenderSize.Height;
+            NotifyPropertyChanged("Width");
+            NotifyPropertyChanged("Height");
+        }
+
+        private void OnUndoChanged(object sender, EventArgs e) {
             Debug.WriteLine("Firing PropertyChanged on IsUndoEnabled");
             OnPropertyChanged("IsUndoEnabled");
         }
 
-        private void OnRedoChanged(object sender, EventArgs e)
-        {
+        private void OnRedoChanged(object sender, EventArgs e) {
             Debug.WriteLine("Firing PropertyChanged on IsRedoEnabled");
             OnPropertyChanged("IsRedoEnabled");
         }
 
         RelayCommand _dropCommand;
 
-        public ICommand DropCommand
-        {
-            get
-            {
-                if (_dropCommand == null)
-                {
+        public ICommand DropCommand {
+            get {
+                if (_dropCommand == null) {
                     _dropCommand = new RelayCommand(param => this.OnDrop());
                 }
 
@@ -133,12 +121,9 @@ namespace RobotInitial.ViewModel
             }
         }
 
-        public bool IsUntitled
-        {
-            get
-            {
-                if (_workspace != null)
-                {
+        public bool IsUntitled {
+            get {
+                if (_workspace != null) {
                     return _workspace.IsUntitled;
                 }
 
@@ -146,50 +131,67 @@ namespace RobotInitial.ViewModel
             }
         }
 
-        void OnDrop()
-        {
-            
+        void OnDrop() {
+
         }
 
-		public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler PropertyChanged;
 
-		/// <summary>
-		/// Notifies the property changed.
-		/// </summary>
-		/// <param name="property">The property.</param>
-		private void NotifyPropertyChanged(string property)
-		{
-			if (PropertyChanged != null)
-			{
-				PropertyChanged(this, new PropertyChangedEventArgs(property));
-			}
-		}
-
-        private static void ConnectBlocks(StartBlock startBlock, ObservableCollection<FrameworkElement> elements) {
-            Block currentBlock = startBlock;
-             foreach (FrameworkElement blockView in elements) {
-                 if (blockView is MoveControlBlockView) {
-                     MoveControlBlockViewModel moveViewModel = (MoveControlBlockViewModel)blockView.DataContext;
-                     currentBlock.Next = moveViewModel.ModelBlock;
-                 } else if (blockView is WaitControlBlockView) {
-                     WaitControlBlockViewModel waitViewModel = (WaitControlBlockViewModel)blockView.DataContext;
-                     currentBlock.Next = waitViewModel.ModelBlock;
-                 } else if (blockView is LoopControlBlockView) {
-                     LoopControlBlockViewModel loopViewModel = (LoopControlBlockViewModel)blockView.DataContext;
-                     currentBlock.Next = loopViewModel.ModelBlock;
-                 } else if (blockView is SwitchControlBlockView) {
-                     SwitchControlBlockViewModel switchViewModel = (SwitchControlBlockViewModel)blockView.DataContext;
-                     //currentBlock.Next = switchViewModel.sw
-                 }
-                 currentBlock = currentBlock.Next;
+        /// <summary>
+        /// Notifies the property changed.
+        /// </summary>
+        /// <param name="property">The property.</param>
+        private void NotifyPropertyChanged(string property) {
+            if (PropertyChanged != null) {
+                PropertyChanged(this, new PropertyChangedEventArgs(property));
             }
+        }
+
+
+        private static Block GetConnectedBlocks(ObservableCollection<FrameworkElement> elements) {
+            Block currentBlock = null;
+            Block nextBlock = null;
+            Block firstBlock = null;
+            foreach (FrameworkElement blockView in elements) {
+                if (blockView is ArrowConnector) {
+                    continue;
+                }
+                if (blockView is MoveControlBlockView) {
+                    MoveControlBlockViewModel moveViewModel = (MoveControlBlockViewModel)blockView.DataContext;
+                    nextBlock = moveViewModel.ModelBlock;
+                } else if (blockView is WaitControlBlockView) {
+                    WaitControlBlockViewModel waitViewModel = (WaitControlBlockViewModel)blockView.DataContext;
+                    nextBlock = waitViewModel.ModelBlock;
+                } else if (blockView is LoopControlBlockView) {
+                    LoopControlBlockViewModel loopViewModel = (LoopControlBlockViewModel)blockView.DataContext;
+                    loopViewModel.ModelBlock.LoopPath = GetConnectedBlocks(loopViewModel.Children);
+                    nextBlock = loopViewModel.ModelBlock;
+                } else if (blockView is SwitchTabBlockView) {
+                    SwitchTabBlockViewModel switchViewModel = (SwitchTabBlockViewModel)blockView.DataContext;
+                    switchViewModel.ModelBlock.MapPath(true, GetConnectedBlocks(switchViewModel.Cases[0]));
+                    switchViewModel.ModelBlock.MapPath(false, GetConnectedBlocks(switchViewModel.Cases[1]));
+                    nextBlock = switchViewModel.ModelBlock;
+                }
+
+                //the assignment takes place out here to prevent loads of duplicate checks..
+                //only reason I have all the weird block vars
+                if (currentBlock == null) {
+                    firstBlock = nextBlock;
+                    currentBlock = nextBlock;
+                } else {
+                    currentBlock.Next = nextBlock;
+                    currentBlock = currentBlock.Next;
+                }
+
+            }
+            return firstBlock;
         }
 
         public StartBlock GetConnectedModel() {
             StartBlock start = DefaultBlockFactory.Instance.CreateStartBlock();
             SequenceViewModel sequenceViewModel = (SequenceViewModel)_sequence.DataContext;
-            //ConnectedBlocks(startBlock, sequenceViewModel.Blocks);
+            start.Next = GetConnectedBlocks(sequenceViewModel.Blocks);
             return start;
         }
-	}
+    }
 }

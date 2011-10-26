@@ -4,7 +4,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -55,11 +54,35 @@ namespace RobotInitial.Behaviours
 			}
 			else if (clickedBlock.GetType() == typeof(ScrollViewer) ||
 				clickedBlock.GetType() == typeof(SequenceView)) {
+
+                //WorkspaceViewModel blah = (WorkspaceViewModel)((FrameworkElement)clickedBlock.Parent).DataContext;
+                //RobotInitial.Model.Block block = blah.GetConnectedModel();
+                //DeleteThisHackTestMethod(block);
+
 				propertiesViewModel.setBlankProperties();
 			}
 
 			e.Handled = true;
 		}
+
+        //private static void DeleteThisHackTestMethod(RobotInitial.Model.Block block) {
+        //    if (block == null) {
+        //        return;
+        //    }
+        //    Console.WriteLine("Current: " + block);
+        //    if (block is RobotInitial.Model.LoopBlock) {
+        //        Console.WriteLine("Entering Loop Path");
+        //        DeleteThisHackTestMethod((block as RobotInitial.Model.LoopBlock).LoopPath);
+        //        Console.WriteLine("Exiting Loop Path");
+        //    } else if (block is RobotInitial.Model.SwitchBlock<bool>) {
+        //        Console.WriteLine("Entering True Path");
+        //        DeleteThisHackTestMethod((block as RobotInitial.Model.SwitchBlock<bool>).GetPath(true));
+        //        Console.WriteLine("Entering False Path");
+        //        DeleteThisHackTestMethod((block as RobotInitial.Model.SwitchBlock<bool>).GetPath(false));
+        //        Console.WriteLine("Exiting Switch");
+        //    }
+        //    DeleteThisHackTestMethod(block.Next);
+        //}
 
 		protected override void OnDetaching()
 		{
