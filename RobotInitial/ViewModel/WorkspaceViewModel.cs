@@ -164,5 +164,32 @@ namespace RobotInitial.ViewModel
 				PropertyChanged(this, new PropertyChangedEventArgs(property));
 			}
 		}
+
+        private static void ConnectBlocks(StartBlock startBlock, ObservableCollection<FrameworkElement> elements) {
+            Block currentBlock = startBlock;
+             foreach (FrameworkElement blockView in elements) {
+                 if (blockView is MoveControlBlockView) {
+                     MoveControlBlockViewModel moveViewModel = (MoveControlBlockViewModel)blockView.DataContext;
+                     currentBlock.Next = moveViewModel.ModelBlock;
+                 } else if (blockView is WaitControlBlockView) {
+                     WaitControlBlockViewModel waitViewModel = (WaitControlBlockViewModel)blockView.DataContext;
+                     currentBlock.Next = waitViewModel.ModelBlock;
+                 } else if (blockView is LoopControlBlockView) {
+                     LoopControlBlockViewModel loopViewModel = (LoopControlBlockViewModel)blockView.DataContext;
+                     currentBlock.Next = loopViewModel.ModelBlock;
+                 } else if (blockView is SwitchControlBlockView) {
+                     SwitchControlBlockViewModel switchViewModel = (SwitchControlBlockViewModel)blockView.DataContext;
+                     //currentBlock.Next = switchViewModel.sw
+                 }
+                 currentBlock = currentBlock.Next;
+            }
+        }
+
+        public StartBlock GetConnectedModel() {
+            StartBlock start = DefaultBlockFactory.Instance.CreateStartBlock();
+            SequenceViewModel sequenceViewModel = (SequenceViewModel)_sequence.DataContext;
+            //ConnectedBlocks(startBlock, sequenceViewModel.Blocks);
+            return start;
+        }
 	}
 }

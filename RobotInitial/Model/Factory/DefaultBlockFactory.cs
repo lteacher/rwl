@@ -56,7 +56,7 @@ namespace RobotInitial.Model {
             if (type.Equals(typeof(bool))) {
                 IRSensorConditional cond = new IRSensorConditional();
                 cond.Distance = 50;
-                cond.ListeningPort = 0;
+                cond.IRSensorNumber = 0;
                 cond.EqualityOperator = IRSensorConditional.Operator.LESS;
                 (block as SwitchBlock<bool>).Condition = cond;
             } else if (type.Equals(typeof(int))) {

@@ -79,6 +79,7 @@
     <Compile Include="Lynx Server\EndState.cs" />
     <Compile Include="Lynx Server\Lynx Server.cs" />
     <Compile Include="LynxProtocol\Enums\LynxCommandSet.cs" />
+    <Compile Include="LynxProtocol\Enums\LynxIRPort.cs" />
     <Compile Include="LynxProtocol\Messages\MessageFactory.cs" />
     <Compile Include="LynxProtocol\Messages\LynxMessagePort.cs" />
     <Compile Include="LynxProtocol\Enums\LynxStatus.cs" />
@@ -92,6 +93,8 @@
     <Compile Include="LynxProtocol\LynxProtocol.cs" />
     <Compile Include="LynxProtocol\Enums\PassWriteControl.cs" />
     <Compile Include="LynxProtocol\Enums\Side.cs" />
+    <Compile Include="Model\Conditionals\Operators\And.cs" />
+    <Compile Include="Model\Conditionals\Operators\Or.cs" />
     <Compile Include="Vector3.cs" />
     <Compile Include="Lynx Server\Request Handler.cs" />
     <Compile Include="Lynx Server\ServerTest.cs" />
