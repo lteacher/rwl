@@ -5,25 +5,25 @@ using System.Text;
 using RobotInitial.Model;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
-using System.Windows;
 
-namespace RobotInitial.ViewModel {
-	class LoopPropertiesViewModel : ViewModelBase, INotifyPropertyChanged {
+namespace RobotInitial.ViewModel
+{
+	class WaitPropertiesViewModel : ViewModelBase, INotifyPropertyChanged
+	{
+		private WaitBlock _waitModel = DefaultBlockFactory.Instance.CreateWaitBlock();
+		public WaitBlock WaitModel { get { return _waitModel; } }
 
-		private LoopBlock _loopModel = DefaultBlockFactory.Instance.CreateLoopBlock();
-		public LoopBlock LoopModel { get { return _loopModel; } }
-
-		// Count Condition
-		private CountConditional _countCondition;
-
-		// Count Condition Duration property
-		public int RepeatCount {
-			get { return _countCondition.Limit; }
-			set { _countCondition.Limit = value; }
-		}
+		// Timer Condition
+		private TimeConditional _timeCondition;
 
 		// IR Condition
 		private IRSensorConditional _irSensor = new IRSensorConditional();
+
+		// Timer Condition Duration property
+		public double TimeDuration { 
+			get { return _timeCondition.Duration/1000; }
+			set { _timeCondition.Duration = (int)value*1000; }
+		}
 
 		// Condition types and its property
 		private ObservableCollection<string> _condTypes = new ObservableCollection<string>();
@@ -46,44 +46,49 @@ namespace RobotInitial.ViewModel {
 		private int _selectedCond = 0;
 
 		// Track the selected index
-		public int SelectedCond {
+		public int SelectedCond { 
 			get { return _selectedCond; }
 			set {
 				_selectedCond = value;
-				
-				if (CondMode) {
-					Visibility = Visibility.Visible;
-					NotifyPropertyChanged("Visibility");
+				if(CondMode) {
 					// Check which condition selected
-					switch (value) {
+					switch(value) {
 						case 0: // IR Sensor - Front
-							_irSensor.IRSensorNumber = value;
-							LoopModel.Condition = _irSensor;
+<<<<<<< HEAD
+                            _irSensor.IRSensorNumber = value;
 							break;
 						case 1: // IR Sensor - Front Left
                             _irSensor.IRSensorNumber = value;
-							LoopModel.Condition = _irSensor;
 							break;
 						case 2: // IR Sensor - Front Right
                             _irSensor.IRSensorNumber = value;
-							LoopModel.Condition = _irSensor;
 							break;
 						case 3: // IR Sensor - Rear
                             _irSensor.IRSensorNumber = value;
-							LoopModel.Condition = _irSensor;
 							break;
 						case 4: // IR Sensor - Rear Left
                             _irSensor.IRSensorNumber = value;
-							LoopModel.Condition = _irSensor;
 							break;
 						case 5: // IR Sensor - Rear Right
                             _irSensor.IRSensorNumber = value;
-							LoopModel.Condition = _irSensor;
+=======
+							_irSensor.IRSensorNumber = value;
 							break;
-						case 6: // Forever
-                            _irSensor.IRSensorNumber = value;
-							Visibility = Visibility.Hidden;
-							NotifyPropertyChanged("Visibility");
+						case 1: // IR Sensor - Front Left
+							_irSensor.IRSensorNumber = value;
+							break;
+						case 2: // IR Sensor - Front Right
+							_irSensor.IRSensorNumber = value;
+							break;
+						case 3: // IR Sensor - Rear
+							_irSensor.IRSensorNumber = value;
+							break;
+						case 4: // IR Sensor - Rear Left
+							_irSensor.IRSensorNumber = value;
+							break;
+						case 5: // IR Sensor - Rear Right
+							_irSensor.IRSensorNumber = value;
+>>>>>>> awesome_merge_temp
 							break;
 					}
 				}
@@ -98,10 +103,10 @@ namespace RobotInitial.ViewModel {
 			get { return _selectedOperator; }
 			set {
 				_selectedOperator = value;
-				if (CondMode) {
+				if(CondMode) {
 					// Selected value is an IRSensor value
 					if (SelectedCond >= 0 && SelectedCond <= 5) {
-						switch (value) {
+						switch(value) {
 							case 0: // Equal To (==)
 								_irSensor.EqualityOperator = IRSensorConditional.Operator.EQUAL;
 								break;
@@ -138,52 +143,43 @@ namespace RobotInitial.ViewModel {
 
 		// Binding for radiobuttons, requires annoying logic
 		private bool _condMode = false;
-		private bool _repeatMode = true;
+		private bool _timerMode = true;
 
 		// Condition mode selected
-		public bool CondMode {
-			get {
+		public bool CondMode { 
+			get { 
 				return _condMode;
-			}
+			} 
 			set {
-				if (_repeatMode) {
-					_repeatMode = false;
+				if(_timerMode) {
+					_timerMode = false;
 					_condMode = true;
-					LoopModel.Condition = _irSensor;
-					NotifyPropertyChanged("RepeatMode");
+					WaitModel.WaitUntil = _irSensor;
+					NotifyPropertyChanged("TimerMode");
 					NotifyPropertyChanged("CondMode");
 				}
 			}
 		}
 
 		// Timer mode selected
-		public bool RepeatMode {
+		public bool TimerMode {
 			get {
-				return _repeatMode;
+				return _timerMode;
 			}
 			set {
 				if (_condMode) {
 					_condMode = false;
-					_repeatMode = true;
-					LoopModel.Condition = _countCondition;
+					_timerMode = true;
+					WaitModel.WaitUntil = _timeCondition;
 					NotifyPropertyChanged("CondMode");
-					NotifyPropertyChanged("RepeatMode");
+					NotifyPropertyChanged("TimerMode");
 				}
 			}
 		}
 
-		// Used for setting forever mode
-		private Visibility _isVisible = Visibility.Visible;
-		public Visibility Visibility {
-			get { return _isVisible; }
-			set {
-				_isVisible = value;
-			}
-		}
-
-		public LoopPropertiesViewModel() {
+		public WaitPropertiesViewModel() {
 			// the default condition for a wait block is a TimeCondition
-			_countCondition = (CountConditional)LoopModel.Condition;
+			_timeCondition = (TimeConditional)WaitModel.WaitUntil;
 
 			// Initiliase the condition types
 			_condTypes.Add("IR Sensor - Front");
@@ -192,7 +188,6 @@ namespace RobotInitial.ViewModel {
 			_condTypes.Add("IR Sensor - Rear");
 			_condTypes.Add("IR Sensor - Rear Left");
 			_condTypes.Add("IR Sensor - Rear Right");
-			_condTypes.Add("Forever");
 
 			// Initialise the condition options, the in order of above
 			ObservableCollection<string> sensorOptions = new ObservableCollection<string>();
