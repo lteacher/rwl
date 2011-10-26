@@ -54,22 +54,22 @@ namespace RobotInitial.ViewModel
 					// Check which condition selected
 					switch(value) {
 						case 0: // IR Sensor - Front
-							_irSensor.ListeningPort = value;
+							_irSensor.IRSensorNumber = value;
 							break;
 						case 1: // IR Sensor - Front Left
-							_irSensor.ListeningPort = value;
+							_irSensor.IRSensorNumber = value;
 							break;
 						case 2: // IR Sensor - Front Right
-							_irSensor.ListeningPort = value;
+							_irSensor.IRSensorNumber = value;
 							break;
 						case 3: // IR Sensor - Rear
-							_irSensor.ListeningPort = value;
+							_irSensor.IRSensorNumber = value;
 							break;
 						case 4: // IR Sensor - Rear Left
-							_irSensor.ListeningPort = value;
+							_irSensor.IRSensorNumber = value;
 							break;
 						case 5: // IR Sensor - Rear Right
-							_irSensor.ListeningPort = value;
+							_irSensor.IRSensorNumber = value;
 							break;
 					}
 				}
