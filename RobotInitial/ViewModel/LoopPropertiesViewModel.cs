@@ -5,6 +5,7 @@ using System.Text;
 using RobotInitial.Model;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace RobotInitial.ViewModel {
 	class LoopPropertiesViewModel : ViewModelBase, INotifyPropertyChanged {
@@ -49,29 +50,40 @@ namespace RobotInitial.ViewModel {
 			get { return _selectedCond; }
 			set {
 				_selectedCond = value;
+				
 				if (CondMode) {
+					Visibility = Visibility.Visible;
+					NotifyPropertyChanged("Visibility");
 					// Check which condition selected
 					switch (value) {
 						case 0: // IR Sensor - Front
 							_irSensor.ListeningPort = value;
+							LoopModel.Condition = _irSensor;
 							break;
 						case 1: // IR Sensor - Front Left
 							_irSensor.ListeningPort = value;
+							LoopModel.Condition = _irSensor;
 							break;
 						case 2: // IR Sensor - Front Right
 							_irSensor.ListeningPort = value;
+							LoopModel.Condition = _irSensor;
 							break;
 						case 3: // IR Sensor - Rear
 							_irSensor.ListeningPort = value;
+							LoopModel.Condition = _irSensor;
 							break;
 						case 4: // IR Sensor - Rear Left
 							_irSensor.ListeningPort = value;
+							LoopModel.Condition = _irSensor;
 							break;
 						case 5: // IR Sensor - Rear Right
 							_irSensor.ListeningPort = value;
+							LoopModel.Condition = _irSensor;
 							break;
 						case 6: // Forever
-							_irSensor.ListeningPort = value;
+							LoopModel.Condition = new FalseConditional();
+							Visibility = Visibility.Hidden;
+							NotifyPropertyChanged("Visibility");
 							break;
 					}
 				}
@@ -161,13 +173,13 @@ namespace RobotInitial.ViewModel {
 		}
 
 		// Used for setting forever mode
-		//private bool _isForever = false;
-		//public bool IsForever { 
-		//    get {  }
-		//    set {
-
-		//    }
-		//}
+		private Visibility _isVisible = Visibility.Visible;
+		public Visibility Visibility {
+			get { return _isVisible; }
+			set {
+				_isVisible = value;
+			}
+		}
 
 		public LoopPropertiesViewModel() {
 			// the default condition for a wait block is a TimeCondition
