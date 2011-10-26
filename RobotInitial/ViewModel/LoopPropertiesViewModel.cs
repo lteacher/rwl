@@ -160,7 +160,14 @@ namespace RobotInitial.ViewModel {
 			}
 		}
 
-		public bool IsForever { get; set; }
+		// Used for setting forever mode
+		//private bool _isForever = false;
+		//public bool IsForever { 
+		//    get {  }
+		//    set {
+
+		//    }
+		//}
 
 		public LoopPropertiesViewModel() {
 			// the default condition for a wait block is a TimeCondition
