@@ -36,8 +36,8 @@ namespace RobotInitial.Behaviours
 				{
 					Point newPoint = e.GetPosition((FrameworkElement)sender);
 
-					if(Math.Abs(newPoint.X - _startPoint.X) >= SystemParameters.MinimumHorizontalDragDistance ||
-					   Math.Abs(newPoint.Y - _startPoint.Y) >= SystemParameters.MinimumVerticalDragDistance) {
+					if(Math.Abs(newPoint.X - _startPoint.X) >= SystemParameters.MinimumHorizontalDragDistance+5 ||
+					   Math.Abs(newPoint.Y - _startPoint.Y) >= SystemParameters.MinimumVerticalDragDistance+5) {
 
 						// Set the source element
 						FrameworkElement source = (FrameworkElement)sender;

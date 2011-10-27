@@ -139,7 +139,7 @@ namespace RobotInitial.ViewModel
 			Blocks.RemoveAt(index);
 			Blocks.RemoveAt(index);
 			// If it is the start that we removed just set the left margin again
-			if (index == 0) Blocks.ElementAt(index).Margin = Blocks.Count == 1 ? new Thickness(25, 0, 25, 0) : new Thickness(0, 0, 25, 0);
+			if (index == 0) Blocks.ElementAt(index).Margin = Blocks.Count == 1 ? new Thickness(25, 0, 25, 0) : new Thickness(25, 0, 0, 0);
 		}
  
 		public event PropertyChangedEventHandler PropertyChanged;
