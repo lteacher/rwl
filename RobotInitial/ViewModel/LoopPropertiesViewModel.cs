@@ -94,7 +94,7 @@ namespace RobotInitial.ViewModel {
 							LoopModel.Condition = _irSensor;
 							break;
 						case 6: // Forever
-                            _irSensor.IRSensorNumber = value;
+                            LoopModel.Condition = DefaultModelFactory.Instance.CreateFalseConditional();
 							Visibility = Visibility.Hidden;
 							NotifyPropertyChanged("Visibility");
 							break;
