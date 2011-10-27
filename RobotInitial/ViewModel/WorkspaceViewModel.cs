@@ -181,6 +181,8 @@ namespace RobotInitial.ViewModel {
                     currentBlock.Next = nextBlock;
                     currentBlock = currentBlock.Next;
                 }
+                //set next to null for now, incase a block has been remove since it was last connected
+                currentBlock.Next = null;
 
             }
             return firstBlock;
