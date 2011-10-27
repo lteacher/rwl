@@ -11,13 +11,13 @@ namespace RobotInitial.ViewModel
 	class WaitPropertiesViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		private WaitBlock _waitModel = DefaultBlockFactory.Instance.CreateWaitBlock();
-		public WaitBlock WaitModel { get { return _waitModel; } }
+		public WaitBlock WaitModel { get { return _waitModel; } set { _waitModel = value; } }
 
 		// Timer Condition
 		private TimeConditional _timeCondition;
 
 		// IR Condition
-		private IRSensorConditional _irSensor = new IRSensorConditional();
+		private IRSensorConditional _irSensor;
 
 		// Timer Condition Duration property
 		public double TimeDuration { 
@@ -144,7 +144,7 @@ namespace RobotInitial.ViewModel
 
 		// Condition mode selected
 		public bool CondMode { 
-			get { 
+			get {
 				return _condMode;
 			} 
 			set {
@@ -175,9 +175,22 @@ namespace RobotInitial.ViewModel
 		}
 
 		public WaitPropertiesViewModel() {
-			// the default condition for a wait block is a TimeCondition
-			_timeCondition = (TimeConditional)WaitModel.WaitUntil;
+			// Set the condition from the default type
+			if (WaitModel.WaitUntil is TimeConditional) {
+				_timeCondition = (TimeConditional)WaitModel.WaitUntil;
+			} else {
+				// TODO replace with factory sensor creation
+				_timeCondition = new TimeConditional();
+			}
 
+			if (WaitModel.WaitUntil is IRSensorConditional) {
+				_irSensor = (IRSensorConditional)WaitModel.WaitUntil;
+			}
+			else {
+				// TODO replace with factory sensor creation
+				_irSensor = new IRSensorConditional();
+			}
+			
 			// Initiliase the condition types
 			_condTypes.Add("IR Sensor - Front");
 			_condTypes.Add("IR Sensor - Front Left");

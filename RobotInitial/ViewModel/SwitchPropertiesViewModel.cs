@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 namespace RobotInitial.ViewModel {
 	class SwitchPropertiesViewModel : ViewModelBase, INotifyPropertyChanged {
 		private SwitchBlock<bool> _switchModel = DefaultBlockFactory.Instance.CreateSwitchBlock<bool>();
-		public SwitchBlock<bool> SwitchModel { get { return _switchModel; } }
+		public SwitchBlock<bool> SwitchModel { get { return _switchModel; } set { _switchModel = value; } }
 
 		// IR Condition
 		private IRSensorConditional _irSensor;
@@ -47,8 +47,6 @@ namespace RobotInitial.ViewModel {
 			set {
 				_selectedCond = value;
 
-				Visibility = Visibility.Visible;
-				NotifyPropertyChanged("Visibility");
 				// Check which condition selected
 				switch (value) {
 					case 0: // IR Sensor - Front

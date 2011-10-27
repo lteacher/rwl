@@ -11,7 +11,7 @@ namespace RobotInitial.ViewModel {
 	class LoopPropertiesViewModel : ViewModelBase, INotifyPropertyChanged {
 
 		private LoopBlock _loopModel = DefaultBlockFactory.Instance.CreateLoopBlock();
-		public LoopBlock LoopModel { get { return _loopModel; } }
+		public LoopBlock LoopModel { get { return _loopModel; } set { _loopModel = value; } }
 
 		// Count Condition
 		private CountConditional _countCondition;
@@ -50,6 +50,13 @@ namespace RobotInitial.ViewModel {
 			get {
 				if (LoopModel.Condition is IRSensorConditional) {
 					_selectedCond = ((IRSensorConditional)LoopModel.Condition).IRSensorNumber;
+					Visibility = Visibility.Visible;
+					NotifyPropertyChanged("Visibility");
+				}
+				else if(LoopModel.Condition is FalseConditional) {
+					_selectedCond = 6;
+					Visibility = Visibility.Hidden;
+					NotifyPropertyChanged("Visibility");
 				}
 
 				return _selectedCond;

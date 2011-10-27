@@ -12,7 +12,7 @@ namespace RobotInitial.ViewModel
 	class MovePropertiesViewModel : ViewModelBase, INotifyPropertyChanged
 	{
 		private MoveBlock _moveModel = DefaultBlockFactory.Instance.CreateMoveBlock();
-		public MoveBlock MoveModel { get { return _moveModel; } }
+		public MoveBlock MoveModel { get { return _moveModel; } set { _moveModel = value; } }
 
 		// Directions valid for the motors
 		private Collection<string> _directions = new Collection<string>();
