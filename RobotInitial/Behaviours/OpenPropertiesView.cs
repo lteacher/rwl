@@ -55,8 +55,9 @@ namespace RobotInitial.Behaviours
 			else if (clickedBlock.GetType() == typeof(ScrollViewer) ||
 				clickedBlock.GetType() == typeof(SequenceView)) {
 
-                //WorkspaceViewModel blah = (WorkspaceViewModel)((FrameworkElement)clickedBlock.Parent).DataContext;
-                //RobotInitial.Model.Block block = blah.GetConnectedModel();
+                WorkspaceViewModel blah = (WorkspaceViewModel)((FrameworkElement)clickedBlock.Parent).DataContext;
+                RobotInitial.Model.Block block = blah.GetConnectedModel();
+                Console.WriteLine(block.ToString());
                 //DeleteThisHackTestMethod(block);
 
 				propertiesViewModel.setBlankProperties();

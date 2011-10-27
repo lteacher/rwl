@@ -27,5 +27,9 @@ namespace RobotInitial.Model {
         public override int Evaluate(Protocol protocol) {
             return current;
         }
+
+        public override string ToString() {
+            return "Random Boolean";
+        }
     }
 }

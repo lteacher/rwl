@@ -65,5 +65,11 @@ namespace RobotInitial.Model {
         public override object Clone() {
             return new MoveBlock(this);
         }
+
+        public override string ToString() {
+            string left = "Left(" + LeftDirection + " " + LeftPower + "% " + LeftDuration + " " + DurationUnit + ")";
+            string right = "Right(" + RightDirection + " " + RightPower + "% " + RightDuration + " " + DurationUnit + ")";
+            return "Move " + left + " " + right + "\n" + this.Next;
+        }
     }
 }

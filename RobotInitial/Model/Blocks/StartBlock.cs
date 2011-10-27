@@ -36,5 +36,26 @@ namespace RobotInitial.Model {
              MemoryStream memoryStream = Network.recieve(stream);
              return serialiser.Deserialize(memoryStream) as StartBlock;
         }
+
+        private static readonly String[] indentOn = { "Switch", "Case", "Do"};
+        private static readonly String[] unindentOn = { "EndSwitch", "EndCase", "Until" };
+
+        public override string ToString() {
+            string code = "Start\n" + this.Next;
+            string formattedCode = "";
+            int level = 0;
+
+            foreach (string line in code.Split('\n')) {
+                if (unindentOn.Any(s => line.StartsWith(s))) {
+                    --level;
+                }
+                formattedCode += new String('\t', level) + line + '\n';
+                if (indentOn.Any(s => line.StartsWith(s))) {
+                    ++level;
+                } 
+            }
+
+            return formattedCode;
+        }
     }
 }

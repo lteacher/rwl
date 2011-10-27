@@ -153,9 +153,6 @@ namespace RobotInitial.ViewModel {
             Block nextBlock = null;
             Block firstBlock = null;
             foreach (FrameworkElement blockView in elements) {
-                if (blockView is ArrowConnector) {
-                    continue;
-                }
                 if (blockView is MoveControlBlockView) {
                     MoveControlBlockViewModel moveViewModel = (MoveControlBlockViewModel)blockView.DataContext;
                     nextBlock = moveViewModel.ModelBlock;
@@ -171,6 +168,8 @@ namespace RobotInitial.ViewModel {
                     switchViewModel.ModelBlock.MapPath(true, GetConnectedBlocks(switchViewModel.Cases[0]));
                     switchViewModel.ModelBlock.MapPath(false, GetConnectedBlocks(switchViewModel.Cases[1]));
                     nextBlock = switchViewModel.ModelBlock;
+                } else {
+                    continue;
                 }
 
                 //the assignment takes place out here to prevent loads of duplicate checks..

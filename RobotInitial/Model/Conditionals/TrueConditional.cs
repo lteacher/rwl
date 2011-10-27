@@ -15,5 +15,9 @@ namespace RobotInitial.Model {
 
         public override void Update() {
         }
+
+        public override string ToString() {
+            return "True";
+        }
     }
 }

@@ -30,5 +30,9 @@ namespace RobotInitial.Model {
 
             return done; //evaulate true when loop is to terminate
         }
+
+        public override string ToString() {
+            return Duration + " Milliseconds Elapsed";
+        }
     }
 }

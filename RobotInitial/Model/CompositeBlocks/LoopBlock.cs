@@ -71,5 +71,12 @@ namespace RobotInitial.Model {
 
         #endregion
 
+        public override string ToString() {
+            string s = "Do\n";
+            s += this.LoopPath;
+            s += "Until (" + this.Condition + ")\n";
+            return s + this.Next;
+        }
+
     }
 }

@@ -34,5 +34,10 @@ namespace RobotInitial.Model {
         public override object Clone() {
             return new WaitBlock(this);
         }
+
+        public override string ToString() {
+            string s = "WaitUntil (" + this.WaitUntil + ")\n";
+            return s + this.Next; 
+        }
     }
 }

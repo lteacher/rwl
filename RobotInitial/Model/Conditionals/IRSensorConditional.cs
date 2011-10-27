@@ -41,5 +41,9 @@ namespace RobotInitial.Model {
                 return (EqualityOperator & Operator.EQUAL) == Operator.EQUAL;
             }
         }
+
+        public override string ToString() {
+            return "IRSensor " + IRSensorNumber + " " + EqualityOperator + " " + Distance;
+        }
     }
 }

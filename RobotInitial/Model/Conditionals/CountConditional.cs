@@ -24,5 +24,9 @@ namespace RobotInitial.Model {
             //will evaulate true when loop is to terminate
             return count >= Limit;
         }
+
+        public override string ToString() {
+            return Limit + " iterations";
+        }
     }
 }

@@ -68,5 +68,16 @@ namespace RobotInitial.Model {
         }
 
         #endregion
+
+        public override string ToString() {
+            string s = "Switch (" + Condition + ")\n";
+            foreach (KeyValuePair<T, Block> kvp in mappedPaths) {
+                s += "Case " + kvp.Key+ ":\n";
+                s += kvp.Value;
+                s += "EndCase\n";
+            }
+            s += "EndSwitch\n";
+            return s + this.Next;
+        }
     }
 }
