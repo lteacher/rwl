@@ -27,22 +27,45 @@ namespace RobotInitial.ViewModel {
 
         #region Properties
 
-        public double Width {
-            get { return _minWidth; }
-            set { _minWidth = value; }
-        }
+		public SequenceView Sequence {
+			get { return _sequence; }
+		}
 
-        public SequenceView Sequence {
-            get { return _sequence; }
+        public double Width {
+            get { 
+				return _minWidth; 
+			}
+            set {
+				if (value <= Sequence.RenderSize.Width) {
+					_minWidth = Sequence.RenderSize.Width + 100;
+				}
+				else {
+					_minWidth = value;
+				}
+			}
         }
 
         public double Height {
-            get { return _minHeight; }
-            set { _minHeight = value; }
+            get { 
+				return _minHeight; 
+			}
+            set {
+				Sequence.Measure(new Size(Sequence.MaxWidth, Sequence.MaxHeight));
+				if(value/2 <= Sequence.RenderSize.Height) {
+					_minHeight = Sequence.RenderSize.Height + 100;
+				} else {
+					_minHeight = value; 
+				}
+				NotifyPropertyChanged("SequenceY");
+			}
         }
 
         public double SequenceY {
-            get { return ((int)(Height / 2) / 25) * 25; }
+			get {
+				int halfway = ((int)(Height / 2) / 25) *25;
+				int halfSize = ((int) (Sequence.RenderSize.Height/2)/25)*25;
+				return halfway-halfSize; 
+			}
         }
 
         public bool IsUndoEnabled {

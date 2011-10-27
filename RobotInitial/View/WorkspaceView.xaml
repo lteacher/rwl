@@ -21,7 +21,7 @@
 			    <b:DropToWorkspace/>
 		    </e:Interaction.Behaviors>-->
 		    <local:GridMask RowWidth="25" ColWidth="25"/>
-            <ContentControl Content="{Binding Sequence}" Canvas.Top="{Binding SequenceY}"/>
+            <ContentControl Margin="50 0 0 0" Content="{Binding Sequence}" Canvas.Top="{Binding SequenceY}"/>
             <i:Interaction.Behaviors>
                 <b:OpenPropertiesView/>
             </i:Interaction.Behaviors>
