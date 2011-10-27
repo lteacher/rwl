@@ -175,6 +175,9 @@ namespace RobotInitial.ViewModel {
 					LoopModel.Condition = _irSensor;
 					NotifyPropertyChanged("RepeatMode");
 					NotifyPropertyChanged("CondMode");
+					NotifyPropertyChanged("SelectedOperator");
+					NotifyPropertyChanged("SelectedCond");
+					NotifyPropertyChanged("OperatorNumber");
 				}
 			}
 		}
@@ -191,6 +194,7 @@ namespace RobotInitial.ViewModel {
 					LoopModel.Condition = _countCondition;
 					NotifyPropertyChanged("CondMode");
 					NotifyPropertyChanged("RepeatMode");
+					NotifyPropertyChanged("RepeatCount");
 				}
 			}
 		}

@@ -160,6 +160,9 @@ namespace RobotInitial.ViewModel
 					WaitModel.WaitUntil = _irSensor;
 					NotifyPropertyChanged("TimerMode");
 					NotifyPropertyChanged("CondMode");
+					NotifyPropertyChanged("SelectedOperator");
+					NotifyPropertyChanged("SelectedCond");
+					NotifyPropertyChanged("OperatorNumber");
 				}
 			}
 		}
@@ -176,6 +179,7 @@ namespace RobotInitial.ViewModel
 					WaitModel.WaitUntil = _timeCondition;
 					NotifyPropertyChanged("CondMode");
 					NotifyPropertyChanged("TimerMode");
+					NotifyPropertyChanged("TimeDuration");
 				}
 			}
 		}
