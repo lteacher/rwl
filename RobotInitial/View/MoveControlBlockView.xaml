@@ -16,6 +16,7 @@
         <Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
         <i:Interaction.Behaviors>
             <b:OpenPropertiesView/>
+            <b:DragWithAdornment/>
         </i:Interaction.Behaviors>
     </Grid>
 </UserControl>

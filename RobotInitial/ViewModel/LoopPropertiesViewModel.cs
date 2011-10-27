@@ -23,7 +23,7 @@ namespace RobotInitial.ViewModel {
 		}
 
 		// IR Condition
-		private IRSensorConditional _irSensor = new IRSensorConditional();
+		private IRSensorConditional _irSensor;
 
 		// Condition types and its property
 		private ObservableCollection<string> _condTypes = new ObservableCollection<string>();
@@ -207,6 +207,25 @@ namespace RobotInitial.ViewModel {
 		public LoopPropertiesViewModel() {
 			// the default condition for a wait block is a TimeCondition
 			_countCondition = (CountConditional)LoopModel.Condition;
+
+			// Set the condition from the default type
+			if (LoopModel.Condition is CountConditional) {
+				_countCondition = (CountConditional)LoopModel.Condition;
+				RepeatMode = true;
+			}
+			else {
+				_countCondition = DefaultModelFactory.Instance.CreateCountConditional();
+				CondMode = true;
+			}
+
+			if (LoopModel.Condition is IRSensorConditional) {
+				_irSensor = (IRSensorConditional)LoopModel.Condition;
+				CondMode = true;
+			}
+			else {
+				_irSensor = DefaultModelFactory.Instance.CreateIRSensorConditional();
+				RepeatMode = true;
+			}
 
 			// Initiliase the condition types
 			_condTypes.Add("IR Sensor - Front");

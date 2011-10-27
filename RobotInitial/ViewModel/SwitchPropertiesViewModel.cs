@@ -142,7 +142,7 @@ namespace RobotInitial.ViewModel {
 		}
 
 		public SwitchPropertiesViewModel() {
-			// the default condition for a wait block is a IR Sensor
+			// the only condition for a Switch block is a IR Sensor at the moment
 			_irSensor = (IRSensorConditional)SwitchModel.Condition;
 
 			// Initiliase the condition types

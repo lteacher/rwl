@@ -32,25 +32,12 @@
             </ItemsControl.ItemsPanel>
         </ItemsControl>
         <Rectangle Fill="Yellow" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Right" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0" />
-        <!--<ItemsControl ItemsSource="{Binding CaseControls}" Height="Auto" Margin="0 0 0 0" HorizontalAlignment="Left" VerticalAlignment="Center">
-            <ItemsControl.Template>
-                <ControlTemplate TargetType="ItemsControl">
-                    <Border>
-                        <ItemsPresenter/>
-                    </Border>
-                </ControlTemplate>
-            </ItemsControl.Template>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Vertical"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>-->
         <Ellipse Stroke="Black" Fill="{Binding BottomButtonColour}" Width="15" Height="15" Margin="5 0 0 5" HorizontalAlignment="Left" VerticalAlignment="Bottom"
                  MouseDown="Ellipse_BottomButtonDown" Opacity="{Binding BottomButtonOpacity}"/>
         <i:Interaction.Behaviors>
             <b:BlockExpand/>
             <b:OpenPropertiesView/>
+            <b:DragWithAdornment/>
         </i:Interaction.Behaviors>
     </Grid>
 </UserControl>

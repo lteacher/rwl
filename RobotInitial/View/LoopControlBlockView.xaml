@@ -33,6 +33,7 @@
         <i:Interaction.Behaviors>
             <b:BlockExpand/>
             <b:OpenPropertiesView/>
+            <b:DragWithAdornment/>
         </i:Interaction.Behaviors>
     </Grid>
 </UserControl>

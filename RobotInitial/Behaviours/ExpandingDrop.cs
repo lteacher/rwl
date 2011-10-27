@@ -38,9 +38,6 @@ namespace RobotInitial.Behaviours
 
 			// Insert code that you would want run when the Behavior is attached to an object.
 			AssociatedObject.Drop += new DragEventHandler(Item_Dropped);
-			//AssociatedObject.DragEnter += new System.Windows.DragEventHandler(ExpandElement);
-			AssociatedObject.MouseDown += new System.Windows.Input.MouseButtonEventHandler(AssociatedObject_MouseDown);
-			//AssociatedObject.MouseEnter += new System.Windows.Input.MouseEventHandler(AssociatedObject_MouseEnter);
 		}
 
 		protected override void OnDetaching()
@@ -72,33 +69,12 @@ namespace RobotInitial.Behaviours
 					depth++;
 					if (tempChildHeight > maxChildHeight) maxChildHeight = tempChildHeight;
 					tempChildHeight = treeParent.DesiredSize.Height;
-					//if (((FrameworkElement)dropTarget.Parent).GetType() == typeof(LoopControlBlockView))
-					//{
-					//    if (treeParent.GetType() == typeof(LoopControlBlockView))
-					//    {
-					//        parent = treeParent;
-					//    }
-					//}
-					//else if (((FrameworkElement)dropTarget.Parent).GetType() == typeof(SwitchControlBlockView))
-					//{
-					//    if (treeParent.GetType() == typeof(SwitchControlBlockView))
-					//    {
-					//        parent = treeParent;
-					//    }
-					//}
-					//else if (((FrameworkElement)dropTarget.Parent).GetType() == typeof(SwitchTabBlockView))
-					//{
-					//    if (treeParent.GetType() == typeof(SwitchTabBlockView))
-					//    {
-							parent = treeParent;
-						//}
-					//}
+					parent = treeParent;
 				}
 
 				// If a switch is found in the heirachy
 				if (treeParent.GetType() == typeof(SwitchTabBlockView)) {
 					// Add the switch view model to the collection for later size check
-					Console.WriteLine("!!! ADDING A SWITCH !!!");
 					switchBlockViews.Add((SwitchTabBlockView)treeParent);
 				}
 
@@ -116,226 +92,46 @@ namespace RobotInitial.Behaviours
 
 			FrameworkElement dropSource = (FrameworkElement)e.Data.GetData("Object");
 			ControlBlockViewModel sourceViewModel = (ControlBlockViewModel)dropSource.DataContext;
-			if(sourceViewModel.Type.Equals("Move"))
+
+			// Set the workspace and the parent
+			setWorkspaceAndParent(dropTarget, dropSource);
+
+			if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
 			{
-				// Create a new Move block as the child
-				MoveControlBlockView child = new MoveControlBlockView();
+				((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget, dropSource, e.GetPosition(dropTarget).X);
+			}
+			else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
+			{
+				// Set the parent for the child for checking the Y value
+				FrameworkElement dropParent = (FrameworkElement)dropTarget.Parent;
 
-				// Set the workspace and the parent
-				setWorkspaceAndParent(dropTarget,child);
+				// Set the parent Y mouse value as relevant to the workspace or the current target
+				double parentY = depth == 1 ? e.GetPosition(workspace).Y : e.GetPosition(dropTarget).Y;
 
-				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
+				// Set the top value depending on the current depth since the top will be
+				// different for a component on the workspace compared to one inside another component
+				double top = depth == 1 ? (double)dropTarget.Parent.GetValue(Canvas.TopProperty) : 0;
+
+				// If the mouse Y location is in the top or bottom half of the component when dropped
+				if (parentY > top + (dropParent.RenderSize.Height / 2))
 				{
-					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget,child, e.GetPosition(dropTarget).X);
+					((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(dropSource, SwitchControlBlockViewModel.ORIENTATION_BOTTOM);
 				}
-				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
+				else
 				{
-					// Set the parent for the child for checking the Y value
-					FrameworkElement dropParent = (FrameworkElement)dropTarget.Parent;
-
-					// Set the parent Y mouse value as relevant to the workspace or the current target
-					double parentY = depth == 1 ? e.GetPosition(workspace).Y : e.GetPosition(dropTarget).Y;
-
-					// Set the top value depending on the current depth since the top will be
-					// different for a component on the workspace compared to one inside another component
-					double top = depth == 1 ? (double)dropTarget.Parent.GetValue(Canvas.TopProperty) : 0;
-
-					// If the mouse Y location is in the top or bottom half of the component when dropped
-					if (parentY > top + (dropParent.RenderSize.Height / 2))
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_BOTTOM);
-					}
-					else
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_TOP);
-					}
-				}
-				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel))
-				{
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
+					((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(dropSource, SwitchControlBlockViewModel.ORIENTATION_TOP);
 				}
 			}
-			if (sourceViewModel.Type.Equals("Loop"))
-			{
-				// Create a new Loop block as the child
-				LoopControlBlockView child = new LoopControlBlockView();
-
-				// Set the workspace and the parent
-				setWorkspaceAndParent(dropTarget, child);
-
-				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel)) {
-					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child, e.GetPosition(dropTarget).X);
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
-				}
-				else if(targetViewModel.GetType() == typeof(SwitchControlBlockViewModel)) {
-					// Set the parent for the child for checking the Y value
-					FrameworkElement dropParent = (FrameworkElement)dropTarget.Parent;
-
-					// Set the parent Y mouse value as relevant to the workspace or the current target
-					double parentY = depth == 1 ? e.GetPosition(workspace).Y : e.GetPosition(dropTarget).Y;
-
-					// Set the top value depending on the current depth since the top will be
-					// different for a component on the workspace compared to one inside another component
-					double top = depth == 1 ? (double)dropTarget.Parent.GetValue(Canvas.TopProperty) : 0;
-
-					// If the mouse Y location is in the top or bottom half of the component when dropped
-					if (parentY > top + (dropParent.RenderSize.Height / 2))
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_BOTTOM);
-					}
-					else
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_TOP);
-					}
-				}
-				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel))
-				{
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
-				}
-
-				// Expand the block
-				ExpandControlBlock(dropTarget,child);
+			else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel)) {
+				((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, dropSource, e.GetPosition(dropTarget).X);
 			}
-			if (sourceViewModel.Type.Equals("Wait"))
-			{
-				// Create a new Wait block as the child
-				WaitControlBlockView child = new WaitControlBlockView();
 
-				// Set the workspace and the parent
-				setWorkspaceAndParent(dropTarget, child);
+			// Expand the block
+			if (dropSource is SwitchTabBlockView || dropSource is LoopControlBlockView) ExpandControlBlock(dropTarget, dropSource);
 
-				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
-				{
-					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
-					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child, e.GetPosition(dropTarget).X);
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
-				}
-				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
-				{
-					// Set the parent for the child for checking the Y value
-					FrameworkElement dropParent = (FrameworkElement)dropTarget.Parent;
-
-					// Set the parent Y mouse value as relevant to the workspace or the current target
-					double parentY = depth == 1 ? e.GetPosition(workspace).Y : e.GetPosition(dropTarget).Y;
-
-					// Set the top value depending on the current depth since the top will be
-					// different for a component on the workspace compared to one inside another component
-					double top = depth == 1 ? (double)dropTarget.Parent.GetValue(Canvas.TopProperty) : 0;
-
-					// If the mouse Y location is in the top or bottom half of the component when dropped
-					if (parentY > top + (dropParent.RenderSize.Height / 2))
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_BOTTOM);
-					}
-					else
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_TOP);
-					}
-				}
-				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel)) {
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
-				}
-			}
-			//if (sourceViewModel.Type.Equals("Switch"))
-			//{
-			//    // Create a new Switch block as the child
-			//    SwitchControlBlockView child = new SwitchControlBlockView();
-
-			//    // Set the workspace and the parent
-			//    setWorkspaceAndParent(dropTarget, child);
-
-			//    if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
-			//    {
-			//        ((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
-			//    }
-			//    else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
-			//    {
-			//        // Set the parent for the child for checking the Y value
-			//        FrameworkElement dropParent = (FrameworkElement)dropTarget.Parent;
-
-			//        // Set the parent Y mouse value as relevant to the workspace or the current target
-			//        double parentY = depth == 1 ? e.GetPosition(workspace).Y : e.GetPosition(dropTarget).Y;
-
-			//        // Set the top value depending on the current depth since the top will be
-			//        // different for a component on the workspace compared to one inside another component
-			//        double top = depth == 1 ? (double)dropTarget.Parent.GetValue(Canvas.TopProperty) : 0;
-
-			//        // If the mouse Y location is in the top or bottom half of the component when dropped
-			//        if (parentY > top + (dropParent.RenderSize.Height / 2))
-			//        {
-			//            ((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_BOTTOM);
-			//        }
-			//        else
-			//        {
-			//            ((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_TOP);
-			//        }
-			//    }
-			//    // TODO, This is wrong switch not implemented
-			//    ExpandControlBlock(dropTarget, child);
-			//}
-			if (sourceViewModel.Type.Equals("Switch"))
-			{
-				// Create a new Loop block as the child
-				SwitchTabBlockView child = new SwitchTabBlockView();
-
-				// Set the workspace and the parent
-				setWorkspaceAndParent(dropTarget, child);
-
-				if (targetViewModel.GetType() == typeof(LoopControlBlockViewModel))
-				{
-					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child);
-					//((LoopControlBlockViewModel)targetViewModel).AddChildBlock(child, e.GetPosition(dropTarget).X);
-					((LoopControlBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
-				}
-				else if (targetViewModel.GetType() == typeof(SwitchControlBlockViewModel))
-				{
-					// Set the parent for the child for checking the Y value
-					FrameworkElement dropParent = (FrameworkElement)dropTarget.Parent;
-
-					// Set the parent Y mouse value as relevant to the workspace or the current target
-					double parentY = depth == 1 ? e.GetPosition(workspace).Y : e.GetPosition(dropTarget).Y;
-
-					// Set the top value depending on the current depth since the top will be
-					// different for a component on the workspace compared to one inside another component
-					double top = depth == 1 ? (double)dropTarget.Parent.GetValue(Canvas.TopProperty) : 0;
-
-					// If the mouse Y location is in the top or bottom half of the component when dropped
-					if (parentY > top + (dropParent.RenderSize.Height / 2))
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_BOTTOM);
-					}
-					else
-					{
-						((SwitchControlBlockViewModel)targetViewModel).AddChildBlock(child, SwitchControlBlockViewModel.ORIENTATION_TOP);
-					}
-				}
-				else if (targetViewModel.GetType() == typeof(SwitchTabBlockViewModel))
-				{
-					((SwitchTabBlockViewModel)targetViewModel).AddChildBlock(dropTarget, child, e.GetPosition(dropTarget).X);
-				}
-
-				// Expand the block
-				ExpandControlBlock(dropTarget, child);
-			}
 			e.Handled = true;
 		}
 
-		private void AssociatedObject_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-		{
-			// TODO: Add event handler implementation here.
-			//FrameworkElement dropTarget = (FrameworkElement)sender;
-			//LoopControlBlockViewModel loopBlockModel = (LoopControlBlockViewModel)dropTarget.DataContext;
-			//loopBlockModel.ExpandControl();
-			//e.Handled = true;
-		}
-
-		private void AssociatedObject_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-		{
-			// TODO: Add event handler implementation here.
-			//MessageBox.Show("Mouse Entered!!");
-
-		}
 
 		private void ExpandControlBlock(FrameworkElement dropTarget, FrameworkElement child) {
 			// Setup the measured size
@@ -392,22 +188,8 @@ namespace RobotInitial.Behaviours
 			// Update the switches that were affected!
 			foreach (SwitchTabBlockView switchView in switchBlockViews)
 			{
-				Console.WriteLine("***************** DOING RESIZE *****************");
 				((SwitchTabBlockViewModel)switchView.DataContext).UpdateChildrenSizes();
 			}
 		}
-
-		/*
-		public ICommand MyCommand
-		{
-			get;
-			private set;
-		}
-		 
-		private void MyFunction()
-		{
-			// Insert code that defines what the behavior will do when invoked.
-		}
-		*/
 	}
 }

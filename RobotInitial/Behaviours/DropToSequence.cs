@@ -6,6 +6,7 @@ using System.Windows.Interactivity;
 using System.Windows;
 using RobotInitial.View;
 using RobotInitial.ViewModel;
+using RobotInitial.Controls;
 
 namespace RobotInitial.Behaviours
 {
@@ -23,35 +24,11 @@ namespace RobotInitial.Behaviours
 			SequenceViewModel sequenceViewModel = (SequenceViewModel)dropTarget.DataContext;
 
 			FrameworkElement dropSource = (FrameworkElement)e.Data.GetData("Object");
-			ControlBlockViewModel sourceViewModel = (ControlBlockViewModel)dropSource.DataContext;
 
-			if(sourceViewModel.Type == "Move") {
-				MoveControlBlockView childBlock = new MoveControlBlockView();
-
-				sequenceViewModel.AddBlock(dropTarget, childBlock, e.GetPosition(dropTarget).X);
-			}
-			else if (sourceViewModel.Type == "Wait")
-			{
-				WaitControlBlockView childBlock = new WaitControlBlockView();
-				sequenceViewModel.AddBlock(dropTarget, childBlock, e.GetPosition(dropTarget).X);
-			}
-			else if (sourceViewModel.Type == "Loop")
-			{
-				LoopControlBlockView childBlock = new LoopControlBlockView();
-
-				sequenceViewModel.AddBlock(dropTarget, childBlock, e.GetPosition(dropTarget).X);
-			}
-			else if (sourceViewModel.Type == "Switch")
-			{
-				SwitchTabBlockView childBlock = new SwitchTabBlockView();
-
-				sequenceViewModel.AddBlock(dropTarget, childBlock, e.GetPosition(dropTarget).X);
-			}
+			sequenceViewModel.AddBlock(dropTarget, dropSource, e.GetPosition(dropTarget).X);
 
 			e.Handled = true;
-			
-
-			
+				
 		}
 	}
 }

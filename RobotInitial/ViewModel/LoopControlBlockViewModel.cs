@@ -129,6 +129,21 @@ namespace RobotInitial.ViewModel
 			NotifyPropertyChanged("StackMargin");	
 		}
 
+		// Correctly remove a block from the Loop
+		public void RemoveBlock(FrameworkElement block) {
+			// If the size is 3 then remove everything, NOTE that it is 3 cause it also contains 2 arrows
+			if (Children.Count == 3) {
+				Children.Clear();
+				NotifyPropertyChanged("StackMargin");
+				return; // done
+			}
+
+			// Now if the block is somewhere in the middle or the start, get the index
+			int index = Children.IndexOf(block);
+			Children.RemoveAt(index);
+			Children.RemoveAt(index);
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>

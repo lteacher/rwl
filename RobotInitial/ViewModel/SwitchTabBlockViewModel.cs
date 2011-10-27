@@ -108,11 +108,16 @@ namespace RobotInitial.ViewModel
 
 			newElement.Measure(new Size(newElement.MaxWidth, newElement.MaxHeight));
 
-			// Set the ultime maximum element size if its ever increased
-			if (newElement.DesiredSize.Height > _maximumElementSize) _maximumElementSize = newElement.DesiredSize.Height;
+			// Set the ultimate maximum element size if its ever increased
+			if (newElement.DesiredSize.Height > _maximumElementSize) {
+				_maximumElementSize = newElement.DesiredSize.Height;
+			}
 
 			// Set the case specific max element size
-			if (newElement.DesiredSize.Height > _maxSizes[_caseIndex]) _maxSizes[_caseIndex] = newElement.DesiredSize.Height;
+			if (newElement.DesiredSize.Height > _maxSizes[_caseIndex]) {
+				_maxSizes[_caseIndex] = newElement.DesiredSize.Height;
+			}
+
 			if (Children.Count == 0)
 			{
 				Children.Add(new ArrowConnector());
@@ -167,9 +172,46 @@ namespace RobotInitial.ViewModel
 				Children.Insert(dropIndex + 1, new ArrowConnector());
 			}
 
-			// Add a child to the collection
-			//Children.Add(element);
 			NotifyPropertyChanged("Children");
+			NotifyPropertyChanged("StackMargin");
+		}
+
+		// Correctly remove a block from the Switch
+		public void RemoveBlock(FrameworkElement block) {
+			// If the size is 3 then remove everything, NOTE that it is 3 cause it also contains 2 arrows
+			if (Children.Count == 3) {
+				Children.Clear();
+
+				// Zero the maximum sizes for this collection
+				_maxSizes[_caseIndex] = 0;
+
+				// Adjust the maximum sizes
+				setMaximumSizes();
+				return; // done
+			}
+
+			// Now if the block is somewhere in the middle or the start, get the index
+			int index = Children.IndexOf(block);
+
+			Children.RemoveAt(index);
+			Children.RemoveAt(index);
+
+			// Adjust the maximum sizes
+			setMaximumSizes();
+		}
+
+		private void setMaximumSizes() {
+			_maximumElementSize = 0;
+			for(int i=0; i<Cases.Count; i++) {
+				for(int j=0; j<Cases[i].Count; j++) {
+					if(Cases[i].ElementAt(j).RenderSize.Height > _maximumElementSize) {
+						_maximumElementSize = Cases[i].ElementAt(j).RenderSize.Height;
+					}
+					if(Cases[i].ElementAt(j).RenderSize.Height > _maxSizes[i]) {
+						_maxSizes[i] = Cases[i].ElementAt(j).RenderSize.Height;
+					}
+				}
+			}
 			NotifyPropertyChanged("StackMargin");
 		}
 

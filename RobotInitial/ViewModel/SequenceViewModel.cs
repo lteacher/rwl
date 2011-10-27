@@ -15,6 +15,7 @@ namespace RobotInitial.ViewModel
 	{
 		private ObservableCollection<FrameworkElement> _blocks = new ObservableCollection<FrameworkElement>();
 		private bool isInitial = true;
+		private Rectangle start;
 
 		public double Height { get; set; }
 		public double Width { get; set; }
@@ -34,7 +35,7 @@ namespace RobotInitial.ViewModel
 			Width = 75;
 
 			// Create the starting block
-			Rectangle start = new Rectangle();
+			start = new Rectangle();
 			start.Width = 75;
 			start.Height = 75;
 			start.RadiusX = 4.0;
@@ -111,14 +112,36 @@ namespace RobotInitial.ViewModel
 						}
 					}
 				}
-
-				
-
 			}
-
-			
 		}
 
+		// Correctly remove a block from the sequence
+		public void RemoveBlock(FrameworkElement block) {
+			// If the size is just one then remove everything and add the start block back in
+			if(Blocks.Count == 1) {
+				Blocks.Clear();
+				Blocks.Add(start);
+				isInitial = true;
+				return; // done
+			}
+
+			// If the block to remove is the last block, we remove it and an arrow from before it
+			if(Blocks.IndexOf(block) == Blocks.Count-1) {
+				Blocks.RemoveAt(Blocks.Count-1);
+				Blocks.RemoveAt(Blocks.Count-1);
+				// Give the last block its margin
+				Blocks.ElementAt(Blocks.Count - 1).Margin = Blocks.Count == 1 ? new Thickness(25, 0, 25, 0) : new Thickness(0, 0, 25, 0);
+				return;
+			}
+
+			// Now if the block is somewhere in the middle or the start, get the index
+			int index = Blocks.IndexOf(block);
+			Blocks.RemoveAt(index);
+			Blocks.RemoveAt(index);
+			// If it is the start that we removed just set the left margin again
+			if (index == 0) Blocks.ElementAt(index).Margin = Blocks.Count == 1 ? new Thickness(25, 0, 25, 0) : new Thickness(0, 0, 25, 0);
+		}
+ 
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		/// <summary>
