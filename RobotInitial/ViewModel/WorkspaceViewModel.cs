@@ -187,7 +187,7 @@ namespace RobotInitial.ViewModel {
         }
 
         public StartBlock GetConnectedModel() {
-            StartBlock start = DefaultBlockFactory.Instance.CreateStartBlock();
+            StartBlock start = DefaultModelFactory.Instance.CreateStartBlock();
             SequenceViewModel sequenceViewModel = (SequenceViewModel)_sequence.DataContext;
             start.Next = GetConnectedBlocks(sequenceViewModel.Blocks);
             return start;

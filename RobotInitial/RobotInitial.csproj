@@ -102,8 +102,8 @@
     <Compile Include="Lynx Server\Virtual Machine.cs" />
     <Compile Include="Lynx Server\VirtualMachineOwnershipException.cs" />
     <Compile Include="MainWindow_methods.cs" />
-    <Compile Include="Model\Factory\BlockFactory.cs" />
-    <Compile Include="Model\Factory\DefaultBlockFactory.cs" />
+    <Compile Include="Model\Factory\ModelFactory.cs" />
+    <Compile Include="Model\Factory\DefaultModelFactory.cs" />
     <Compile Include="Model\Blocks\AbstractBlock.cs" />
     <Compile Include="Model\Conditionals\RBGConditional.cs" />
     <Compile Include="Model\Conditionals\RNGConditional.cs" />

@@ -10,7 +10,7 @@ using System.Windows;
 namespace RobotInitial.ViewModel {
 	class LoopPropertiesViewModel : ViewModelBase, INotifyPropertyChanged {
 
-		private LoopBlock _loopModel = DefaultBlockFactory.Instance.CreateLoopBlock();
+		private LoopBlock _loopModel = DefaultModelFactory.Instance.CreateLoopBlock();
 		public LoopBlock LoopModel { get { return _loopModel; } set { _loopModel = value; } }
 
 		// Count Condition

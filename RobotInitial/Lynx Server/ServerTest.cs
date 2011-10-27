@@ -27,7 +27,7 @@ namespace RobotInitial.Lynx_Server {
             //loop.LoopPath = truepath;
             //start.Next = loop;
 
-            DefaultBlockFactory fact = DefaultBlockFactory.Instance;
+            DefaultModelFactory fact = DefaultModelFactory.Instance;
 
             StartBlock start = fact.CreateStartBlock();
             //LoopBlock loop = fact.CreateLoopBlock();

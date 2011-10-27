@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace RobotInitial.ViewModel {
 	class SwitchPropertiesViewModel : ViewModelBase, INotifyPropertyChanged {
-		private SwitchBlock<bool> _switchModel = DefaultBlockFactory.Instance.CreateSwitchBlock<bool>();
+		private SwitchBlock<bool> _switchModel = DefaultModelFactory.Instance.CreateSwitchBlock<bool>();
 		public SwitchBlock<bool> SwitchModel { get { return _switchModel; } set { _switchModel = value; } }
 
 		// IR Condition

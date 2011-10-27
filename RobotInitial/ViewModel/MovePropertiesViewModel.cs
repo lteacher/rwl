@@ -11,7 +11,7 @@ namespace RobotInitial.ViewModel
 {
 	class MovePropertiesViewModel : ViewModelBase, INotifyPropertyChanged
 	{
-		private MoveBlock _moveModel = DefaultBlockFactory.Instance.CreateMoveBlock();
+		private MoveBlock _moveModel = DefaultModelFactory.Instance.CreateMoveBlock();
 		public MoveBlock MoveModel { get { return _moveModel; } set { _moveModel = value; } }
 
 		// Directions valid for the motors

@@ -10,7 +10,7 @@ namespace RobotInitial.ViewModel
 {
 	class WaitPropertiesViewModel : ViewModelBase, INotifyPropertyChanged
 	{
-		private WaitBlock _waitModel = DefaultBlockFactory.Instance.CreateWaitBlock();
+		private WaitBlock _waitModel = DefaultModelFactory.Instance.CreateWaitBlock();
 		public WaitBlock WaitModel { get { return _waitModel; } set { _waitModel = value; } }
 
 		// Timer Condition
