@@ -7,7 +7,10 @@ using System.Diagnostics;
 namespace RobotInitial.Model {
     [Serializable()]
     class TimeConditional : Conditional<bool> {
+
+        [NonSerializedAttribute()]
         private Stopwatch timer;
+
         public int Duration { get; set; }
 
         internal TimeConditional() {

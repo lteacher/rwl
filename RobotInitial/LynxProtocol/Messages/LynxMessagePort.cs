@@ -25,7 +25,7 @@ namespace RobotInitial.LynxProtocol {
         private const int DATABITS = 8;                     //default 8
         private const StopBits STOPBITS = StopBits.One;     //default StopBits.One
         private readonly SerialPort port;
-        private const int DELAYAFTERSEND = 30;
+        private const int DELAYAFTERSEND = 45;
 
         private LynxMessagePort() {
             port = new SerialPort(PORTNAME, BAUDRATE, PARITY, DATABITS, STOPBITS);
@@ -43,10 +43,15 @@ namespace RobotInitial.LynxProtocol {
             lock (this) {
                 Console.WriteLine("Sending " + m.ToString() + " TO " + PORTNAME);
                 port.WriteLine(m.ToString());
-                Thread.Sleep(DELAYAFTERSEND);   //give the robot time to accept the message
-                if (isRequest) Console.WriteLine("Reading Response...");
-                response = isRequest ? new LynxMessage(port.ReadLine()) : null;
-                if (isRequest) Console.WriteLine(response.ToString());
+
+                if (isRequest) {
+                    Console.WriteLine("Reading Response...");
+                    response = new LynxMessage(port.ReadLine());    //blocking call
+                    Console.WriteLine(response.ToString());
+                } else {
+                    Thread.Sleep(DELAYAFTERSEND);   //give the robot time to accept the message
+                    response = null;
+                }
             }
             return response;
         }

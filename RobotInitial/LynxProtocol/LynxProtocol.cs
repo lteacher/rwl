@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using RobotInitial.Model;
-using System.Threading;
 using System.Diagnostics;
 
 namespace RobotInitial.LynxProtocol {
@@ -11,12 +10,9 @@ namespace RobotInitial.LynxProtocol {
 
         #region Fields
 
-        private const int CONTINUOUSREQUESTDELAY = 400;
         private readonly MessageFactory factory = new LynxMessageFactory();
-        private volatile Thread continuousMovementThread = null;
         private LynxMessage currentContCmdL = null;
         private LynxMessage currentContCmdR = null;
-        private Object continuousLock = new Object();
 
         #endregion
 
@@ -25,11 +21,11 @@ namespace RobotInitial.LynxProtocol {
         public void Move(MoveParameters parameters) {
             LynxMessage l = factory.CreateMoveMsg(parameters, Side.LEFT);
             LynxMessage r = factory.CreateMoveMsg(parameters, Side.RIGHT);
-            
+
             if (parameters.DurationUnit == MoveDurationUnit.UNLIMITED) {
                 StartContinuousMovement(l, r);
             } else {
-                StopContinuousMovement();
+                ClearContinuousMovement(); 
                 SendMovement(l, r);
                 WaitForCompletion();
             }
@@ -62,7 +58,8 @@ namespace RobotInitial.LynxProtocol {
         }
 
         public void OnExecutionFinish() {
-            StopContinuousMovement();
+            Console.WriteLine("program ended");
+            SendMovement(factory.CreateBrakeMsg(Side.LEFT), factory.CreateBrakeMsg(Side.RIGHT));
         }
 
         //the lynx status doesn't contain any useful info for the program
@@ -89,13 +86,8 @@ namespace RobotInitial.LynxProtocol {
         }
 
         private void SendMovement(LynxMessage left, LynxMessage right) {
-            //This lock prevent left and right messages from being inturrupted by a status request generated from the continuous movement thread.
-            //The port locks on itself while a messsage is being sent.
-            //C# locks are re-entrant locks.
-            lock (LynxMessagePort.Instance) {
-                LynxMessagePort.Instance.Send(left, false);
-                LynxMessagePort.Instance.Send(right, false);
-            }
+            LynxMessagePort.Instance.Send(left, false);
+            LynxMessagePort.Instance.Send(right, false);
         }
 
         private LynxStatus RequestStatus(Side side) {
@@ -108,49 +100,32 @@ namespace RobotInitial.LynxProtocol {
         #region Continuous Movement Methods
 
         private void StartContinuousMovement(LynxMessage left, LynxMessage right) {
-            bool leftDif = !left.Equals(currentContCmdL);
-            bool rightDif = !right.Equals(currentContCmdR);
-
-            if (leftDif && rightDif) {
-                //send both with this method so they don't get inturrupted
-                SendMovement(left, right);
+            //only send if it is different to the current continuous command
+            if (!left.Equals(currentContCmdL)) {
+                LynxMessagePort.Instance.Send(left, false);
                 currentContCmdL = left;
+            }
+            if (!right.Equals(currentContCmdR)) {
+                LynxMessagePort.Instance.Send(right, false);
                 currentContCmdR = right;
-            } else {
-                if (leftDif) {
-                    LynxMessagePort.Instance.Send(left, false);
-                    currentContCmdL = left;
-                } else if (rightDif) {
-                    LynxMessagePort.Instance.Send(right, false);
-                    currentContCmdR = right;
-                }
-            }
-
-            if (continuousMovementThread == null) {
-                continuousMovementThread = new Thread(ContinuousMovementThread);
-                continuousMovementThread.Start();
             }
         }
 
-        private void StopContinuousMovement() {
-            continuousMovementThread = null;
+        private void ClearContinuousMovement() {
             currentContCmdL = null;
-            currentContCmdR = null;
+            currentContCmdL = null;
         }
 
-        private void ContinuousMovementThread() {
-            //This thread stops if the continuousMovementThread was set to null,
-            //or in the unlikely event a new thread was started before this was able to stop 
-            //(which is only possible if it was set it to null and then a new thread was started before the old one could finish)
-            //The lock prevents request spam if multiple threads were created, if that unlikely event were to occur.
-            lock (continuousLock) {
-                while (Thread.CurrentThread.Equals(continuousMovementThread)) {
-                    RequestStatus(Side.LEFT);
-                    RequestStatus(Side.RIGHT);
-                    Thread.Sleep(CONTINUOUSREQUESTDELAY);
-                }
-            }
-        }
+        //private void StopContinuousMovement() {
+        //    if (currentContCmdL != null) {
+        //        LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.LEFT), false);
+        //        currentContCmdL = null;
+        //    }
+        //    if (currentContCmdR != null) {
+        //        LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.RIGHT), false);
+        //        currentContCmdR = null;
+        //    }
+        //}
 
         #endregion
 
