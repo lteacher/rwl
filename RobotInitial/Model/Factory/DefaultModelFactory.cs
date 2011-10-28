@@ -76,8 +76,8 @@ namespace RobotInitial.Model {
         public IRSensorConditional CreateIRSensorConditional() {
             IRSensorConditional cond = new IRSensorConditional();
             cond.Distance = 10;
-            cond.IRSensorNumber = 0;
-            cond.EqualityOperator = IRSensorConditional.Operator.LESS;
+            cond.IRSensors = LynxIRPort.FRONT;
+            cond.EqualityOperator = Operator.LESS;
             return cond;
         }
 

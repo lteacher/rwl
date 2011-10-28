@@ -39,7 +39,7 @@ namespace RobotInitial.ViewModel {
 		public int SelectedCond {
 			get {
 				if(SwitchModel.Condition is IRSensorConditional) {
-					_selectedCond = ((IRSensorConditional)SwitchModel.Condition).IRSensorNumber;
+                    _selectedCond = (int)Math.Log((double)((IRSensorConditional)SwitchModel.Condition).IRSensors, 2);
 				}
 					 
 				return _selectedCond;
@@ -50,27 +50,27 @@ namespace RobotInitial.ViewModel {
 				// Check which condition selected
 				switch (value) {
 					case 0: // IR Sensor - Front
-						_irSensor.IRSensorNumber = value;
+						_irSensor.IRSensors = LynxIRPort.FRONT;
 						SwitchModel.Condition = _irSensor;
 						break;
 					case 1: // IR Sensor - Front Left
-						_irSensor.IRSensorNumber = value;
+                        _irSensor.IRSensors = LynxIRPort.FRONTLEFT;
 						SwitchModel.Condition = _irSensor;
 						break;
 					case 2: // IR Sensor - Front Right
-						_irSensor.IRSensorNumber = value;
+                        _irSensor.IRSensors = LynxIRPort.FRONTRIGHT;
 						SwitchModel.Condition = _irSensor;
 						break;
 					case 3: // IR Sensor - Rear
-						_irSensor.IRSensorNumber = value;
+                        _irSensor.IRSensors = LynxIRPort.REAR;
 						SwitchModel.Condition = _irSensor;
 						break;
 					case 4: // IR Sensor - Rear Left
-						_irSensor.IRSensorNumber = value;
+						_irSensor.IRSensors = LynxIRPort.REARLEFT;
 						SwitchModel.Condition = _irSensor;
 						break;
 					case 5: // IR Sensor - Rear Right
-						_irSensor.IRSensorNumber = value;
+						_irSensor.IRSensors = LynxIRPort.REARLEFT;
 						SwitchModel.Condition = _irSensor;
 						break;
 				}
@@ -84,12 +84,12 @@ namespace RobotInitial.ViewModel {
 		public int SelectedOperator {
 			get {
 				if (SwitchModel.Condition is IRSensorConditional) {
-					if(_irSensor.EqualityOperator == IRSensorConditional.Operator.EQUAL) _selectedOperator = 0;
-					else if(_irSensor.EqualityOperator == IRSensorConditional.Operator.NOTEQUAL) _selectedOperator = 1;
-					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.LESS) _selectedOperator = 2;
-					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.EQUALORLESS) _selectedOperator = 3;
-					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.GREATER) _selectedOperator = 4;
-					else if (_irSensor.EqualityOperator == IRSensorConditional.Operator.EQUALORGREATER) _selectedOperator = 5;
+					if(_irSensor.EqualityOperator == Operator.EQUAL) _selectedOperator = 0;
+					else if(_irSensor.EqualityOperator == Operator.NOTEQUAL) _selectedOperator = 1;
+					else if (_irSensor.EqualityOperator == Operator.LESS) _selectedOperator = 2;
+					else if (_irSensor.EqualityOperator == Operator.EQUALORLESS) _selectedOperator = 3;
+					else if (_irSensor.EqualityOperator == Operator.GREATER) _selectedOperator = 4;
+					else if (_irSensor.EqualityOperator == Operator.EQUALORGREATER) _selectedOperator = 5;
 				} 
 				return _selectedOperator; 
 			}
@@ -100,22 +100,22 @@ namespace RobotInitial.ViewModel {
 				if (SelectedCond >= 0 && SelectedCond <= 5) {
 					switch (value) {
 						case 0: // Equal To (==)
-							_irSensor.EqualityOperator = IRSensorConditional.Operator.EQUAL;
+							_irSensor.EqualityOperator = Operator.EQUAL;
 							break;
 						case 1: // Not Equal To (!=)
-							_irSensor.EqualityOperator = IRSensorConditional.Operator.NOTEQUAL;
+							_irSensor.EqualityOperator = Operator.NOTEQUAL;
 							break;
 						case 2: // Less Than (<)
-							_irSensor.EqualityOperator = IRSensorConditional.Operator.LESS;
+							_irSensor.EqualityOperator = Operator.LESS;
 							break;
 						case 3: // Less Than or Equal To (<=)
-							_irSensor.EqualityOperator = IRSensorConditional.Operator.EQUALORLESS;
+							_irSensor.EqualityOperator = Operator.EQUALORLESS;
 							break;
 						case 4: // Greater Than (>)
-							_irSensor.EqualityOperator = IRSensorConditional.Operator.GREATER;
+							_irSensor.EqualityOperator = Operator.GREATER;
 							break;
 						case 5: // Greater Than or Equal To (>=)
-							_irSensor.EqualityOperator = IRSensorConditional.Operator.EQUALORGREATER;
+							_irSensor.EqualityOperator = Operator.EQUALORGREATER;
 							break;
 					}
 				}

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.LynxProtocol.Enums {
-    enum LynxIRPort {
-        FRONT,
-        FRONTLEFT,
-        REARLEFT,
-        FRONTRIGHT,
-        REARRIGHT,
-        REAR
-    }
+    //copied to the model for the time being
+    //enum LynxIRPort {
+    //    FRONT,
+    //    FRONTLEFT,
+    //    REARLEFT,
+    //    FRONTRIGHT,
+    //    REARRIGHT,
+    //    REAR
+    //}
 }

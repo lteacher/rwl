@@ -45,6 +45,8 @@ namespace RobotInitial.Model {
                 //Console.WriteLine("Program threw exception, stop execution");
                 //program threw Exception, stop execution
                 StopExecution();
+                Console.WriteLine("An error occured during the execution of the program");
+                Console.WriteLine(e);
                 return;
             }
 

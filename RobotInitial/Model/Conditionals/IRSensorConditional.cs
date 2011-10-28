@@ -4,21 +4,42 @@ using System.Linq;
 using System.Text;
 
 namespace RobotInitial.Model {
+    [Flags]
+    public enum Operator {
+        EQUAL = 1,
+        GREATER = 2,
+        LESS = 4,
+        EQUALORGREATER = EQUAL | GREATER,
+        EQUALORLESS = EQUAL | LESS,
+        NOTEQUAL = GREATER | LESS
+    }
+
+    static class OperatorExt {
+        public static bool Evaluate(this Operator _operator, int operandLeft, int operandRight) {
+            switch (_operator) {
+                case Operator.EQUAL:
+                    return operandLeft == operandRight;
+                case Operator.GREATER:
+                    return operandLeft > operandRight;
+                case Operator.LESS:
+                    return operandLeft < operandRight;
+                case Operator.EQUALORGREATER:
+                    return operandLeft >= operandRight;
+                case Operator.EQUALORLESS:
+                    return operandLeft <= operandRight;
+                case Operator.NOTEQUAL:
+                    return operandLeft != operandRight;
+            }
+            return false;
+        }
+    }
+
     [Serializable()]
     class IRSensorConditional : Conditional<bool> {
-        [Flags]
-        public enum Operator {
-            EQUAL = 1,
-            GREATER = 2,
-            LESS = 4,
-            EQUALORGREATER = EQUAL | GREATER,
-            EQUALORLESS = EQUAL | LESS,
-            NOTEQUAL = GREATER | LESS
-        }
 
         public Operator EqualityOperator { get; set; }
         public int Distance { get; set; }
-        public int IRSensorNumber { get; set; }
+        public LynxIRPort IRSensors { get; set; }
 
         internal IRSensorConditional() {
         }
@@ -31,19 +52,12 @@ namespace RobotInitial.Model {
 
         public override bool Evaluate(Protocol protocol) {
             IRData data = protocol.RequestIR();
-            int actualDistance = data.GetDistance(IRSensorNumber);
-
-            if (actualDistance < Distance) {
-                return (EqualityOperator & Operator.LESS) == Operator.LESS;
-            } else if (actualDistance > Distance) {
-                return (EqualityOperator & Operator.GREATER) == Operator.GREATER;
-            } else {
-                return (EqualityOperator & Operator.EQUAL) == Operator.EQUAL;
-            }
+            List<int> actualDistances = data.GetDistances(IRSensors);
+            return actualDistances.Any(x => EqualityOperator.Evaluate(x, Distance));
         }
 
         public override string ToString() {
-            return "IRSensor " + IRSensorNumber + " " + EqualityOperator + " " + Distance;
+            return "IRSensor " + IRSensors + " " + EqualityOperator + " " + Distance;
         }
     }
 }
