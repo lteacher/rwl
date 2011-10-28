@@ -11,12 +11,14 @@ using System.Windows.Shapes;
 using System.Windows.Interactivity;
 using RobotInitial.View;
 using RobotInitial.ViewModel;
+using System.Windows.Media.Animation;
 //using Microsoft.Expression.Interactivity.Core;
 
 namespace RobotInitial.Behaviours
 {
 	public class OpenPropertiesView : Behavior<UIElement>
 	{
+
 		public OpenPropertiesView()
 		{
 			// Insert code required on object creation below this point.
@@ -34,29 +36,52 @@ namespace RobotInitial.Behaviours
 			FrameworkElement clickedBlock = (FrameworkElement)((FrameworkElement)sender).Parent;
 			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
 			PropertiesTabViewModel propertiesViewModel = (PropertiesTabViewModel)mainWindow.PropertiesView.DataContext;
-			Console.WriteLine(clickedBlock.GetType());
+			WorkspaceView workspaceView = getWorspaceView(clickedBlock);
+			WorkspaceViewModel workspaceViewModel = (WorkspaceViewModel)workspaceView.DataContext;
+
+			// If the same object is clicked then just return handled dont need to do it twice
+			if (ReferenceEquals(workspaceViewModel.SelectedBlock, clickedBlock)) {
+				e.Handled = true;
+				return;
+			}
 
 			if (clickedBlock.GetType() == typeof(MoveControlBlockView)) {			
 				MoveControlBlockViewModel viewModel = (MoveControlBlockViewModel)clickedBlock.DataContext;
+				if(workspaceViewModel.SelectedBlock != null)((ControlBlockViewModel)workspaceViewModel.SelectedBlock.DataContext).
+																			StopSelectedAnimation(workspaceViewModel.SelectedBlock);
+				workspaceViewModel.SelectedBlock = clickedBlock;
+				viewModel.StartSelectedAnimation(clickedBlock);
 				propertiesViewModel.setPropertiesView(viewModel.PropertiesView);
 			}
 			else if (clickedBlock.GetType() == typeof(LoopControlBlockView)) {
 				LoopControlBlockViewModel viewModel = (LoopControlBlockViewModel)clickedBlock.DataContext;
+				if (workspaceViewModel.SelectedBlock != null) ((ControlBlockViewModel)workspaceViewModel.SelectedBlock.DataContext).
+																			  StopSelectedAnimation(workspaceViewModel.SelectedBlock);
+				workspaceViewModel.SelectedBlock = clickedBlock;
+				viewModel.StartSelectedAnimation(clickedBlock);
 				propertiesViewModel.setPropertiesView(viewModel.PropertiesView);
 			}
 			else if (clickedBlock.GetType() == typeof(SwitchTabBlockView)) {
 				SwitchTabBlockViewModel viewModel = (SwitchTabBlockViewModel)clickedBlock.DataContext;
+				if (workspaceViewModel.SelectedBlock != null) ((ControlBlockViewModel)workspaceViewModel.SelectedBlock.DataContext).
+																			  StopSelectedAnimation(workspaceViewModel.SelectedBlock);
+				workspaceViewModel.SelectedBlock = clickedBlock;
+				viewModel.StartSelectedAnimation(clickedBlock);
 				propertiesViewModel.setPropertiesView(viewModel.PropertiesView);
 			}
 			else if (clickedBlock.GetType() == typeof(WaitControlBlockView)) {
 				WaitControlBlockViewModel viewModel = (WaitControlBlockViewModel)clickedBlock.DataContext;
+				if (workspaceViewModel.SelectedBlock != null) ((ControlBlockViewModel)workspaceViewModel.SelectedBlock.DataContext).
+																			  StopSelectedAnimation(workspaceViewModel.SelectedBlock);
+				workspaceViewModel.SelectedBlock = clickedBlock;
+				viewModel.StartSelectedAnimation(clickedBlock);
 				propertiesViewModel.setPropertiesView(viewModel.PropertiesView);
 			}
 			else if (clickedBlock.GetType() == typeof(ScrollViewer) ||
 				clickedBlock.GetType() == typeof(SequenceView)) {
-
-                WorkspaceViewModel blah = (WorkspaceViewModel)((FrameworkElement)clickedBlock.Parent).DataContext;
-                RobotInitial.Model.Block block = blah.GetConnectedModel();
+				if (workspaceViewModel.SelectedBlock != null) ((ControlBlockViewModel)workspaceViewModel.SelectedBlock.DataContext).
+																				  StopSelectedAnimation(workspaceViewModel.SelectedBlock);
+				RobotInitial.Model.Block block = workspaceViewModel.GetConnectedModel();
                 Console.WriteLine(block.ToString());
                 //DeleteThisHackTestMethod(block);
 
@@ -64,6 +89,21 @@ namespace RobotInitial.Behaviours
 			}
 
 			e.Handled = true;
+		}
+
+		// Do some fun times to get the workspace as usual!
+		private WorkspaceView getWorspaceView(FrameworkElement source) {
+			FrameworkElement treeParent = source;
+			while (treeParent != null) {
+				if (treeParent == null) break;
+				treeParent = (FrameworkElement)VisualTreeHelper.GetParent(treeParent);
+
+				// If the treeparent is WorkspaceView then return it
+				if (treeParent is WorkspaceView) {
+					return treeParent as WorkspaceView;
+				}
+			}
+			return treeParent as WorkspaceView;
 		}
 
         //private static void DeleteThisHackTestMethod(RobotInitial.Model.Block block) {

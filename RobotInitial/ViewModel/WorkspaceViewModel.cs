@@ -31,6 +31,9 @@ namespace RobotInitial.ViewModel {
 			get { return _sequence; }
 		}
 
+		// Reference to the currently selected block model for animating
+		public FrameworkElement SelectedBlock { get; set; }
+
         public double Width {
             get { 
 				return _minWidth; 

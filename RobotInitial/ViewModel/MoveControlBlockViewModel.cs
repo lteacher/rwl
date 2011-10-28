@@ -22,5 +22,6 @@ namespace RobotInitial.ViewModel
 		public MoveControlBlockViewModel() {
 			Type = "Move";
 		}
+
 	}
 }

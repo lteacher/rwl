@@ -23,9 +23,9 @@
                 <TextBox IsEnabled="{Binding CondMode}"  TextWrapping="Wrap" Margin="0,0,7.722,15.314" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" Width="56.389" VerticalAlignment="Bottom">
                     <TextBox.Text>
                 	    <Binding Path="OperatorNumber" UpdateSourceTrigger="PropertyChanged">
-                		    <Binding.ValidationRules>
+                		    <!--<Binding.ValidationRules>
                 			    <val:NumericOnlyRule/>
-                		    </Binding.ValidationRules>
+                		    </Binding.ValidationRules>-->
                 	    </Binding>
                     </TextBox.Text>
                 </TextBox>

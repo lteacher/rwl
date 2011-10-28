@@ -56,6 +56,9 @@ namespace RobotInitial.ViewModel
 				_mainHeight = value;
 			}
 		}
+
+		public Visibility AnimSideL { get; set; }
+		public Visibility AnimSideR { get; set; }
 		
 		public LoopControlBlockViewModel()
 		{
@@ -64,8 +67,11 @@ namespace RobotInitial.ViewModel
 			// Set the default Height and Width
 			Height = 75;
 			Width = 75;
+
+			AnimSideL = Visibility.Hidden;
+			AnimSideR = Visibility.Hidden;
 		}
-		
+
 		public void ExpandControl() {
 			MessageBox.Show("Count is currently: " + Children.Count);
 		}
@@ -142,6 +148,17 @@ namespace RobotInitial.ViewModel
 			int index = Children.IndexOf(block);
 			Children.RemoveAt(index);
 			Children.RemoveAt(index);
+		}
+
+		public override void SetAnimationVisibility(Visibility v) {
+			AnimSideL = v;
+			AnimSideR = v;
+			NotifyPropertyChanged("AnimSideL");
+			NotifyPropertyChanged("AnimSideR");
+		}
+
+		public override Visibility GetAnimationVisibility() {
+			return AnimSideL;
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

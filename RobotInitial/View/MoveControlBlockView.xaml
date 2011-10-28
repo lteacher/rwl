@@ -8,12 +8,39 @@
              xmlns:b="clr-namespace:RobotInitial.Behaviours"
              mc:Ignorable="d" 
              d:DesignHeight="75" d:DesignWidth="75">
+	<UserControl.Resources>
+		<Storyboard x:Key="BlockSelected" RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(Brush.RelativeTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="rectangle">
+				<EasingDoubleKeyFrame KeyTime="0" Value="-180"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-90"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="90"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2" Value="180"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</UserControl.Resources>
     <UserControl.DataContext>
         <vm:MoveControlBlockViewModel/>
     </UserControl.DataContext>
     <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto">  
-        <Rectangle Height="59" Width="59" Fill="Green" Stroke="Black" StrokeThickness="1" RadiusX="18" RadiusY="18"/>
+        <Rectangle Height="59" Width="59" Fill="Green" StrokeThickness="1" RadiusX="18" RadiusY="18" Stroke="Black"/>
         <Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
+        <Rectangle x:Name="rectangle" Visibility="{Binding AnimationVisible}" Height="59" Width="59" StrokeThickness="3" RadiusX="18" RadiusY="18">
+			<Rectangle.Stroke>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<LinearGradientBrush.RelativeTransform>
+						<TransformGroup>
+							<ScaleTransform CenterY="0.5" CenterX="0.5"/>
+							<SkewTransform CenterY="0.5" CenterX="0.5"/>
+							<RotateTransform CenterY="0.5" CenterX="0.5" Angle="-180"/>
+							<TranslateTransform/>
+						</TransformGroup>
+					</LinearGradientBrush.RelativeTransform>
+					<GradientStop Color="#FF19086C" Offset="0"/>
+					<GradientStop Color="#FF10B0C4" Offset="1"/>
+				</LinearGradientBrush>
+			</Rectangle.Stroke>
+		</Rectangle>     
         <i:Interaction.Behaviors>
             <b:OpenPropertiesView/>
             <b:DragWithAdornment/>

@@ -28,7 +28,7 @@ namespace RobotInitial.ViewModel
 		// Timer Condition Duration property
 		public double TimeDuration { 
 			get { return _timeCondition.Duration/1000; }
-			set { _timeCondition.Duration = (int)value*1000; }
+			set { double blah= value * 1000;Console.WriteLine("BLAH IS: {0}",blah); _timeCondition.Duration = (int)blah; }
 		}
 
 		// Condition types and its property

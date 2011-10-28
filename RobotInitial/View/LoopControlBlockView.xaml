@@ -8,6 +8,24 @@
              xmlns:b="clr-namespace:RobotInitial.Behaviours"
              mc:Ignorable="d" 
              d:DesignWidth="{Binding NotBound}" d:DesignHeight="{Binding NotBound}" ClipToBounds="True" >
+		<UserControl.Resources>
+		<Storyboard x:Key="BlockSelected" RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(Brush.RelativeTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="rectangle1">
+				<EasingDoubleKeyFrame KeyTime="0" Value="-180"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-90"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="90"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2" Value="180"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Stroke).(Brush.RelativeTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)" Storyboard.TargetName="rectangle2">
+				<EasingDoubleKeyFrame KeyTime="0" Value="-180"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-90"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="0"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="90"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2" Value="180"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</UserControl.Resources>
     <UserControl.DataContext>
         <vm:LoopControlBlockViewModel/>
     </UserControl.DataContext>
@@ -15,6 +33,22 @@
     <Grid x:Name="LayoutRoot" Height="Auto" Width="Auto" AllowDrop="True" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Rectangle Fill="LightSkyBlue" Stroke="Black" Opacity="0.16" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5" />
         <Rectangle Fill="LightSkyBlue" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Left" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0"/>
+        <Rectangle x:Name="rectangle1" Visibility="{Binding AnimSideL}" Width="25" Height="75" StrokeThickness="3" HorizontalAlignment="Left" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0">
+			<Rectangle.Stroke>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<LinearGradientBrush.RelativeTransform>
+						<TransformGroup>
+							<ScaleTransform CenterY="0.5" CenterX="0.5"/>
+							<SkewTransform CenterY="0.5" CenterX="0.5"/>
+							<RotateTransform CenterY="0.5" CenterX="0.5" Angle="-180"/>
+							<TranslateTransform/>
+						</TransformGroup>
+					</LinearGradientBrush.RelativeTransform>
+					<GradientStop Color="#FF19086C" Offset="0"/>
+					<GradientStop Color="#FF10B0C4" Offset="1"/>
+				</LinearGradientBrush>
+			</Rectangle.Stroke>
+		</Rectangle> 
             <ItemsControl ItemsSource="{Binding Children}" Margin="{Binding StackMargin}" HorizontalAlignment="Center" VerticalAlignment="Center">
                 <ItemsControl.Template>
                     <ControlTemplate TargetType="ItemsControl">
@@ -30,6 +64,22 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         <Rectangle Fill="LightSkyBlue" Stroke="Black" Width="25" Height="75" HorizontalAlignment="Right" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0" />
+        <Rectangle x:Name="rectangle2" Visibility="{Binding AnimSideR}" Width="25" Height="75" StrokeThickness="3" HorizontalAlignment="Right" Margin="0 25 0 25" RadiusY="4.0" RadiusX="4.0">
+			<Rectangle.Stroke>
+				<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+					<LinearGradientBrush.RelativeTransform>
+						<TransformGroup>
+							<ScaleTransform CenterY="0.5" CenterX="0.5"/>
+							<SkewTransform CenterY="0.5" CenterX="0.5"/>
+							<RotateTransform CenterY="0.5" CenterX="0.5" Angle="-180"/>
+							<TranslateTransform/>
+						</TransformGroup>
+					</LinearGradientBrush.RelativeTransform>
+					<GradientStop Color="#FF19086C" Offset="0"/>
+					<GradientStop Color="#FF10B0C4" Offset="1"/>
+				</LinearGradientBrush>
+			</Rectangle.Stroke>
+		</Rectangle>
         <i:Interaction.Behaviors>
             <b:BlockExpand/>
             <b:OpenPropertiesView/>

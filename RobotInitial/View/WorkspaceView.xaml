@@ -17,13 +17,11 @@
     
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Canvas Background="#FFFFE5E5" Width="{Binding Width}" Height="{Binding Height}">
-	        <!--<e:Interaction.Behaviors>
-			    <b:DropToWorkspace/>
-		    </e:Interaction.Behaviors>-->
 		    <local:GridMask RowWidth="25" ColWidth="25"/>
             <ContentControl Margin="50 0 0 0" Content="{Binding Sequence}" Canvas.Top="{Binding SequenceY}"/>
             <i:Interaction.Behaviors>
                 <b:OpenPropertiesView/>
+                <b:DropToWorkspace/>
             </i:Interaction.Behaviors>
         </Canvas>
         

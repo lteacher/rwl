@@ -92,6 +92,9 @@ namespace RobotInitial.ViewModel
 			TopButtonOpacity = 0.9;
 			BottomButtonColour = Brushes.DarkGray;
 			BottomButtonOpacity = 0.5;
+
+			AnimSideL = Visibility.Hidden;
+			AnimSideR = Visibility.Hidden;
 		}
 		
 		public void ExpandControl() {
@@ -101,6 +104,20 @@ namespace RobotInitial.ViewModel
         public ObservableCollection<FrameworkElement> Children
 		{
 			get { return _cases[_caseIndex]; }
+		}
+
+		public Visibility AnimSideL { get; set; }
+		public Visibility AnimSideR { get; set; }
+
+		public override void SetAnimationVisibility(Visibility v) {
+			AnimSideL = v;
+			AnimSideR = v;
+			NotifyPropertyChanged("AnimSideL");
+			NotifyPropertyChanged("AnimSideR");
+		}
+
+		public override Visibility GetAnimationVisibility() {
+			return AnimSideL;
 		}
 
 		public void AddChildBlock(FrameworkElement sourceView, FrameworkElement newElement, double xLocation)
@@ -260,6 +277,7 @@ namespace RobotInitial.ViewModel
 			}
 			NotifyPropertyChanged("StackMargin");
 		}
+
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
