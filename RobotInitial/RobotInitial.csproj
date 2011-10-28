@@ -68,6 +68,7 @@
     <Compile Include="Behaviours\DropToWorkspace.cs" />
     <Compile Include="Behaviours\ExpandingDrop.cs" />
     <Compile Include="Behaviours\OpenPropertiesView.cs" />
+    <Compile Include="Behaviours\ScrollViewerCentering.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
