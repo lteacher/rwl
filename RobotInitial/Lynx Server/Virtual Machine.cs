@@ -33,13 +33,14 @@ namespace RobotInitial.Lynx_Server {
         #endregion
 
         //Volatile varibles must be read from memory and updated in a single command/cycle
-        volatile Boolean runningProgram = false;
+        volatile Boolean runningProgram = false;        
         volatile Shutdown terminate;
 
         int runningProgramID;
         private StartBlock Start;
         private Protocol Protocol;     
         public EndState state;
+        private Boolean pauseFlag = false;
 
         object initialiseLock = new Object();
         object runningLock = new Object();
@@ -59,6 +60,14 @@ namespace RobotInitial.Lynx_Server {
             }
 
             return true;     
+        }
+
+        public void pause() {
+            pauseFlag = true;
+        }
+
+        public void resume() {
+            pauseFlag = false;
         }
 
         public void LoadProgram(StartBlock start, Protocol protocol) {
@@ -93,17 +102,14 @@ namespace RobotInitial.Lynx_Server {
                 ModelExecutor executor = new ModelExecutor(Start, Protocol);
 
                 while (!executor.IsDone()) {
-                    //Console.Write("Program Line Run \n");
                     //Check hardware/software shutdowns
                     if (terminate != Shutdown.None){
-
-                        if(terminate == Shutdown.Software){
-                            state = EndState.TerminatedByClient;
-                        }else{
-                            state = EndState.TerminatedByHardware;
-                        }
-
+                        state = EndState.TerminatedByClient;
                         break;
+                    }
+
+                    while (pauseFlag) {
+                        //Wait
                     }
 
                     //Run through next program instruction

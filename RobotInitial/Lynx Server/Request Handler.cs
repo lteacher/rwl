@@ -21,7 +21,7 @@ namespace RobotInitial.Lynx_Server {
 
             if (!VM.Initialise()) {
                 //Reject connection, virtual machine is busy
-                //Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection refused, Virtual Machine busy");
+                Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection refused, Virtual Machine busy");
                 Console.Write("Connection rejected: VM busy \n");
                 clientStream.WriteByte(0);
                 client.Close();
@@ -29,7 +29,7 @@ namespace RobotInitial.Lynx_Server {
 
             } else {
                 //Virtual machine is free and has been allocated to this request
-                //Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection Accepted");
+                Lynx_Server.Log(DateTime.Now + " " + Lynx_Server.getIPAddress(client) + " Client connection Accepted");
                 Console.Write("Connection accepted \n");
                 clientStream.WriteByte(1);
                 
@@ -48,16 +48,28 @@ namespace RobotInitial.Lynx_Server {
                 while (keepLooping) {                    
                     if (clientStream.DataAvailable) {
                         //DO we have any communications from the client to be processed
-
+                        int message = clientStream.ReadByte();
+                                                
+                        if (message == 80) {
+                            //Pause = 80
+                            VM.pause();
+                        } else if (message == 82) {
+                            //Resume == 82
+                            VM.resume();
+                        } else if (message == 83) {
+                            //Stop == 83
+                            VM.TerminateProgram(Shutdown.Software);
+                        }
+                        
                     } else if (!programThread.IsAlive) {
                         //If the VM is not running, check why
                         if (VM.state == EndState.Completed) {
-                            //Send program completed to client                            
+                            //Send program completed to client
+                            clientStream.WriteByte(255);                            
                         } else if (VM.state == EndState.TerminatedByClient) {
                             //Confirm program termination
-                        } else if (VM.state == EndState.TerminatedByHardware) {
-                            //Send program terminated via hardware error to client
-                        }
+                            clientStream.WriteByte(10);
+                        } 
 
                         //Reset the VM so another program can run and exit request thread
                         try {
@@ -79,30 +91,3 @@ namespace RobotInitial.Lynx_Server {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-//Some manual message recieving code incase its needed.
-//byte[] messageLengthByte = new byte[4];
-//clientStream.Read(messageLengthByte, 0, 4);
-
-////Convert 4 byte binary to integer
-//int messageLengthInt = BitConverter.ToInt32(messageLengthByte, 0);
-//byte[] message = new byte[messageLengthInt];
-//int recievedBytes = 0;
-
-////Loop while we have not recieved the entire message
-//while (recievedBytes < messageLengthInt) {
-//    //Read message length bytes minus what has already been read, into the message byte array at next empty position
-//    recievedBytes += clientStream.Read(message, recievedBytes, (messageLengthInt - recievedBytes));
-//}

@@ -78,7 +78,7 @@
     <Compile Include="Components.cs" />
     <Compile Include="Controls\TaskBlockItem.cs" />
     <Compile Include="Command\ExecutionStrategy.cs" />
-    <Compile Include="Lynx Server\EndState.cs" />
+    <Compile Include="Lynx Server\Server Enums.cs" />
     <Compile Include="Lynx Server\Lynx Server.cs" />
     <Compile Include="LynxProtocol\Enums\LynxCommandSet.cs" />
     <Compile Include="LynxProtocol\Enums\LynxIRPort.cs" />
@@ -102,7 +102,6 @@
     <Compile Include="Lynx Server\Request Handler.cs" />
     <Compile Include="Lynx Server\ServerTest.cs" />
     <Compile Include="Lynx Server\Virtual Machine.cs" />
-    <Compile Include="Lynx Server\VirtualMachineOwnershipException.cs" />
     <Compile Include="MainWindow_methods.cs" />
     <Compile Include="Model\Factory\ModelFactory.cs" />
     <Compile Include="Model\Factory\DefaultModelFactory.cs" />

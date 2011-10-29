@@ -12,6 +12,8 @@ using RobotInitial.Lynx_Server;
 namespace LynxTest2.Communications {
     class Network {
 
+        private static NetworkStream connection;
+
         public static List<IPEndPoint> lynxAddresses = new List<IPEndPoint>() {            
             new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331)
         };
@@ -20,19 +22,37 @@ namespace LynxTest2.Communications {
         public static void connectToLynx(IPEndPoint robot, StartBlock program){
             TcpClient client = new TcpClient();
             client.Connect(robot);
-            NetworkStream clientStream = client.GetStream();
+            connection = client.GetStream();
 
             //Read response from server. 1 = ready, 0 = busy.
-            int response = clientStream.ReadByte();
+            int response = connection.ReadByte();
             Console.Write("Response recieved: " + response + "\n");
 
             if (response == 1) {
-                program.Serialise(clientStream);
+                program.Serialise(connection);
                 Console.Write("Program sent \n");
             } else {
                 throw new RobotInitial.LynxBusyException();
             }
 
+        }
+
+        public static void stopProgram() {
+            if (connection != null) {
+                connection.WriteByte(83);
+            }
+        }
+
+        public static void pauseProgram() {
+            if (connection != null) {
+                connection.WriteByte(80);
+            }
+        }
+
+        public static void resumeProgram() {
+            if (connection != null) {
+                connection.WriteByte(82);
+            }
         }
 
         public static void send(MemoryStream item, Stream stream) {
