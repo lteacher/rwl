@@ -18,7 +18,7 @@ namespace RobotInitial.ViewModel
         #endregion // Constructor
 
         #region DisplayName
-        public virtual string DisplayName { get; protected set; }
+        public virtual string DisplayName { get; set; }
 
         #endregion // DisplayName
 

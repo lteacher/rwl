@@ -91,7 +91,6 @@ namespace RobotInitial.ViewModel {
         }
 
         public WorkspaceViewModel() {
-            //base.DisplayName = _workspace.FileName;
             _undoManager = ServiceLocator.GetService<IUndoService>().CreateUndoManager();
             _undoManager.UndoStackChanged += new EventHandler(OnUndoChanged);
             _undoManager.RedoStackChanged += new EventHandler(OnRedoChanged);

@@ -197,9 +197,9 @@
     <value>Save</value>
   </data>
   <data name="tabProperties" xml:space="preserve">
-    <value>Properties</value>
+    <value>Block Properties</value>
   </data>
   <data name="tabSomethingElse" xml:space="preserve">
-    <value>SomethingElse</value>
+    <value>Pseudocode</value>
   </data>
 </root>

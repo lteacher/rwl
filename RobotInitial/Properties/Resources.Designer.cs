@@ -266,7 +266,7 @@ namespace RobotInitial.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Properties.
+        ///   Looks up a localized string similar to Block Properties.
         /// </summary>
         public static string tabProperties {
             get {
@@ -275,7 +275,7 @@ namespace RobotInitial.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SomethingElse.
+        ///   Looks up a localized string similar to Pseudocode.
         /// </summary>
         public static string tabSomethingElse {
             get {

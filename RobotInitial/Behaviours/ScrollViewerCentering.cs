@@ -27,7 +27,7 @@ namespace RobotInitial.Behaviours {
 			WorkspaceView workspaceView = (WorkspaceView)AssociatedObject.Parent;
 			WorkspaceViewModel workspaceViewModel = (WorkspaceViewModel)workspaceView.DataContext;
 			double offset = workspaceViewModel.SequenceY;
-			AssociatedObject.ScrollToVerticalOffset(offset/2+12.5);
+			AssociatedObject.ScrollToVerticalOffset(offset/2+40);
 		}
 
 	}

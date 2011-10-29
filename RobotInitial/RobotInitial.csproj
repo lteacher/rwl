@@ -184,6 +184,9 @@
     <Compile Include="View\SequenceView.xaml.cs">
       <DependentUpon>SequenceView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\StartStopControlView.xaml.cs">
+      <DependentUpon>StartStopControlView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\SwitchControlBlockView.xaml.cs">
       <DependentUpon>SwitchControlBlockView.xaml</DependentUpon>
     </Compile>
@@ -250,6 +253,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SequenceView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\StartStopControlView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

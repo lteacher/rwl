@@ -1,0 +1,150 @@
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" x:Class="RobotInitial.View.StartStopControlView" 
+             d:DesignHeight="75" d:DesignWidth="100" mc:Ignorable="d">
+	<UserControl.Resources>
+		<Storyboard x:Key="StartButtonAnimation">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="StartButtonGrid">
+				<SplineDoubleKeyFrame KeyTime="0" Value="0.4"/>
+				<SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="StartButtonAnimationExit">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="StartButtonGrid">
+				<SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0.4"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="StopButtonAnimation">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="StopButtonGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0.395"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="StopButtonAnimationExit">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="StopButtonGrid">
+				<SplineDoubleKeyFrame KeyTime="0" Value="1"/>
+				<SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0.395"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="PauseButtonAnimation">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PauseButtonGrid">
+				<EasingDoubleKeyFrame KeyTime="0" Value="0.395"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0.995"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		<Storyboard x:Key="PauseButtonAnimationExit">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="PauseButtonGrid">
+				<SplineDoubleKeyFrame KeyTime="0" Value="0.995"/>
+				<SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0.395"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</UserControl.Resources>
+	
+    <Grid>
+        <Rectangle Height="75" Width="100" Fill="DarkGray" Stroke="Black" Opacity="0.10" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5"/>
+        <Grid x:Name="StartButtonGrid" Margin="32.5,20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Opacity="0.395" MouseLeave="ResetColours" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange">
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard Storyboard="{StaticResource StartButtonAnimation}"/>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard Storyboard="{StaticResource StartButtonAnimationExit}"/>
+                </EventTrigger>
+            </Grid.Triggers>
+            <Ellipse x:Name="StartEllipse" VerticalAlignment="Center" HorizontalAlignment="Center" Width="35" Height="35">
+        		<Ellipse.Fill>
+        			<RadialGradientBrush>
+        				<RadialGradientBrush.RelativeTransform>
+        					<TransformGroup>
+        						<ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="2" ScaleY="2"/>
+        						<SkewTransform CenterY="0.5" CenterX="0.5"/>
+        						<RotateTransform CenterY="0.5" CenterX="0.5"/>
+        						<TranslateTransform/>
+        					</TransformGroup>
+        				</RadialGradientBrush.RelativeTransform>
+        				<GradientStop Color="Black" Offset="1"/>
+        				<GradientStop Color="White" Offset="0.01"/>
+        			</RadialGradientBrush>
+        		</Ellipse.Fill>
+        	</Ellipse>
+        	<ed:RegularPolygon x:Name="regularPolygon" InnerRadius="1" Margin="9.666,8.958,1.501,9.875" PointCount="3" Stretch="Fill" RenderTransformOrigin="0.5,0.5" Stroke="Black" StrokeThickness="0.5">
+        		<ed:RegularPolygon.Fill>
+        			<RadialGradientBrush Center="11.917,11.1" GradientOrigin="11.917,7.1" MappingMode="Absolute" RadiusY="7.8" RadiusX="6.7">
+        				<RadialGradientBrush.RelativeTransform>
+        					<TransformGroup>
+        						<ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="2.2" ScaleY="2.7"/>
+        						<SkewTransform CenterY="0.5" CenterX="0.5"/>
+        						<RotateTransform CenterY="0.5" CenterX="0.5"/>
+        						<TranslateTransform/>
+        					</TransformGroup>
+        				</RadialGradientBrush.RelativeTransform>
+        				<GradientStop Color="Black" Offset="1"/>
+        				<GradientStop Color="#FF00FF04" Offset="0.5"/>
+        			</RadialGradientBrush>
+        		</ed:RegularPolygon.Fill>
+        		<ed:RegularPolygon.RenderTransform>
+        			<TransformGroup>
+        				<ScaleTransform/>
+        				<SkewTransform/>
+        				<RotateTransform Angle="90"/>
+        				<TranslateTransform/>
+        			</TransformGroup>
+        		</ed:RegularPolygon.RenderTransform>
+        	</ed:RegularPolygon>
+        </Grid>
+        <Grid x:Name="StopButtonGrid" HorizontalAlignment="Left" Height="25" Margin="22,0,0,-8.667" VerticalAlignment="Bottom" Width="25" Opacity="0.395" MouseLeave="ResetColours" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange">
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard Storyboard="{StaticResource StopButtonAnimation}"/>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard Storyboard="{StaticResource StopButtonAnimationExit}"/>
+                </EventTrigger>
+            </Grid.Triggers>
+            <Ellipse x:Name="StopEllipse">
+        		<Ellipse.Fill>
+        			<RadialGradientBrush Opacity="0.965">
+        				<RadialGradientBrush.RelativeTransform>
+        					<TransformGroup>
+        						<ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="2" ScaleX="2"/>
+        						<SkewTransform CenterY="0.5" CenterX="0.5"/>
+        						<RotateTransform CenterY="0.5" CenterX="0.5"/>
+        						<TranslateTransform/>
+        					</TransformGroup>
+        				</RadialGradientBrush.RelativeTransform>
+        				<GradientStop Color="Black" Offset="1"/>
+        				<GradientStop Color="White" Offset="0.01"/>
+        			</RadialGradientBrush>
+        		</Ellipse.Fill>
+        	</Ellipse>
+        	<Rectangle Fill="Red" Width="10" Margin="7.527,7.625,7.473,7.375" Stroke="Black" StrokeThickness="0.5"/>
+        </Grid>
+        <Grid x:Name="PauseButtonGrid" HorizontalAlignment="Right" Height="25" Margin="0,0,18.5,-9" VerticalAlignment="Bottom" Width="25" Opacity="0.395" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange" MouseLeave="ResetColours">
+            <Grid.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard Storyboard="{StaticResource PauseButtonAnimation}"/>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard Storyboard="{StaticResource PauseButtonAnimationExit}"/>
+                </EventTrigger>
+            </Grid.Triggers>
+            <Ellipse x:Name="PauseEllipse">
+        		<Ellipse.Fill>
+        			<RadialGradientBrush>
+        				<RadialGradientBrush.RelativeTransform>
+        					<TransformGroup>
+        						<ScaleTransform CenterY="0.5" CenterX="0.5" ScaleX="2" ScaleY="2"/>
+        						<SkewTransform CenterY="0.5" CenterX="0.5"/>
+        						<RotateTransform CenterY="0.5" CenterX="0.5"/>
+        						<TranslateTransform/>
+        					</TransformGroup>
+        				</RadialGradientBrush.RelativeTransform>
+        				<GradientStop Color="Black" Offset="1"/>
+        				<GradientStop Color="White" Offset="0.01"/>
+        			</RadialGradientBrush>
+        		</Ellipse.Fill>
+        	</Ellipse>
+        	<Rectangle Fill="#FFF58700" Width="5" Margin="0,7.292,6.098,7.708" Stroke="Black" StrokeThickness="0.5" HorizontalAlignment="Right" d:LayoutOverrides="Width"/>
+        	<Rectangle Fill="#FFF58700" Width="5" Margin="6.777,7.292,0,7.708" Stroke="Black" StrokeThickness="0.5" HorizontalAlignment="Left" d:LayoutOverrides="Width"/>
+        </Grid>
+    </Grid>
+</UserControl>

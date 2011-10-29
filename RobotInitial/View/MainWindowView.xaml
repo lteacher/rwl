@@ -91,9 +91,16 @@
                 <RowDefinition Height="0.669*"/>
                 <RowDefinition Height="0.331*"/>
             </Grid.RowDefinitions>
-            <ContentControl Content="{Binding Path=Workspaces}" 
+            <TabControl
+                IsSynchronizedWithCurrentItem="True"
+                SelectedIndex="{Binding SelectedIndex}"
+                ItemsSource="{Binding Workspaces}"
+                ItemTemplate="{StaticResource CloseableTabItemTemplate}"
+                Margin="106,0,1,2"/>
+            <!--<ContentControl Content="{Binding Path=Workspaces}"
                             ContentTemplate="{StaticResource WorkspacesTemplate}"
-                            />
+                            />-->
+            <vw:StartStopControlView HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 25 35 35"></vw:StartStopControlView>
             <ContentControl Content="{Binding Path=BrickTabs}"
                             ContentTemplate="{StaticResource BrickTabTemplate}"
                             />
