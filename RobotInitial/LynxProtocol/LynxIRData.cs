@@ -13,20 +13,28 @@ namespace RobotInitial.LynxProtocol {
         }
 
         public List<int> GetDistances(LynxIRPort port) {
-            List<int> indexes = new List<int>();
-            int portInt = (int)port;
-            for (int i = 0; port != 0; ++i, portInt >>= 1) {
-                if ((portInt & 1) == 1) {
-                    indexes.Add(i);
-                }
-            }
-
             List<int> requestedDistances = new List<int>();
-            foreach (int i in indexes) {
-                requestedDistances.Add(i >= 0 && i < distances.Length ? distances[i] : -1);
+            int portInt = (int)port;
+
+            for (int i = 0; portInt != 0; ++i, portInt >>= 1) {
+                if ((portInt & 1) == 1) {
+                    requestedDistances.Add(i >= 0 && i < distances.Length ? distances[i] : -1);
+                }
             }
 
             return requestedDistances;
         }
+
+        //public static void Main() {
+        //    LynxIRData data = new LynxIRData(500, 30, 700, 5123, 12, 56);
+        //    data.GetDistances(LynxIRPort.FRONT).ForEach(s => Console.Write(s + " "));
+        //    Console.WriteLine();
+        //    data.GetDistances(LynxIRPort.FRONTRIGHT | LynxIRPort.REARRIGHT).ForEach(s => Console.Write(s + " "));
+        //    Console.WriteLine();
+        //    data.GetDistances(LynxIRPort.FRONT | LynxIRPort.FRONTLEFT | LynxIRPort.REARLEFT | LynxIRPort.FRONTRIGHT | LynxIRPort.REARRIGHT | LynxIRPort.REAR).ForEach(s => Console.Write(s + " "));
+        //    Console.WriteLine();
+        //    data.GetDistances(LynxIRPort.FRONT | LynxIRPort.FRONTLEFT | LynxIRPort.FRONTRIGHT).ForEach(s => Console.Write(s + " "));
+        //    while (true) ;
+        //}
     }
 }

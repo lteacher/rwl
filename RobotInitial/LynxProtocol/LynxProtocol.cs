@@ -36,7 +36,7 @@ namespace RobotInitial.LynxProtocol {
 
             int[] distances = new int[r.Length - 1];
             for (int i = 0; i < distances.Length; ++i) {
-                distances[i] = r.GetArg(i + 1);
+                distances[i] = r.GetArg(i + 1); //ignore return type, which is in the first argument
             }
 
             return new LynxIRData(distances);
