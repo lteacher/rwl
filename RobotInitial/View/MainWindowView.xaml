@@ -97,6 +97,7 @@
                 ItemsSource="{Binding Workspaces}"
                 ItemTemplate="{StaticResource CloseableTabItemTemplate}"
                 Margin="106,0,1,2"/>
+
             <!--<ContentControl Content="{Binding Path=Workspaces}"
                             ContentTemplate="{StaticResource WorkspacesTemplate}"
                             />-->

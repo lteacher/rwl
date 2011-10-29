@@ -28,8 +28,10 @@ namespace RobotInitial.ViewModel
 
         public ICommand CloseCommand
         {
+			
             get
             {
+				
                 if (_closeCommand == null)
                 {
                     _closeCommand = new RelayCommand(param => this.OnRequestClose());

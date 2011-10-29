@@ -55,6 +55,12 @@ namespace RobotInitial.ViewModel
 			return Workspaces[SelectedIndex];
 		}
 
+		public WorkspaceViewModel ActiveWorkspaceViewModel {
+			get {
+				return (WorkspaceViewModel)GetCurrentWorkspace().DataContext;
+			}
+		}
+
         bool _undoEnabled = false;
         bool _redoEnabled = false;
 
@@ -68,8 +74,6 @@ namespace RobotInitial.ViewModel
 
 			// Just add a bricktabs probably there wont ever be any more tabs
 			BrickTabs.Add(new TaskBlockTabView());
-			((TaskBlockTabViewModel)BrickTabs[0].DataContext).DisplayName = "C";
-			
         }
 
 
@@ -144,17 +148,14 @@ namespace RobotInitial.ViewModel
 
 		//#region CloseWorkspaceCommand
 
-		//public ICommand CloseWorkspaceCommand
-		//{
-		//    get
-		//    {
-		//        if (_closeWorkspaceCommand == null)
-		//        {
-		//            _closeWorkspaceCommand = new RelayCommand(param => this.CloseWorkspace());
-		//        }
-		//        return _closeWorkspaceCommand;
-		//    }
-		//}
+		public ICommand CloseWorkspaceCommand {
+			get {
+				if (_closeWorkspaceCommand == null) {
+					_closeWorkspaceCommand = new RelayCommand(param => this.CloseWorkspace());
+				}
+				return _closeWorkspaceCommand;
+			}
+		}
 
 		//#endregion // CloseWorkspaceCommand
 
@@ -380,11 +381,14 @@ namespace RobotInitial.ViewModel
 //            }
 //        }
 
-//        void CloseWorkspace()
-//        {
-//            // Save Workspace.
-
-//        }
+		void CloseWorkspace() {
+			// Save Workspace.
+			Workspaces.RemoveAt(SelectedIndex);
+			if(Workspaces.Count == 0) {
+				SelectedIndex = 0;
+				NotifyPropertyChanged("SelectedIndex");
+			}
+		}
 
 //        WorkspaceViewModel GetCurrentWorkspace()
 //        {

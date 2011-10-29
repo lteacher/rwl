@@ -14,6 +14,9 @@
 	<UserControl.Resources>
         <ResourceDictionary Source="..\MainWindowResources.xaml"/>
     </UserControl.Resources>
+    <UserControl.DataContext>
+        <vm:TaskBlockTabViewModel/>
+    </UserControl.DataContext>
 	
     <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
     	<StackPanel Height="Auto" Width="Auto">

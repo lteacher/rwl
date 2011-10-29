@@ -60,7 +60,8 @@
     <DataTemplate x:Key="CloseableTabItemTemplate">
         <DockPanel Width="80">
             <Button
-                Command="{Binding Path=CloseCommand}"
+                Command="{Binding DataContext.CloseWorkspaceCommand, RelativeSource={RelativeSource FindAncestor,
+                            AncestorType={x:Type vw:MainWindowView}}}"
                 Content="X"
                 Cursor="Hand"
                 DockPanel.Dock="Right"
@@ -71,10 +72,10 @@
                 Margin="0,1,0,0"
                 Padding="0"
                 VerticalContentAlignment="Bottom"
-                Width="16" Height="16"
-                />
+                Width="16" Height="16"/>
             <ContentPresenter 
-                Content="{Binding Path=DisplayName}" 
+                Content="{Binding DataContext.ActiveWorkspaceViewModel.DisplayName, RelativeSource={RelativeSource FindAncestor,
+                            AncestorType={x:Type vw:MainWindowView}}}" 
                 VerticalAlignment="Center"
                 />
         </DockPanel>
