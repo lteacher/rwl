@@ -81,10 +81,6 @@ namespace RobotInitial.Behaviours
 				clickedBlock.GetType() == typeof(SequenceView)) {
 				if (workspaceViewModel.SelectedBlock != null) ((ControlBlockViewModel)workspaceViewModel.SelectedBlock.DataContext).
 																				  StopSelectedAnimation(workspaceViewModel.SelectedBlock);
-				RobotInitial.Model.Block block = workspaceViewModel.GetConnectedModel();
-                Console.WriteLine(block.ToString());
-                //DeleteThisHackTestMethod(block);
-
 				propertiesViewModel.setBlankProperties();
 			}
 

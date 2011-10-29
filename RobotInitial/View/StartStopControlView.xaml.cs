@@ -11,6 +11,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using RobotInitial.ViewModel;
 
 namespace RobotInitial.View {
 	/// <summary>
@@ -88,7 +89,18 @@ namespace RobotInitial.View {
 			Console.WriteLine("Nothing Happened!!!");
 		}
 		private void DoStartButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
-			Console.WriteLine("Nothing Happened!!!");
+			// Get the Main Window view
+			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
+
+			// Get its view model
+			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
+
+			// Get the start block
+			RobotInitial.Model.Block startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
+
+			// TEMPORARY, Print the pseudocode
+			Console.WriteLine(startBlock.ToString());
+			
 		}
 		private void DoStopButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
 			Console.WriteLine("Nothing Happened!!!");
