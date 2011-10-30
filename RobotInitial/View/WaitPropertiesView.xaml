@@ -40,9 +40,9 @@
                 <TextBox IsEnabled="{Binding TimerMode}" TextWrapping="Wrap" Margin="84.75,23.534,112.478,6.333" MaxLength="3" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" VerticalAlignment="Top">
                     <TextBox.Text>
                         <Binding Path="TimeDuration" UpdateSourceTrigger="PropertyChanged">
-                            <Binding.ValidationRules>
+                            <!--<Binding.ValidationRules>
                                 <val:NumericOnlyRule/>
-                            </Binding.ValidationRules>
+                            </Binding.ValidationRules>-->
                         </Binding>
                     </TextBox.Text>
                 </TextBox>

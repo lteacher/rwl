@@ -101,7 +101,7 @@
             <!--<ContentControl Content="{Binding Path=Workspaces}"
                             ContentTemplate="{StaticResource WorkspacesTemplate}"
                             />-->
-            <vw:StartStopControlView HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 25 35 35"></vw:StartStopControlView>
+            <vw:StartStopControlView x:Name="StartStopControl" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0 25 35 35"></vw:StartStopControlView>
             <ContentControl Content="{Binding Path=BrickTabs}"
                             ContentTemplate="{StaticResource BrickTabTemplate}"
                             />

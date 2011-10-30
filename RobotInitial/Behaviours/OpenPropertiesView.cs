@@ -36,8 +36,9 @@ namespace RobotInitial.Behaviours
 			FrameworkElement clickedBlock = (FrameworkElement)((FrameworkElement)sender).Parent;
 			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
 			PropertiesTabViewModel propertiesViewModel = (PropertiesTabViewModel)mainWindow.PropertiesView.DataContext;
-			WorkspaceView workspaceView = getWorspaceView(clickedBlock);
-			WorkspaceViewModel workspaceViewModel = (WorkspaceViewModel)workspaceView.DataContext;
+			//WorkspaceView workspaceView = getWorspaceView(clickedBlock);
+			WorkspaceViewModel workspaceViewModel = ((MainWindowViewModel)mainWindow.DataContext).ActiveWorkspaceViewModel;
+			//WorkspaceViewModel workspaceViewModel = (WorkspaceViewModel)workspaceView.DataContext;
 
 			// If the same object is clicked then just return handled dont need to do it twice
 			if (ReferenceEquals(workspaceViewModel.SelectedBlock, clickedBlock)) {
@@ -81,6 +82,7 @@ namespace RobotInitial.Behaviours
 				clickedBlock.GetType() == typeof(SequenceView)) {
 				if (workspaceViewModel.SelectedBlock != null) ((ControlBlockViewModel)workspaceViewModel.SelectedBlock.DataContext).
 																				  StopSelectedAnimation(workspaceViewModel.SelectedBlock);
+				workspaceViewModel.SelectedBlock = null;
 				propertiesViewModel.setBlankProperties();
 			}
 
@@ -88,19 +90,19 @@ namespace RobotInitial.Behaviours
 		}
 
 		// Do some fun times to get the workspace as usual!
-		private WorkspaceView getWorspaceView(FrameworkElement source) {
-			FrameworkElement treeParent = source;
-			while (treeParent != null) {
-				if (treeParent == null) break;
-				treeParent = (FrameworkElement)VisualTreeHelper.GetParent(treeParent);
+		//private WorkspaceView getWorspaceView(FrameworkElement source) {
+		//    FrameworkElement treeParent = source;
+		//    while (treeParent != null) {
+		//        if (treeParent == null) break;
+		//        treeParent = (FrameworkElement)VisualTreeHelper.GetParent(treeParent);
 
-				// If the treeparent is WorkspaceView then return it
-				if (treeParent is WorkspaceView) {
-					return treeParent as WorkspaceView;
-				}
-			}
-			return treeParent as WorkspaceView;
-		}
+		//        // If the treeparent is WorkspaceView then return it
+		//        if (treeParent is WorkspaceView) {
+		//            return treeParent as WorkspaceView;
+		//        }
+		//    }
+		//    return treeParent as WorkspaceView;
+		//}
 
         //private static void DeleteThisHackTestMethod(RobotInitial.Model.Block block) {
         //    if (block == null) {

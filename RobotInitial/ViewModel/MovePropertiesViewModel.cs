@@ -136,6 +136,7 @@ namespace RobotInitial.ViewModel
 			}
 			set {
 				MoveModel.LeftPower = value;
+				NotifyPropertyChanged("LeftPower");
 			}
 		}
 
@@ -146,6 +147,7 @@ namespace RobotInitial.ViewModel
 			}
 			set {
 				MoveModel.RightPower = value;
+				NotifyPropertyChanged("RightPower");
 			}
 		}
 

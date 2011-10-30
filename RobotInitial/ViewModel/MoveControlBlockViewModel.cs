@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using RobotInitial.Model;
 using RobotInitial.View;
+using System.Windows;
 
 namespace RobotInitial.ViewModel
 {
@@ -12,7 +13,7 @@ namespace RobotInitial.ViewModel
 		//public MoveBlock MoveBlock { get; set; }
 		private MovePropertiesView _propertiesView = new MovePropertiesView();
 		
-		public MovePropertiesView PropertiesView {
+		public override FrameworkElement PropertiesView {
 			get { return _propertiesView; }
 		}
 

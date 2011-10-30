@@ -1,5 +1,16 @@
-﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" x:Class="RobotInitial.View.StartStopControlView" 
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing"
+             xmlns:vm="clr-namespace:RobotInitial.ViewModel"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:b="clr-namespace:RobotInitial.Behaviours"
+             x:Class="RobotInitial.View.StartStopControlView" 
              d:DesignHeight="75" d:DesignWidth="100" mc:Ignorable="d">
+    <UserControl.DataContext>
+        <vm:StartStopControlViewModel/>
+    </UserControl.DataContext>
 	<UserControl.Resources>
 		<Storyboard x:Key="StartButtonAnimation">
 			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="StartButtonGrid">
@@ -39,9 +50,12 @@
 		</Storyboard>
 	</UserControl.Resources>
 	
-    <Grid>
+    <Grid x:Name="MainGrid">
         <Rectangle Height="75" Width="100" Fill="DarkGray" Stroke="Black" Opacity="0.10" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5"/>
         <Grid x:Name="StartButtonGrid" Margin="32.5,20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Opacity="0.395" MouseLeave="ResetColours" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange">
+            <i:Interaction.Behaviors>
+                <b:StartStopPause/>
+            </i:Interaction.Behaviors>
             <Grid.Triggers>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <BeginStoryboard Storyboard="{StaticResource StartButtonAnimation}"/>
@@ -92,6 +106,9 @@
         	</ed:RegularPolygon>
         </Grid>
         <Grid x:Name="StopButtonGrid" HorizontalAlignment="Left" Height="25" Margin="22,0,0,-8.667" VerticalAlignment="Bottom" Width="25" Opacity="0.395" MouseLeave="ResetColours" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange">
+            <i:Interaction.Behaviors>
+                <b:StartStopPause/>
+            </i:Interaction.Behaviors>
             <Grid.Triggers>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <BeginStoryboard Storyboard="{StaticResource StopButtonAnimation}"/>
@@ -119,6 +136,9 @@
         	<Rectangle Fill="Red" Width="10" Margin="7.527,7.625,7.473,7.375" Stroke="Black" StrokeThickness="0.5"/>
         </Grid>
         <Grid x:Name="PauseButtonGrid" HorizontalAlignment="Right" Height="25" Margin="0,0,18.5,-9" VerticalAlignment="Bottom" Width="25" Opacity="0.395" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange" MouseLeave="ResetColours">
+            <i:Interaction.Behaviors>
+                <b:StartStopPause/>
+            </i:Interaction.Behaviors>
             <Grid.Triggers>
                 <EventTrigger RoutedEvent="MouseEnter">
                     <BeginStoryboard Storyboard="{StaticResource PauseButtonAnimation}"/>

@@ -18,7 +18,7 @@
 				<TextBlock TextWrapping="Wrap" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="32.688,24,0,0" Height="21.296" VerticalAlignment="Top" HorizontalAlignment="Left" Width="97.124"><Run Language="en-au" Text="DIRECTION"/></TextBlock>
                 <ComboBox Margin="131.053,23.5,74.782,0" VerticalAlignment="Top" ItemsSource="{Binding Directions}" SelectedIndex="{Binding LeftDirection}" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment" />
                 <TextBlock Visibility="{Binding LeftStopVisibility}" TextWrapping="Wrap" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="69.688,49.5,0,51" HorizontalAlignment="Left" Width="62.124"><Run Language="en-au" Text="POWER"/></TextBlock>
-				<Slider Visibility="{Binding LeftStopVisibility}" Value="{Binding LeftPower}" Margin="135,50,76.999,49.796" d:LayoutOverrides="Height" TickPlacement="BottomRight" Maximum="100" TickFrequency="10" LargeChange="10" SmallChange="5" Background="#00765935"/>
+				<Slider Visibility="{Binding LeftStopVisibility}" Value="{Binding LeftPower}" IsSnapToTickEnabled="True" Margin="135,50,76.999,49.796" d:LayoutOverrides="Height" TickPlacement="BottomRight" Maximum="100" TickFrequency="5" LargeChange="5" SmallChange="5" Background="#00765935"/>
                 <TextBlock Visibility="{Binding LeftStopVisibility}" TextWrapping="Wrap" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="39.688,0,0,25.75" HorizontalAlignment="Left" Width="92.124" Height="21.296" VerticalAlignment="Bottom"><Run Language="en-au" Text="DURATION"/></TextBlock>
                 <ComboBox Visibility="{Binding LeftStopVisibility}" Margin="189.053,0,74.282,24.072" VerticalAlignment="Bottom" ItemsSource="{Binding DurationUnits}" SelectedIndex="{Binding DurationUnit}" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment" />
                 <TextBox Visibility="{Binding LeftStopVisibility}" TextWrapping="Wrap" Margin="131.639,75.804,0,0" MaxLength="6" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Left" Width="56.389" VerticalAlignment="Top">
@@ -28,6 +28,13 @@
                         </Binding.ValidationRules>
                     </Binding>
                 </TextBox>
+                <TextBox Visibility="{Binding LeftStopVisibility}" TextWrapping="Wrap" Margin="0,50.636,42.86,0" MaxLength="3" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" Width="30.889" VerticalAlignment="Top">
+                	<Binding Path="LeftPower" UpdateSourceTrigger="PropertyChanged">
+                		<Binding.ValidationRules>
+                			<RobotInitial_Validation:NumericOnlyRule/>
+                		</Binding.ValidationRules>
+                	</Binding>
+                </TextBox>
             </Grid>
 		</Grid>
 		<Grid Margin="446.667,8,8,8">
@@ -36,7 +43,7 @@
 				<TextBlock TextWrapping="Wrap" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="32.688,24,0,0" Height="21.296" VerticalAlignment="Top" HorizontalAlignment="Left" Width="97.124"><Run Language="en-au" Text="DIRECTION"/></TextBlock>
                 <ComboBox Margin="131.053,23.5,74.782,0" VerticalAlignment="Top" ItemsSource="{Binding Directions}" SelectedIndex="{Binding RightDirection}" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment" />
                 <TextBlock Visibility="{Binding RightStopVisibility}" TextWrapping="Wrap" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="69.688,49.5,0,51" HorizontalAlignment="Left" Width="62.124"><Run Language="en-au" Text="POWER"/></TextBlock>
-                <Slider Visibility="{Binding RightStopVisibility}" Value="{Binding RightPower}" Margin="135,50,76.999,49.796" d:LayoutOverrides="Height" TickPlacement="BottomRight" Maximum="100" Minimum="0" SmallChange="5" TickFrequency="10" LargeChange="10"/>
+                <Slider Visibility="{Binding RightStopVisibility}" Value="{Binding RightPower}" IsSnapToTickEnabled="True" Margin="135,50,76.999,49.796" d:LayoutOverrides="Height" TickPlacement="BottomRight" Maximum="100" Minimum="0" SmallChange="5" TickFrequency="5" LargeChange="10"/>
                 <TextBlock Visibility="{Binding RightStopVisibility}" TextWrapping="Wrap" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="39.688,0,0,25.75" HorizontalAlignment="Left" Width="92.124" Height="21.296" VerticalAlignment="Bottom"><Run Language="en-au" Text="DURATION"/></TextBlock>
                 <ComboBox Visibility="{Binding RightStopVisibility}" Margin="189.053,0,74.282,24.072" VerticalAlignment="Bottom" ItemsSource="{Binding DurationUnits}" SelectedIndex="{Binding DurationUnit}" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment" />
                 <TextBox Visibility="{Binding RightStopVisibility}" TextWrapping="Wrap" Margin="131.639,75.804,0,0" MaxLength="6" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Left" Width="56.389" VerticalAlignment="Top">
@@ -45,6 +52,13 @@
                             <RobotInitial_Validation:NumericOnlyRule/>
                         </Binding.ValidationRules>
                     </Binding>
+                </TextBox>
+                <TextBox Visibility="{Binding LeftStopVisibility}" TextWrapping="Wrap" Margin="0,50.636,42.86,0" MaxLength="3" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" Width="30.889" VerticalAlignment="Top">
+                	<Binding Path="RightPower" UpdateSourceTrigger="PropertyChanged">
+                		<Binding.ValidationRules>
+                			<RobotInitial_Validation:NumericOnlyRule/>
+                		</Binding.ValidationRules>
+                	</Binding>
                 </TextBox>
             </Grid>
 		</Grid>

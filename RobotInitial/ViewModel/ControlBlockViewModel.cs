@@ -32,6 +32,8 @@ namespace RobotInitial.ViewModel
 			}
 		}
 
+		public virtual FrameworkElement PropertiesView { get; set; }
+
 		public Visibility AnimationVisible { get; set; }
 		
 		public void SetOffsetMargin(FrameworkElement element) {

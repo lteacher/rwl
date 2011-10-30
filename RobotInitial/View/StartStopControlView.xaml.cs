@@ -20,9 +20,9 @@ namespace RobotInitial.View {
 	public partial class StartStopControlView : UserControl {
 		public StartStopControlView() {
 			InitializeComponent();
-			this.StartButtonGrid.MouseDown +=new MouseButtonEventHandler(DoStartButtonAction);
-			this.StopButtonGrid.MouseDown += new MouseButtonEventHandler(DoStopButtonAction);
-			this.PauseButtonGrid.MouseDown += new MouseButtonEventHandler(DoPauseButtonAction);
+			//this.StartButtonGrid.MouseDown +=new MouseButtonEventHandler(DoStartButtonAction);
+			//this.StopButtonGrid.MouseDown += new MouseButtonEventHandler(DoStopButtonAction);
+			//this.PauseButtonGrid.MouseDown += new MouseButtonEventHandler(DoPauseButtonAction);
 		}
 
 		private void PressedColourChange(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -83,27 +83,6 @@ namespace RobotInitial.View {
 				RadialGradientBrush currentBrush = (RadialGradientBrush)this.PauseEllipse.Fill;
 				currentBrush.GradientStops[1].Color = Colors.White;
 			}
-		}
-
-		private void DoPauseButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
-			Console.WriteLine("Nothing Happened!!!");
-		}
-		private void DoStartButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
-			// Get the Main Window view
-			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
-
-			// Get its view model
-			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
-
-			// Get the start block
-			RobotInitial.Model.Block startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
-
-			// TEMPORARY, Print the pseudocode
-			Console.WriteLine(startBlock.ToString());
-			
-		}
-		private void DoStopButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
-			Console.WriteLine("Nothing Happened!!!");
 		}
 	}
 }

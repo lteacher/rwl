@@ -12,7 +12,7 @@ namespace RobotInitial.ViewModel
 	{
 		private WaitPropertiesView _propertiesView = new WaitPropertiesView();
 
-		public WaitPropertiesView PropertiesView {
+		public override FrameworkElement PropertiesView {
 			get { return _propertiesView; }
 		}
 

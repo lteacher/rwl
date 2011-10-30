@@ -24,7 +24,7 @@ namespace RobotInitial.ViewModel
 
 		private LoopPropertiesView _propertiesView = new LoopPropertiesView();
 
-		public LoopPropertiesView PropertiesView {
+		public override FrameworkElement PropertiesView {
 			get { return _propertiesView; }
 		}
 

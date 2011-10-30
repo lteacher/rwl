@@ -69,6 +69,7 @@
     <Compile Include="Behaviours\ExpandingDrop.cs" />
     <Compile Include="Behaviours\OpenPropertiesView.cs" />
     <Compile Include="Behaviours\ScrollViewerCentering.cs" />
+    <Compile Include="Behaviours\StartStopPause.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="ViewModel\MovePropertiesViewModel.cs" />
     <Compile Include="ViewModel\PropertiesTabViewModel.cs" />
     <Compile Include="ViewModel\SequenceViewModel.cs" />
+    <Compile Include="ViewModel\StartStopControlViewModel.cs" />
     <Compile Include="ViewModel\SwitchControlBlockViewModel.cs" />
     <Compile Include="ViewModel\SwitchPropertiesViewModel.cs" />
     <Compile Include="ViewModel\SwitchTabBlockViewModel.cs" />

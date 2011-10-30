@@ -26,9 +26,18 @@ namespace RobotInitial.ViewModel
 		private IRSensorConditional _irSensor;
 
 		// Timer Condition Duration property
-		public double TimeDuration { 
-			get { return _timeCondition.Duration/1000; }
-			set { double blah= value * 1000;Console.WriteLine("BLAH IS: {0}",blah); _timeCondition.Duration = (int)blah; }
+		public string TimeDuration { 
+			get { 
+				return (_timeCondition.Duration/1000).ToString(); 
+			}
+			set { 
+				double result;
+				if(Double.TryParse(value,out result)) {
+					result *= 1000;
+					_timeCondition.Duration = (int)result;
+				}
+				else return;
+			}
 		}
 
 		// Condition types and its property

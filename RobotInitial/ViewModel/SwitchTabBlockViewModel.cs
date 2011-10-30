@@ -30,7 +30,7 @@ namespace RobotInitial.ViewModel
 		// For convenience return the model here
 		public SwitchBlock<bool> ModelBlock { get { return ((SwitchPropertiesViewModel)_propertiesView.DataContext).SwitchModel; } }
 
-		public SwitchPropertiesView PropertiesView {
+		public override FrameworkElement PropertiesView {
 			get { return _propertiesView; }
 		}
 

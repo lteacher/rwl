@@ -11,6 +11,7 @@ using RobotInitial.Command;
 using RobotInitial.Properties;
 using RobotInitial.Model;
 using RobotInitial.View;
+using System.Windows;
 
 namespace RobotInitial.ViewModel
 {
@@ -94,6 +95,8 @@ namespace RobotInitial.ViewModel
 			WorkspaceView workspace = new WorkspaceView();
 			((WorkspaceViewModel)workspace.DataContext).DisplayName = Resources.untitledFileName;
 			Workspaces.Add(workspace);
+			// Shamelessly reference the MainWindowView and its start stop control, sorry MVVM
+			((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
 		}
 
 		//#endregion // NewWorkspaceCommand
@@ -386,8 +389,23 @@ namespace RobotInitial.ViewModel
 			Workspaces.RemoveAt(SelectedIndex);
 			if(Workspaces.Count == 0) {
 				SelectedIndex = 0;
+
+				// Closing all pages resets the properties to blank!
+				((PropertiesTabViewModel)((MainWindowView)Application.Current.MainWindow).PropertiesView.DataContext).setBlankProperties();
+
+				// Shamelessly reference the MainWindowView and its start stop control, sorry MVVM
+				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
 				NotifyPropertyChanged("SelectedIndex");
+				return;
 			}
+
+			// If theres still workspaces open get the now selected one and update the properties
+			if (ActiveWorkspaceViewModel.SelectedBlock != null) {
+				((PropertiesTabViewModel)((MainWindowView)Application.Current.MainWindow).PropertiesView.DataContext).setPropertiesView(
+										((ControlBlockViewModel)ActiveWorkspaceViewModel.SelectedBlock.DataContext).PropertiesView);
+			}
+
+			
 		}
 
 //        WorkspaceViewModel GetCurrentWorkspace()
