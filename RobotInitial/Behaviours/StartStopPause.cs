@@ -7,6 +7,8 @@ using System.Windows.Controls;
 using RobotInitial.View;
 using RobotInitial.ViewModel;
 using System.Windows;
+using LynxTest2.Communications;
+using System.Net;
 
 namespace RobotInitial.Behaviours {
 	class StartStopPause : Behavior<Grid> {
@@ -27,6 +29,17 @@ namespace RobotInitial.Behaviours {
 		}
 
 		private void DoPauseButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
+
+			// Make sure robot is still connected
+
+			// Make sure the program is still running
+
+			// Pause the program
+
+			// Pause the running animation
+
+			// Display the play button as resume
+
 			Console.WriteLine("Nothing Happened!!!");
 		}
 
@@ -38,14 +51,44 @@ namespace RobotInitial.Behaviours {
 			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
 
 			// Get the start block
-			RobotInitial.Model.Block startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
+			RobotInitial.Model.StartBlock startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
 
 			// TEMPORARY, Print the pseudocode
 			Console.WriteLine(startBlock.ToString());
-			
+
+			// Hopefully the robot connection is handled through the toolbar and drop down list
+			// So we need to.... Make sure the robot is still connected, !! maybe tie this to the visibility !!
+
+			// Set the program
+
+			// Start the program
+
+			// Start the program running animation and await status, 
+
+			// The status waiting is completed, stop the running animation and reset the widget
+
+			////============== TEMPORARY HACK FOR TESTING ======================
+			//// Use a real address here! get it from a drop down or something ?
+			//string robotAddIpAddress = "127.0.0.1";
+
+			//// Connect to the Lynx Robot OR run the start command someway
+			//// I would like to just set and start the program here and have a separate area to connect in the toolbar maybe
+			//Network.connectToLynx(new IPEndPoint(IPAddress.Parse(robotAddIpAddress), 7331), startBlock);
+			////============== TEMPORARY HACK FOR TESTING ======================
 		}
 
 		private void DoStopButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
+
+			// Make sure robot is still connected
+
+			// Make sure the program is still running
+
+			// Stop the program
+
+			// Stop the running animation
+
+			// Reset the start stop widget
+
 			Console.WriteLine("Nothing Happened!!!");
 		}
 	}
