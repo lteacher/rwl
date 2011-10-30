@@ -35,6 +35,7 @@ namespace LynxTest2.Communications {
                 throw new RobotInitial.LynxBusyException();
             }
 
+
         }
 
         public static void stopProgram() {
