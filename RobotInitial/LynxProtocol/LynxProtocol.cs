@@ -113,7 +113,7 @@ namespace RobotInitial.LynxProtocol {
 
         private void ClearContinuousMovement() {
             currentContCmdL = null;
-            currentContCmdL = null;
+            currentContCmdR = null;
         }
 
         //private void StopContinuousMovement() {

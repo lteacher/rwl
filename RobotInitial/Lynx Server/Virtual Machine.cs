@@ -101,24 +101,30 @@ namespace RobotInitial.Lynx_Server {
                 Console.Write("Running program \n");
                 ModelExecutor executor = new ModelExecutor(Start, Protocol);
 
-                while (!executor.IsDone()) {
-                    //Check hardware/software shutdowns
-                    if (terminate != Shutdown.None){
-                        state = EndState.TerminatedByClient;
-                        break;
-                    }
+                    while (!executor.IsDone())
+                    {
+                        //Check hardware/software shutdowns
+                        if (terminate != Shutdown.None)
+                        {
+                            state = EndState.TerminatedByClient;
+                            executor.StopExecution();
+                            break;
+                        }
 
-                    while (pauseFlag) {
-                        //Wait
-                    }
+                        while (pauseFlag)
+                        {
+                            //Wait
+                        }
 
-                    //Run through next program instruction
-                    executor.ExecuteOneBlock();
+                        //Run through next program instruction
+                        executor.ExecuteOneBlock();
+                    }
                 }
+
             }
         }
     }
-}
+
 
 
 

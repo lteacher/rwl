@@ -14,6 +14,11 @@ namespace RobotInitial.Model {
         NOTEQUAL = GREATER | LESS
     }
 
+    public enum LogicalOperator {
+        OR,
+        AND
+    }
+
     static class OperatorExt {
         public static bool Evaluate(this Operator _operator, int operandLeft, int operandRight) {
             switch (_operator) {
@@ -38,6 +43,7 @@ namespace RobotInitial.Model {
     class IRSensorConditional : Conditional<bool> {
 
         public Operator EqualityOperator { get; set; }
+        public LogicalOperator LogicalOperator { get; set; }
         public int Distance { get; set; }
         public LynxIRPort IRSensors { get; set; }
 
@@ -53,7 +59,13 @@ namespace RobotInitial.Model {
         public override bool Evaluate(Protocol protocol) {
             IRData data = protocol.RequestIR();
             List<int> actualDistances = data.GetDistances(IRSensors);
-            return actualDistances.Any(x => EqualityOperator.Evaluate(x, Distance));
+
+            if (LogicalOperator == LogicalOperator.AND) {
+                return actualDistances.All(x => EqualityOperator.Evaluate(x, Distance));
+            } else { 
+                //if (LogicalOperator == LogicalOperator.OR) 
+                return actualDistances.Any(x => EqualityOperator.Evaluate(x, Distance));
+            }
         }
 
         public override string ToString() {
