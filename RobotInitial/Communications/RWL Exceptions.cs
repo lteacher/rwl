@@ -13,6 +13,9 @@ namespace RobotInitial {
     class InvalidMessageFormatException : ApplicationException {
     }
 
-    class LynxIsNotAliveException : ApplicationException {
+    class ComPortAlreadyInUseException : ApplicationException {
+    }
+
+    class ComPortHasNotBeenClaimedException : ApplicationException {
     }
 }

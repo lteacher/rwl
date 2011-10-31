@@ -139,7 +139,6 @@ namespace RobotInitial.LynxProtocol {
             }
 
             return this.CreatePassMsg(parameters, side);
-
         }
 
         public LynxMessage CreateBrakeMsg(Side side) {

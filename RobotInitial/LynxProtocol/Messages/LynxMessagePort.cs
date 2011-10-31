@@ -25,20 +25,37 @@ namespace RobotInitial.LynxProtocol {
         private const int DATABITS = 8;                     //default 8
         private const StopBits STOPBITS = StopBits.One;     //default StopBits.One
         private readonly SerialPort port;
-        private const int DELAYAFTERSEND = 45;
+        private const int DELAYAFTERSEND = 50;
 
         private LynxMessagePort() {
             port = new SerialPort(PORTNAME, BAUDRATE, PARITY, DATABITS, STOPBITS);
             port.NewLine = NEWLINE;
-            port.Open();
         }
 
         ~LynxMessagePort() {
+            ReleaseComPort();
+        }
+
+        public void ReleaseComPort() {
             port.Close();
+        }
+
+        public void ClaimComPort() {
+            if (!port.IsOpen) {
+                try {
+                    port.Open();
+                } catch (UnauthorizedAccessException e) {
+                    throw new ComPortAlreadyInUseException();
+                }
+            }
         }
 
         //TODO: implement reliability (use checksum)
         public LynxMessage Send(LynxMessage m, bool isRequest) {
+            if (!port.IsOpen) {
+                throw new ComPortHasNotBeenClaimedException();
+            }
+
             LynxMessage response;
             lock (this) {
                 Console.WriteLine("Sending " + m.ToString() + " TO " + PORTNAME);
