@@ -41,13 +41,20 @@ namespace RobotInitial.LynxProtocol {
         }
 
         public void ClaimComPort() {
-            if (!port.IsOpen) {
-                try {
-                    port.Open();
-                } catch (UnauthorizedAccessException e) {
-                    throw new ComPortAlreadyInUseException();
-                }
+            if (this.HasComPort()) {
+                //if this is thrown then the logic of the server/vm is screwed and we want to know about it
+                throw new ComPortAlreadyClaimedException();
             }
+
+            try {
+                port.Open();
+            } catch (UnauthorizedAccessException e) {
+                throw new ComPortInUseByOtherProcessException();
+            }
+        }
+
+        public bool HasComPort() {
+            return port.IsOpen;
         }
 
         //TODO: implement reliability (use checksum)

@@ -83,7 +83,6 @@ namespace RobotInitial.Lynx_Server {
                     }
 
                 }
-
                 client.Close();
                 return;
             }

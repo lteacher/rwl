@@ -13,9 +13,12 @@ namespace RobotInitial {
     class InvalidMessageFormatException : ApplicationException {
     }
 
-    class ComPortAlreadyInUseException : ApplicationException {
+    class ComPortInUseByOtherProcessException : ApplicationException {
     }
 
     class ComPortHasNotBeenClaimedException : ApplicationException {
+    }
+
+    class ComPortAlreadyClaimedException : ApplicationException {
     }
 }
