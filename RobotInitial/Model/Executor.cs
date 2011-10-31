@@ -55,6 +55,14 @@ namespace RobotInitial.Model {
             }
         }
 
+        public void Pause() {
+            Protocol.Pause();
+        }
+
+        public void Resume() {
+            Protocol.Resume();
+        }
+
         public void StopExecution() {
             execStack.Clear();
             Protocol.OnExecutionFinish();

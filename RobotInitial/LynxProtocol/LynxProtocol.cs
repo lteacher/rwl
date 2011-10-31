@@ -67,6 +67,12 @@ namespace RobotInitial.LynxProtocol {
             return 0;
         }
 
+        public void Pause() {
+        }
+
+        public void Resume() {
+        }
+
         #endregion
 
         #region Helper Methods

@@ -21,7 +21,7 @@ namespace RobotInitial.LynxProtocol {
         private static readonly LynxMessage REQIR = new LynxMessage((byte)LynxCommandSet.BASE, (byte)BaseCommand.REQIR, 0, 0, 0);
 
         private const byte MINCMPERSEC = 10;
-        private const byte MAXCMPERSEC = 126;   //ARBITRARY VALUE, the actual value needs to be found for calculations to be accurate
+        private const byte MAXCMPERSEC = 126; 
         private const float MAXPOWER = 100.0f;
         private const int ENCODERPERREVOLUTION = 1600;   
         private const float WHEELCIRCUMFERENCECM = 37.9f;
