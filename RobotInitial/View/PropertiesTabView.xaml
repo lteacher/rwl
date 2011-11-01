@@ -16,7 +16,7 @@
 
 	<Grid x:Name="LayoutRoot">
 		<TabControl>
-			<TabItem Header="{x:Static p:Resources.tabProperties}">
+			<TabItem Header="{x:Static p:Resources.tabProperties}" FontFamily="Comic Sans MS">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <Grid Background="#FFE5E5E5">
                         <!--<Rectangle Fill="Green" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8" Opacity="0.7"/>-->

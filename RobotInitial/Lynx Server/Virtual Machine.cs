@@ -105,6 +105,9 @@ namespace RobotInitial.Lynx_Server {
                     //Check hardware/software shutdowns
                     if (terminate != Shutdown.None){
                         state = EndState.TerminatedByClient;
+
+						// Send the stop command
+						executor.StopExecution();
                         break;
                     }
 

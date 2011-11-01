@@ -29,11 +29,11 @@ namespace RobotInitial.Model {
         public void Serialise(Stream stream) {
             MemoryStream memoryStream = new MemoryStream();
             serialiser.Serialize(memoryStream, this);
-            Network.send(memoryStream, stream);
+            Network.Instance.send(memoryStream, stream);
         }
 
         public static StartBlock Deserialise(Stream stream) {
-             MemoryStream memoryStream = Network.recieve(stream);
+             MemoryStream memoryStream = Network.Instance.recieve(stream);
              return serialiser.Deserialize(memoryStream) as StartBlock;
         }
 

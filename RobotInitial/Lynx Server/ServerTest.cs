@@ -48,8 +48,8 @@ namespace RobotInitial.Lynx_Server {
             //wait.WaitUntil = new FalseConditional();
             //move.Next = wait;
 
-            Console.Write("Contacting Server \n");
-            Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
+			//Console.Write("Contacting Server \n");
+			//Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
 
             //Keep Console Open
             while (true) {

@@ -12,6 +12,14 @@ using RobotInitial.Properties;
 using RobotInitial.Model;
 using RobotInitial.View;
 using System.Windows;
+using System.Net;
+using System.Xml;
+using System.IO;
+using System.Net.Sockets;
+using LynxTest2.Communications;
+using System.Threading;
+using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace RobotInitial.ViewModel
 {
@@ -36,6 +44,18 @@ namespace RobotInitial.ViewModel
 		//ObservableCollection<WorkspaceViewModel> _workspaces;
 		//ObservableCollection<TaskBlockTabViewModel> _brickTabs;
 
+		private bool connected = false;
+		public bool AddressesEnabled { get; set; }
+		private delegate void NoArgDelegate();
+		private delegate void OneArgDelegate(string arg);
+		public Visibility ConnectButtonVisibility { get; set; }
+		public Visibility DisconnectButtonVisibility { get; set; }
+		public Collection<string> _robotNames = new Collection<string>();
+		public Collection<IPEndPoint> _robotEndpoints = new Collection<IPEndPoint>();
+		public Collection<string> RobotNames {
+			get { return _robotNames; }
+		}
+
 		// The workspace views that can show in the tab control
 		ObservableCollection<WorkspaceView> _workspaces = new ObservableCollection<WorkspaceView>();
         public ObservableCollection<WorkspaceView> Workspaces {
@@ -50,6 +70,12 @@ namespace RobotInitial.ViewModel
 
 		// The selected index of whatever workspace is active, used to get the currently selected index... since i know it will work
 		public int SelectedIndex { get; set; }
+
+		// Selected address
+		public int SelectedAddress { get; set; }
+
+		// Set the current text of the address box
+		public string CurrentAddressText { get; set; }
 
 		// Now the current/active workspace is easy to get, its the item in the collection from the selected index
 		public WorkspaceView GetCurrentWorkspace() {
@@ -75,8 +101,123 @@ namespace RobotInitial.ViewModel
 
 			// Just add a bricktabs probably there wont ever be any more tabs
 			BrickTabs.Add(new TaskBlockTabView());
-        }
 
+			// Initialise the connect and disconnect buttons
+			ConnectButtonVisibility = Visibility.Visible;
+			DisconnectButtonVisibility = Visibility.Hidden;
+
+			////=== TESTING ONLY, START A LOCAL LYNX SERVER!
+			//Thread ServerThread;
+			//Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
+			//ServerThread = new Thread(server.start);
+			//ServerThread.Start();
+			//Console.WriteLine("SERVER IS RUNNING");
+			////====================================================
+
+			// Update the RobotNames address list
+			updateRobotAddressList();
+		}
+			
+		public void updateRobotAddressList() {
+			CurrentAddressText = "Updating Robot List";
+			AddressesEnabled = false;
+			NotifyPropertyChanged("AddressesEnabled");
+			NotifyPropertyChanged("CurrentAddressText");
+			NoArgDelegate addressUpdate = new NoArgDelegate(checkAddressConnections);
+			addressUpdate.BeginInvoke(null, null);
+		}
+
+		private void checkAddressConnections() {
+			string robotsXML = Resources.Robots;
+
+			using (XmlReader reader = XmlReader.Create(new StringReader(robotsXML))) {
+				
+				bool IPAdded = false;
+				while (reader.Read()) {
+					if(reader.NodeType == XmlNodeType.Element) {
+						// If the element name is IPAddress
+						if (reader.Name == "IPAddress") {
+							// Move to the nodes value
+							string value = reader.ReadElementContentAsString();
+
+							// Check the value isnt empty
+							if(value != "") {
+								try {
+									IPHostEntry IpToDomainName = Dns.GetHostEntry(value);
+									IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(value), Network.DefaultPort);
+									if (Network.Instance.robotConnectionAvail(endpoint)) {
+										// Add the EndPoint
+										_robotEndpoints.Add(endpoint);
+
+										// Set the added flag
+										IPAdded = true;
+									}
+								}
+								catch (SocketException exc) {
+									Console.WriteLine("EXCEPTION ({1}): {0}", exc, value);
+								}
+							}
+						}
+
+						// If the element name is HostName
+						if (reader.Name == "HostName") {
+							// Skip the HostName if the IP is already added
+							if(IPAdded) continue;
+
+							// Move to the nodes value
+							string value = reader.ReadElementContentAsString();
+
+							// Check the value isnt empty
+							if (value != "") {
+								try {
+									// NOTE: Here im using the first address, there could be more than one!!
+									IPHostEntry IpToDomainName = Dns.GetHostEntry(value);
+									IPEndPoint endpoint = new IPEndPoint(IpToDomainName.AddressList[0], Network.DefaultPort);
+									if (Network.Instance.robotConnectionAvail(endpoint)) {
+										// Add the EndPoint
+										_robotEndpoints.Add(endpoint);
+
+										// Set the added flag
+										IPAdded = true;
+									}
+								}
+								catch (SocketException exc) {
+									Console.WriteLine("EXCEPTION ({1}): {0}", exc, value);
+								}
+							}
+						}
+
+						// If the element name is DisplayName
+						if (reader.Name == "DisplayName") {
+							// If the IP is added
+							if(IPAdded) {
+								// Move to the nodes value
+								string value = reader.ReadElementContentAsString();
+
+								// Add the displayName
+								RobotNames.Add(value);
+
+								// Set the flag back to false
+								IPAdded = false;
+							}
+						}
+					}
+				}
+			}
+
+			// Update the properties back on the main UI thread
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+				 new NoArgDelegate(robotNamesUpdated));
+		}
+
+		// Update a bunch of properties
+		private void robotNamesUpdated() {
+			AddressesEnabled = true;
+			CurrentAddressText = RobotNames.Count>0 ? RobotNames[0]: "No Default Robots Available (Enter an IPAddress)";
+			NotifyPropertyChanged("AddressesEnabled");
+			NotifyPropertyChanged("RobotNames");
+			NotifyPropertyChanged("CurrentAddressText");
+		}
 
 		//#region Command Definitions
 

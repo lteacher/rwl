@@ -20,22 +20,22 @@
 	
     <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto">
     	<StackPanel Height="Auto" Width="Auto">
-            <c:TaskBlockItem Margin="0 40 0 0" Action="Move" Style="{StaticResource MoveStyle}">
+            <c:TaskBlockItem Margin="0,30,0,0" Action="Move" Style="{StaticResource MoveStyle}">
                 <e:Interaction.Behaviors>
                     <b:DragWithAdornment></b:DragWithAdornment>
                 </e:Interaction.Behaviors>
             </c:TaskBlockItem>
-            <c:TaskBlockItem Margin="0 40 0 0" Action="Loop" Style="{StaticResource LoopStyle}">
+            <c:TaskBlockItem Margin="0,30,0,0" Action="Loop" Style="{StaticResource LoopStyle}">
                 <e:Interaction.Behaviors>
                     <b:DragWithAdornment></b:DragWithAdornment>
                 </e:Interaction.Behaviors>                
             </c:TaskBlockItem>
-            <c:TaskBlockItem Margin="0 40 0 0" Action="Switch" Style="{StaticResource SwitchStyle}">
+            <c:TaskBlockItem Margin="0,30,0,0" Action="Switch" Style="{StaticResource SwitchStyle}">
                 <e:Interaction.Behaviors>
                     <b:DragWithAdornment></b:DragWithAdornment>
                 </e:Interaction.Behaviors>
             </c:TaskBlockItem>
-            <c:TaskBlockItem Margin="0 40 0 0" Action="Wait" Style="{StaticResource WaitStyle}">
+            <c:TaskBlockItem Margin="0,30,0,0" Action="Wait" Style="{StaticResource WaitStyle}">
                 <e:Interaction.Behaviors>
                     <b:DragWithAdornment></b:DragWithAdornment>
                 </e:Interaction.Behaviors>

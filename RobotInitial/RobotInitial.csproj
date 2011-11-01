@@ -311,7 +311,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Content\Images\Floppy.png" />
     <Resource Include="Content\Images\image0.png" />
+    <Resource Include="Content\Images\Opened.png" />
+    <Resource Include="Content\Images\Close.png" />
+    <Resource Include="Content\Images\connect.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -321,6 +325,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fonts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Robots.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\.NETFramework\v4.0\Microsoft.Expression.Blend.WPF.targets" />
