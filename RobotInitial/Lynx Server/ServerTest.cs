@@ -31,7 +31,7 @@ namespace RobotInitial.Lynx_Server {
 
             StartBlock start = fact.CreateStartBlock();
             //LoopBlock loop = fact.CreateLoopBlock();
-            MoveBlock move = fact.CreateMoveBlock();
+            //MoveBlock move = fact.CreateMoveBlock();
             //move.DurationUnit = MoveDurationUnit.ENCODERCOUNT;
             //move.Duration = 5000;
             //move.DurationUnit = MoveDurationUnit.DEGREES;
@@ -42,7 +42,7 @@ namespace RobotInitial.Lynx_Server {
             //move.LeftDirection = MoveDirection.STOP;
             //move.RightDirection = MoveDirection.STOP;
             //loop.LoopPath = move;
-            start.Next = move;
+            //start.Next = move;
 
             //WaitBlock wait = fact.CreateWaitBlock();
             //wait.WaitUntil = new FalseConditional();

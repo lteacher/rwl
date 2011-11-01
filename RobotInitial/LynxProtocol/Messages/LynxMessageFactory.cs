@@ -20,15 +20,16 @@ namespace RobotInitial.LynxProtocol {
         private static readonly LynxMessage REQIMU = new LynxMessage((byte)LynxCommandSet.BASE, (byte)BaseCommand.REQIMU, 0, 0, 0);
         private static readonly LynxMessage REQIR = new LynxMessage((byte)LynxCommandSet.BASE, (byte)BaseCommand.REQIR, 0, 0, 0);
 
-        private const byte MINCMPERSEC = 3;     //lynx does not respond to anything lower
-        private const byte MAXCMPERSEC = 255;   //ARBITRARY VALUE, the actual value needs to be found for calculations to be accurate
+        private const byte MINCMPERSEC = 10;
+        private const byte MAXCMPERSEC = 126; 
         private const float MAXPOWER = 100.0f;
         private const int ENCODERPERREVOLUTION = 1600;   
-        private const float WHEELCIRCUMFERENCEMM = 379;
-        private const float ENCODERPERCM = ENCODERPERREVOLUTION / (WHEELCIRCUMFERENCEMM / 10);  
+        private const float WHEELCIRCUMFERENCECM = 37.9f;
+        private const float ENCODERPERCM = ENCODERPERREVOLUTION / WHEELCIRCUMFERENCECM;  
         private const ushort CONTINUOUS = 0xFFFF;
         private const ushort NOTCONTINUOUS = 0xFFFE;
         private const int RAWBRAKEVAL = 127;
+        private const int MINSCALE = 12;
 
         #endregion
 
@@ -36,12 +37,13 @@ namespace RobotInitial.LynxProtocol {
 
         private byte CalcRawValue(int power, MoveDurationUnit durationUnit, MoveDirection direction) {
             int scaledPower = (byte)(RAWBRAKEVAL * (power / MAXPOWER));
+            scaledPower = Math.Max(scaledPower, MINSCALE);
             if (direction == MoveDirection.FORWARD) {
-                scaledPower += RAWBRAKEVAL;
+                scaledPower = RAWBRAKEVAL + scaledPower;
             } else if (direction == MoveDirection.BACK) {
-                scaledPower -= RAWBRAKEVAL;
+                scaledPower = RAWBRAKEVAL - scaledPower;
             }
-            return RAWBRAKEVAL;
+            return (byte)scaledPower;
         }
 
         private LynxMessage CreateContinuousMsg(MoveParameters parameters, Side side) {
@@ -57,6 +59,7 @@ namespace RobotInitial.LynxProtocol {
                 value = CalcRawValue(parameters.RightPower, parameters.DurationUnit, parameters.RightDirection);
             }
 
+            //Console.WriteLine(set, 
             return new LynxMessage(set, cmd, value, 0, 0);
         }
 
@@ -69,8 +72,7 @@ namespace RobotInitial.LynxProtocol {
         }
 
         private byte CalcCmPerSec(int power) {
-            byte speed = (byte)((power / MAXPOWER) * MAXCMPERSEC);
-            return Math.Max(speed, MINCMPERSEC);
+            return (byte)((power / MAXPOWER) * (MAXCMPERSEC - MINCMPERSEC) + MINCMPERSEC);
         }
 
 
@@ -137,7 +139,6 @@ namespace RobotInitial.LynxProtocol {
             }
 
             return this.CreatePassMsg(parameters, side);
-
         }
 
         public LynxMessage CreateBrakeMsg(Side side) {

@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using RobotInitial.Model;
 using System.Collections.Generic;
 using System.Threading;
+using RobotInitial.LynxProtocol;
 
 namespace RobotInitial.Lynx_Server {
 
@@ -33,14 +34,14 @@ namespace RobotInitial.Lynx_Server {
         #endregion
 
         //Volatile varibles must be read from memory and updated in a single command/cycle
-        volatile Boolean runningProgram = false;        
+        volatile Boolean runningProgram = false;
         volatile Shutdown terminate;
 
         int runningProgramID;
         private StartBlock Start;
-        private Protocol Protocol;     
+        private Protocol Protocol;
         public EndState state;
-        private Boolean pauseFlag = false;
+        private volatile Boolean pauseFlag = false;
 
         object initialiseLock = new Object();
         object runningLock = new Object();
@@ -59,7 +60,7 @@ namespace RobotInitial.Lynx_Server {
                 }
             }
 
-            return true;     
+            return true;
         }
 
         public void pause() {
@@ -74,50 +75,61 @@ namespace RobotInitial.Lynx_Server {
             lock (runningLock) {
                 this.Start = start;
                 this.Protocol = protocol;
-            }            
+            }
         }
 
         //Hardware & Software reset of program
         public void TerminateProgram(Shutdown terminate) {
             //Calling thread must currently have ownership of the VM
-            if(Thread.CurrentThread.ManagedThreadId == runningProgramID){
+            if (Thread.CurrentThread.ManagedThreadId == runningProgramID) {
                 this.terminate = terminate;
-            }else{
+            } else {
                 throw new VirtualMachineOwnershipException();
             }
         }
 
         public void Reset() {
             //Calling thread must currently have ownership of the VM
-            if(Thread.CurrentThread.ManagedThreadId == runningProgramID){
+            if (Thread.CurrentThread.ManagedThreadId == runningProgramID) {
                 runningProgram = false;
-            }else{
+            } else {
                 throw new VirtualMachineOwnershipException();
-            } 
+            }
         }
 
         public void RunProgram() {
-            lock (runningLock) {
-                Console.Write("Running program \n");
-                ModelExecutor executor = new ModelExecutor(Start, Protocol);
+            try {
+                LynxMessagePort.Instance.ClaimComPort();
+            } catch (ComPortInUseByOtherProcessException e) {
+                Console.WriteLine("COM1 is in use by another process, the program will not be exectued");
+            }
 
-                while (!executor.IsDone()) {
-                    //Check hardware/software shutdowns
-                    if (terminate != Shutdown.None){
-                        state = EndState.TerminatedByClient;
+            if (LynxMessagePort.Instance.HasComPort()) {
+                lock (runningLock) {
+                    Console.Write("Running program \n");
+                    ModelExecutor executor = new ModelExecutor(Start, Protocol);
 
+                    while (!executor.IsDone()) {
+                        //Check hardware/software shutdowns
+                        if (terminate != Shutdown.None) {
+                            state = EndState.TerminatedByClient;
+                            executor.StopExecution();
 						// Send the stop command
 						executor.StopExecution();
-                        break;
-                    }
+                            break;
+                        }
 
-                    while (pauseFlag) {
-                        //Wait
-                    }
+                        if (pauseFlag) {
+                            executor.Pause();
+                            while (pauseFlag) { }   //busy wait
+                            executor.Resume();
+                        }
 
-                    //Run through next program instruction
-                    executor.ExecuteOneBlock();
+                        //Run through next program instruction
+                        executor.ExecuteOneBlock();
+                    }
                 }
+                LynxMessagePort.Instance.ReleaseComPort();
             }
         }
     }
@@ -131,61 +143,62 @@ namespace RobotInitial.Lynx_Server {
 
 
 
-    //    public static Boolean runningProgram = false;
-    //    private static Boolean stopProgram = false;
-    //    private static Object thisLock = new Object();
 
-    //    private TcpClient client;
+//    public static Boolean runningProgram = false;
+//    private static Boolean stopProgram = false;
+//    private static Object thisLock = new Object();
 
-    //    public static void Initialise(object input){
+//    private TcpClient client;
 
-    //        //Only one thread may attempt to initalise the VM at a time
-    //        lock (thisLock) {
+//    public static void Initialise(object input){
 
-    //            //If the VM is currently running a program, stop.
-    //            if (runningProgram) {
-    //                return;
-    //            } else {
-    //                runningProgram = true;
-    //            }
+//        //Only one thread may attempt to initalise the VM at a time
+//        lock (thisLock) {
 
-    //            //Cast our input object to the TcpClient and start the VM.
-    //            RWL_Virtual_Machine VM = new RWL_Virtual_Machine((TcpClient)input);
-    //            VM.Start();
+//            //If the VM is currently running a program, stop.
+//            if (runningProgram) {
+//                return;
+//            } else {
+//                runningProgram = true;
+//            }
 
-    //        }
-    //    }
+//            //Cast our input object to the TcpClient and start the VM.
+//            RWL_Virtual_Machine VM = new RWL_Virtual_Machine((TcpClient)input);
+//            VM.Start();
 
-    //    public static void forceStop(){
-    //        stopProgram = true;
-    //    }
+//        }
+//    }
 
-    //    private RWL_Virtual_Machine(TcpClient client) {
-    //        this.client = client;
-    //    }
+//    public static void forceStop(){
+//        stopProgram = true;
+//    }
 
-    //    private void Start() {
-    //        while (!stopProgram) {
+//    private RWL_Virtual_Machine(TcpClient client) {
+//        this.client = client;
+//    }
 
-    //        }
-    //    }
-    //}
+//    private void Start() {
+//        while (!stopProgram) {
 
-    //Grab the start block from the workspace
-                //LinkedList<Block> ProgramList = new LinkedList<Block>();
-                //LynxProtocol protocol = new LynxProtocol();
-                //Block currentBlock;
+//        }
+//    }
+//}
 
-                //program._startBlock.perform(protocol, ref ProgramList);
+//Grab the start block from the workspace
+//LinkedList<Block> ProgramList = new LinkedList<Block>();
+//LynxProtocol protocol = new LynxProtocol();
+//Block currentBlock;
 
-                //while (ProgramList.Count > 0) {
-                //    if (terminate) {
-                //        state = EndState.TerminatedByClient;
-                //        return;
-                //    }
+//program._startBlock.perform(protocol, ref ProgramList);
 
-                //    //Pop the first item on the stack/list and run it
-                //    currentBlock = ProgramList.First.Value;
-                //    ProgramList.RemoveFirst();
-                //    currentBlock.perform(protocol, ref ProgramList);
-                //}
+//while (ProgramList.Count > 0) {
+//    if (terminate) {
+//        state = EndState.TerminatedByClient;
+//        return;
+//    }
+
+//    //Pop the first item on the stack/list and run it
+//    currentBlock = ProgramList.First.Value;
+//    ProgramList.RemoveFirst();
+//    currentBlock.perform(protocol, ref ProgramList);
+//}

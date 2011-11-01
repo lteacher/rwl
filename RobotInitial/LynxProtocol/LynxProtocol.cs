@@ -16,6 +16,13 @@ namespace RobotInitial.LynxProtocol {
 
         #endregion
 
+        #region Constructor
+
+        public LynxProtocol() {
+        }
+
+        #endregion
+
         #region Implemented Protocol Methods
 
         public void Move(MoveParameters parameters) {
@@ -62,9 +69,15 @@ namespace RobotInitial.LynxProtocol {
             SendMovement(factory.CreateBrakeMsg(Side.LEFT), factory.CreateBrakeMsg(Side.RIGHT));
         }
 
-        //the lynx status doesn't contain any useful info for the program
         public int RequestStatus() {
+            //the lynx status doesn't contain any useful info for the program
             return 0;
+        }
+
+        public void Pause() {
+        }
+
+        public void Resume() {
         }
 
         #endregion
@@ -113,19 +126,8 @@ namespace RobotInitial.LynxProtocol {
 
         private void ClearContinuousMovement() {
             currentContCmdL = null;
-            currentContCmdL = null;
+            currentContCmdR = null;
         }
-
-        //private void StopContinuousMovement() {
-        //    if (currentContCmdL != null) {
-        //        LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.LEFT), false);
-        //        currentContCmdL = null;
-        //    }
-        //    if (currentContCmdR != null) {
-        //        LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.RIGHT), false);
-        //        currentContCmdR = null;
-        //    }
-        //}
 
         #endregion
 

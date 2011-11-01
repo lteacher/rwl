@@ -59,6 +59,7 @@ namespace RobotInitial.Lynx_Server {
                         } else if (message == 83) {
                             //Stop == 83
                             VM.TerminateProgram(Shutdown.Software);
+                            //programThread.Abort();
                         }
                         
                     } else if (!programThread.IsAlive) {
@@ -82,7 +83,6 @@ namespace RobotInitial.Lynx_Server {
                     }
 
                 }
-
                 client.Close();
                 return;
             }
