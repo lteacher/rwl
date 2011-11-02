@@ -313,9 +313,11 @@
   <ItemGroup>
     <Resource Include="Content\Images\Floppy.png" />
     <Resource Include="Content\Images\image0.png" />
+    <Resource Include="Content\Images\Network_Connections.png" />
     <Resource Include="Content\Images\Opened.png" />
     <Resource Include="Content\Images\Close.png" />
     <Resource Include="Content\Images\connect.png" />
+    <Resource Include="Content\Images\RefreshIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">

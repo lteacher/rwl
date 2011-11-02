@@ -53,15 +53,24 @@ namespace RobotInitial.Behaviours {
 			// Get the start block
 			RobotInitial.Model.StartBlock startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
 
+			
+
+			// Make sure the connection is still active
+			if(mainWindowViewModel.Connected == false) {
+				Console.WriteLine("NOT CONNECTED");
+				return;
+			}
+
 			// TEMPORARY, Print the pseudocode
 			Console.WriteLine(startBlock.ToString());
 
-			// Hopefully the robot connection is handled through the toolbar and drop down list
-			// So we need to.... Make sure the robot is still connected, !! maybe tie this to the visibility !!
-
-			// Set the program
-
 			// Start the program
+			try {
+				Network.Instance.startProgram(startBlock);
+			} catch(LynxBusyException exc) {
+				Console.WriteLine("LYNX IS BUSY!");
+				return;
+			}
 
 			// Start the program running animation and await status, 
 
@@ -78,12 +87,22 @@ namespace RobotInitial.Behaviours {
 		}
 
 		private void DoStopButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
+			// Get the Main Window view
+			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
+
+			// Get its view model
+			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
 
 			// Make sure robot is still connected
+			if(mainWindowViewModel.Connected != true) {
+				// recover UI, this should not be happening here
+				return;
+			}
 
 			// Make sure the program is still running
 
 			// Stop the program
+			Network.Instance.stopProgram();
 
 			// Stop the running animation
 

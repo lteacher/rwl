@@ -34,23 +34,27 @@ namespace LynxTest2.Communications {
 
 		// Send the program, called on button start press
 		public void startProgram(StartBlock program) {
-			//Read response from server. 1 = ready, 0 = busy.
+			// Send a Execution request
+			connection.WriteByte(Request_Handler.EXECUTE_REQUEST);
+
+			// Get the response
 			int response = connection.ReadByte();
+
 			Console.Write("Response recieved: " + response + "\n");
 
-			if (response == 1) {
+			if (response == Request_Handler.OK_RESPONSE) {
 				program.Serialise(connection);
 				Console.Write("Program sent \n");
 			}
-			else {
+			if (response == Request_Handler.BUSY_RESPONSE) {
 				throw new RobotInitial.LynxBusyException();
 			}
 		}
 
-		// check if a connection is available to a robot
-		public bool robotConnectionAvail(IPEndPoint robot) {
-			// Connect to the Lynx
-			connectToLynx(robot);
+		// Check if a connection is available to a robot
+		public bool robotConnectionAvail() {
+			// Send a ping request
+			connection.WriteByte(Request_Handler.PING_REQUEST);
 
 			//Read response from server. 1 = ready, 0 = busy.
 			int response = connection.ReadByte();
@@ -58,11 +62,17 @@ namespace LynxTest2.Communications {
 			// Close the connection
 			closeConnection();
 
-			return response == 1 ? true : false;
+			return response == Request_Handler.OK_RESPONSE ? true : false;
 		}
 
 		// Close the connection to the Lynx
 		public void closeConnection() {
+			// Send a ping request
+			connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
+
+			//Read response from server. 1 = ready, 0 = busy.
+			int response = connection.ReadByte();
+
 			client.Close();
 			connection.Close();
 		}
@@ -74,7 +84,7 @@ namespace LynxTest2.Communications {
 
         public void stopProgram() {
             if (connection != null) {
-                connection.WriteByte(83);
+                connection.WriteByte(Request_Handler.STOP_REQUEST);
             }
         }
 
