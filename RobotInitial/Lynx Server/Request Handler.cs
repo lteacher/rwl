@@ -20,6 +20,7 @@ namespace RobotInitial.Lynx_Server {
 		public const int PING_REQUEST = 98;
 		public const int EXECUTE_REQUEST = 99;
 		public const int DISCONNECT_REQUEST = 97;
+        public const int PROGRAM_STATUS_REQUEST = 96;
 
         private TcpClient client;
 		private Virtual_Machine VM = Virtual_Machine.Instance;
@@ -63,6 +64,9 @@ namespace RobotInitial.Lynx_Server {
 						case DISCONNECT_REQUEST:	// Disconnect, stop looping!
 							closeConnection();
 							break;
+                        case PROGRAM_STATUS_REQUEST:	// Status request
+							sendProgramStatus();
+							break;
 					}
 				}
 
@@ -95,8 +99,6 @@ namespace RobotInitial.Lynx_Server {
 		}
 
 		public void closeConnection() {
-			// Write close response
-			clientStream.WriteByte(OK_RESPONSE);
 			client.Close();
 			clientStream.Close();
 			keepLooping = false;
@@ -106,6 +108,7 @@ namespace RobotInitial.Lynx_Server {
 
 		// Send back the current status
 		private void sendPingResult() {
+			Console.WriteLine("Ping Request Accepted, Sending Response");
 			if (VM.isInitial()) {
 				clientStream.WriteByte(OK_RESPONSE);
 			}
@@ -125,14 +128,14 @@ namespace RobotInitial.Lynx_Server {
 			}
 			// Write an accepted message back
 			clientStream.WriteByte(OK_RESPONSE);
-			Console.Write("Connection accepted \n");
+			Console.Write("Execution Request Accepted \n");
 
 			// Initialise the VM
 			VM.Initialise();
 
 			//Deserialise the workspace object from the client stream
 			StartBlock program = StartBlock.Deserialise(clientStream);
-			Console.Write("Program recieved \n");
+			Console.Write("Program Recieved \n");
 			Protocol lynxProtocol = new RobotInitial.LynxProtocol.LynxProtocol();
 
 			//Load the program onto the virtual machine and start it on a new thread
@@ -177,15 +180,7 @@ namespace RobotInitial.Lynx_Server {
 
 		// Send the status of the program back to the caller
 		private void sendProgramStatus() {
-			if (programThread != null) {
-				if (programThread.IsAlive) {
-					clientStream.WriteByte(PROGRAM_EXECUTING_RESPONSE);
-					return;
-				}
-			}
-			if(!VM.isInitial()) {
-
-			}
+            clientStream.WriteByte((byte)programStatus);
 			Console.Write("Sent Status \n");
 		}
 

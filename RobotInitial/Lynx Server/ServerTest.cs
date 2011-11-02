@@ -27,9 +27,9 @@ namespace RobotInitial.Lynx_Server {
             //loop.LoopPath = truepath;
             //start.Next = loop;
 
-            DefaultModelFactory fact = DefaultModelFactory.Instance;
+            //DefaultModelFactory fact = DefaultModelFactory.Instance;
 
-            StartBlock start = fact.CreateStartBlock();
+            //StartBlock start = fact.CreateStartBlock();
             //LoopBlock loop = fact.CreateLoopBlock();
             //MoveBlock move = fact.CreateMoveBlock();
             //move.DurationUnit = MoveDurationUnit.ENCODERCOUNT;
@@ -52,8 +52,8 @@ namespace RobotInitial.Lynx_Server {
 			//Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
 
             //Keep Console Open
-            while (true) {
-            }
+            //while (true) {
+            //}
         }
     }
 }

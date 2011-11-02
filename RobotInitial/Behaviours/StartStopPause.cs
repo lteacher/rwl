@@ -9,6 +9,7 @@ using RobotInitial.ViewModel;
 using System.Windows;
 using LynxTest2.Communications;
 using System.Net;
+using RobotInitial.Lynx_Server;
 
 namespace RobotInitial.Behaviours {
 	class StartStopPause : Behavior<Grid> {
@@ -60,6 +61,14 @@ namespace RobotInitial.Behaviours {
 				Console.WriteLine("NOT CONNECTED");
 				return;
 			}
+
+            // Check the status is not running
+            int response = Network.Instance.requestProgramStatus();
+            if (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE)
+            {
+                Console.WriteLine("PROGRAM IS RUNNING!!");
+                return;
+            }
 
 			// TEMPORARY, Print the pseudocode
 			Console.WriteLine(startBlock.ToString());

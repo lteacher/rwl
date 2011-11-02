@@ -38,6 +38,7 @@ namespace RobotInitial.LynxProtocol {
 
         public void ReleaseComPort() {
             port.Close();
+            Console.WriteLine("Closed COM port");
         }
 
         public void ClaimComPort() {
@@ -47,6 +48,7 @@ namespace RobotInitial.LynxProtocol {
             }
 
             try {
+                Console.WriteLine("Openning COM port");
                 port.Open();
             } catch (UnauthorizedAccessException e) {
                 throw new ComPortInUseByOtherProcessException();

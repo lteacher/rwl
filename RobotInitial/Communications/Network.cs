@@ -69,10 +69,6 @@ namespace LynxTest2.Communications {
 		public void closeConnection() {
 			// Send a ping request
 			connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
-
-			//Read response from server. 1 = ready, 0 = busy.
-			int response = connection.ReadByte();
-
 			client.Close();
 			connection.Close();
 		}
@@ -81,6 +77,15 @@ namespace LynxTest2.Communications {
 		public bool isConnected() {
 			return client.Connected;
 		}
+
+        public int requestProgramStatus()
+        {
+            // Send a status request
+            connection.WriteByte(Request_Handler.PROGRAM_STATUS_REQUEST);
+
+            //Read response from server. 1 = ready, 0 = busy.
+            return connection.ReadByte();
+        }
 
         public void stopProgram() {
             if (connection != null) {

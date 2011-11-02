@@ -68,8 +68,6 @@
     <Compile Include="Behaviours\DropToWorkspace.cs" />
     <Compile Include="Behaviours\ExpandingDrop.cs" />
     <Compile Include="Behaviours\OpenPropertiesView.cs" />
-    <Compile Include="Behaviours\ScrollViewerCentering.cs" />
-    <Compile Include="Behaviours\StartStopPause.cs" />
     <Compile Include="Command\CommandBehavior.cs" />
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
@@ -78,7 +76,7 @@
     <Compile Include="Components.cs" />
     <Compile Include="Controls\TaskBlockItem.cs" />
     <Compile Include="Command\ExecutionStrategy.cs" />
-    <Compile Include="Lynx Server\Server Enums.cs" />
+    <Compile Include="Lynx Server\EndState.cs" />
     <Compile Include="Lynx Server\Lynx Server.cs" />
     <Compile Include="LynxProtocol\Enums\LynxCommandSet.cs" />
     <Compile Include="LynxProtocol\Enums\LynxIRPort.cs" />
@@ -95,16 +93,20 @@
     <Compile Include="LynxProtocol\LynxProtocol.cs" />
     <Compile Include="LynxProtocol\Enums\PassWriteControl.cs" />
     <Compile Include="LynxProtocol\Enums\Side.cs" />
+<<<<<<< HEAD
     <Compile Include="Validation\NumericOnlyRule.cs" />
+=======
     <Compile Include="Model\Conditionals\Operators\And.cs" />
     <Compile Include="Model\Conditionals\Operators\Or.cs" />
+>>>>>>> origin/model_viewmodel_linkage
     <Compile Include="Vector3.cs" />
     <Compile Include="Lynx Server\Request Handler.cs" />
     <Compile Include="Lynx Server\ServerTest.cs" />
     <Compile Include="Lynx Server\Virtual Machine.cs" />
+    <Compile Include="Lynx Server\VirtualMachineOwnershipException.cs" />
     <Compile Include="MainWindow_methods.cs" />
-    <Compile Include="Model\Factory\ModelFactory.cs" />
-    <Compile Include="Model\Factory\DefaultModelFactory.cs" />
+    <Compile Include="Model\Factory\BlockFactory.cs" />
+    <Compile Include="Model\Factory\DefaultBlockFactory.cs" />
     <Compile Include="Model\Blocks\AbstractBlock.cs" />
     <Compile Include="Model\Conditionals\RBGConditional.cs" />
     <Compile Include="Model\Conditionals\RNGConditional.cs" />
@@ -143,7 +145,6 @@
     <Compile Include="ViewModel\MovePropertiesViewModel.cs" />
     <Compile Include="ViewModel\PropertiesTabViewModel.cs" />
     <Compile Include="ViewModel\SequenceViewModel.cs" />
-    <Compile Include="ViewModel\StartStopControlViewModel.cs" />
     <Compile Include="ViewModel\SwitchControlBlockViewModel.cs" />
     <Compile Include="ViewModel\SwitchPropertiesViewModel.cs" />
     <Compile Include="ViewModel\SwitchTabBlockViewModel.cs" />
@@ -184,9 +185,6 @@
     </Compile>
     <Compile Include="View\SequenceView.xaml.cs">
       <DependentUpon>SequenceView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\StartStopControlView.xaml.cs">
-      <DependentUpon>StartStopControlView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\SwitchControlBlockView.xaml.cs">
       <DependentUpon>SwitchControlBlockView.xaml</DependentUpon>
@@ -257,10 +255,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\StartStopControlView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="View\SwitchControlBlockView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -311,13 +305,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Content\Images\Floppy.png" />
     <Resource Include="Content\Images\image0.png" />
-    <Resource Include="Content\Images\Network_Connections.png" />
-    <Resource Include="Content\Images\Opened.png" />
-    <Resource Include="Content\Images\Close.png" />
-    <Resource Include="Content\Images\connect.png" />
-    <Resource Include="Content\Images\RefreshIcon.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -328,11 +316,8 @@
   <ItemGroup>
     <Folder Include="Fonts\" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Robots.xml" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath32)\Microsoft.CSharp.targets" />
-  <!--<Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\.NETFramework\v4.0\Microsoft.Expression.Blend.WPF.targets" /> -->
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\.NETFramework\v4.0\Microsoft.Expression.Blend.WPF.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">

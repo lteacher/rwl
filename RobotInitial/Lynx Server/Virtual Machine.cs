@@ -82,10 +82,8 @@ namespace RobotInitial.Lynx_Server {
 			return true;
 		}
 
-		public Boolean isInitial() {
-			lock (runningLock) {
-				return runningProgram ? false : true;
-			}
+		public bool isInitial() {
+			return runningProgram ? false : true;
 		}
 
         public void pause() {
@@ -109,7 +107,6 @@ namespace RobotInitial.Lynx_Server {
             if (Thread.CurrentThread.ManagedThreadId == runningProgramID) {
                 this.terminate = terminate;
 				state = EndState.TerminatedByClient;
-				if (executor != null) executor.StopExecution();
             } else {
                 throw new VirtualMachineOwnershipException();
             }
@@ -126,29 +123,37 @@ namespace RobotInitial.Lynx_Server {
             }
         }
 
-        public void RunProgram() {
-            try {
-                LynxMessagePort.Instance.ClaimComPort();
-            } catch (ComPortInUseByOtherProcessException e) {
-                Console.WriteLine("COM1 is in use by another process, the program will not be exectued");
-            }
+        public void RunProgram()
+        {
+            lock (runningLock)
+            {
+                try
+                {
+                    LynxMessagePort.Instance.ClaimComPort();
+                }
+                catch (ComPortInUseByOtherProcessException e)
+                {
+                    Console.WriteLine("COM1 is in use by another process, the program will not be exectued");
+                }
 
-            if (LynxMessagePort.Instance.HasComPort()) {
-                lock (runningLock) {
+                if (LynxMessagePort.Instance.HasComPort())
+                {
+
                     Console.Write("Running program \n");
                     executor = new ModelExecutor(Start, Protocol);
 
-                    while (!executor.IsDone()) {
+                    while (!executor.IsDone())
+                    {
                         //Check hardware/software shutdowns
-						//if (terminate != Shutdown.None) {
-						//    state = EndState.TerminatedByClient;
-						//    //executor.StopExecution();
-						//    // Send the stop command
-						//    executor.StopExecution();
-						//    break;
-						//}
+                        if (terminate != Shutdown.None)
+                        {
+                            executor.StopExecution();
+                            state = EndState.TerminatedByClient;
+                            break;
+                        }
 
-                        if (pauseFlag) {
+                        if (pauseFlag)
+                        {
                             executor.Pause();
                             while (pauseFlag) { }   //busy wait
                             executor.Resume();
@@ -157,9 +162,11 @@ namespace RobotInitial.Lynx_Server {
                         //Run through next program instruction
                         executor.ExecuteOneBlock();
                     }
+
+                    if (state == EndState.None) state = EndState.Completed;
+                    LynxMessagePort.Instance.ReleaseComPort();
+  
                 }
-				state = EndState.Completed;
-                LynxMessagePort.Instance.ReleaseComPort();
             }
         }
     }
