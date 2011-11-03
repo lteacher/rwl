@@ -12,9 +12,24 @@ using RobotInitial.Properties;
 using RobotInitial.Model;
 using RobotInitial.View;
 using System.Windows;
+using System.Net;
+using System.Xml;
+using System.IO;
+using System.Net.Sockets;
+using LynxTest2.Communications;
+using System.Threading;
+using System.Windows.Threading;
+using System.Windows.Controls;
 
 namespace RobotInitial.ViewModel
 {
+	enum ConnectionVisible {
+		CONNECT, // Show the connect button
+		DISCONNECT, // Show the Disconnect button
+		CONNECT_ADDRESS, // Show the connect button and allow address edit
+		DISCONNECT_ADDRESS // Show the Disconnect button and disallow address edit
+	};
+
 	class MainWindowViewModel : ClosableViewModel, INotifyPropertyChanged 
     {
 
@@ -27,6 +42,9 @@ namespace RobotInitial.ViewModel
         RelayCommand _saveWorkspaceCommand;
         RelayCommand _saveAsWorkspaceCommand;
         RelayCommand _closeWorkspaceCommand;
+		RelayCommand _refreshRobotsCommand;
+        RelayCommand _disconnectCommand;
+		RelayCommand _connectCommand;
 
         RelayCommand _undoCommand;
         RelayCommand _redoCommand;
@@ -35,6 +53,19 @@ namespace RobotInitial.ViewModel
      
 		//ObservableCollection<WorkspaceViewModel> _workspaces;
 		//ObservableCollection<TaskBlockTabViewModel> _brickTabs;
+
+		public bool Connected = false;
+		public bool AddressesEnabled { get; set; }
+		private delegate void NoArgDelegate();
+		private delegate void OneArgDelegate(string arg);
+		public Visibility ConnectButtonVisibility { get; set; }
+		public Visibility DisconnectButtonVisibility { get; set; }
+		public Visibility RefreshButtonVisibility { get; set; }
+		public Collection<string> _robotNames = new Collection<string>();
+		public Collection<IPEndPoint> _robotEndpoints = new Collection<IPEndPoint>();
+		public Collection<string> RobotNames {
+			get { return _robotNames; }
+		}
 
 		// The workspace views that can show in the tab control
 		ObservableCollection<WorkspaceView> _workspaces = new ObservableCollection<WorkspaceView>();
@@ -50,6 +81,12 @@ namespace RobotInitial.ViewModel
 
 		// The selected index of whatever workspace is active, used to get the currently selected index... since i know it will work
 		public int SelectedIndex { get; set; }
+
+		// Selected address
+		public int SelectedAddress { get; set; }
+
+		// Set the current text of the address box
+		public string CurrentAddressText { get; set; }
 
 		// Now the current/active workspace is easy to get, its the item in the collection from the selected index
 		public WorkspaceView GetCurrentWorkspace() {
@@ -75,8 +112,126 @@ namespace RobotInitial.ViewModel
 
 			// Just add a bricktabs probably there wont ever be any more tabs
 			BrickTabs.Add(new TaskBlockTabView());
-        }
 
+			// Initialise the connect and disconnect buttons
+			ConnectButtonVisibility = Visibility.Visible;
+			DisconnectButtonVisibility = Visibility.Hidden;
+
+			////=== TESTING ONLY, START A LOCAL LYNX SERVER!
+			//Thread ServerThread;
+			//Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
+			//ServerThread = new Thread(server.start);
+			//ServerThread.Start();
+			//Console.WriteLine("SERVER IS RUNNING");
+			////====================================================
+
+			// Update the RobotNames address list
+			updateRobotAddressList();
+		}
+			
+		public void updateRobotAddressList() {
+			CurrentAddressText = "Updating Robot List";
+			AddressesEnabled = false;
+			NotifyPropertyChanged("AddressesEnabled");
+			NotifyPropertyChanged("CurrentAddressText");
+			NoArgDelegate addressUpdate = new NoArgDelegate(checkAddressConnections);
+			addressUpdate.BeginInvoke(null, null);
+		}
+
+		private void checkAddressConnections() {
+			string robotsXML = Resources.Robots;
+
+			using (XmlReader reader = XmlReader.Create(new StringReader(robotsXML))) {
+				
+				bool IPAdded = false;
+				while (reader.Read()) {
+					if(reader.NodeType == XmlNodeType.Element) {
+						// If the element name is IPAddress
+						if (reader.Name == "IPAddress") {
+							// Move to the nodes value
+							string value = reader.ReadElementContentAsString();
+
+							// Check the value isnt empty
+							if(value != "") {
+								try {
+									IPHostEntry IPEntry = Dns.GetHostEntry(value);
+									IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(value), Network.DefaultPort);
+
+									// Connect to the address
+									Network.Instance.connectToLynx(endpoint);
+
+									// Make sure the server is running 
+									if (Network.Instance.robotConnectionAvail()) {
+										// Add the EndPoint
+										_robotEndpoints.Add(endpoint);
+
+										// Set the added flag
+										IPAdded = true;
+									}
+								}
+								catch (SocketException exc) {
+									Console.WriteLine("EXCEPTION ({1}): {0}", exc, value);
+								}
+							}
+							else {
+								reader.MoveToContent();
+								value = reader.ReadElementContentAsString();
+								if(value != "") {
+									try {
+										// NOTE: Here im using the first address, there could be more than one!!
+										IPHostEntry IPEntry = Dns.GetHostEntry(value);
+										IPEndPoint endpoint = new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort);
+
+										// Connect to the address
+										Network.Instance.connectToLynx(endpoint);
+
+										// Make sure the server is running 
+										if (Network.Instance.robotConnectionAvail()) {
+											// Add the EndPoint
+											_robotEndpoints.Add(endpoint);
+
+											// Set the added flag
+											IPAdded = true;
+										}
+									}
+									catch (SocketException exc) {
+										Console.WriteLine("EXCEPTION ({1}): {0}", exc, value);
+									}
+								}
+							}
+						}
+
+						// If the element name is DisplayName
+						if (reader.Name == "DisplayName") {
+							// If the IP is added
+							if(IPAdded) {
+								// Move to the nodes value
+								string value = reader.ReadElementContentAsString();
+
+								// Add the displayName
+								RobotNames.Add(value);
+
+								// Set the flag back to false
+								IPAdded = false;
+							}
+						}
+					}
+				}
+			}
+
+			// Update the properties back on the main UI thread
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+				 new NoArgDelegate(robotNamesUpdated));
+		}
+
+		// Update a bunch of properties
+		private void robotNamesUpdated() {
+			AddressesEnabled = true;
+			CurrentAddressText = RobotNames.Count>0 ? RobotNames[0]: "No Default Robots Available (Enter an IPAddress)";
+			NotifyPropertyChanged("AddressesEnabled");
+			NotifyPropertyChanged("RobotNames");
+			NotifyPropertyChanged("CurrentAddressText");
+		}
 
 		//#region Command Definitions
 
@@ -95,8 +250,22 @@ namespace RobotInitial.ViewModel
 			WorkspaceView workspace = new WorkspaceView();
 			((WorkspaceViewModel)workspace.DataContext).DisplayName = Resources.untitledFileName;
 			Workspaces.Add(workspace);
-			// Shamelessly reference the MainWindowView and its start stop control, sorry MVVM
-			((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+			
+			// Show the start stop widget
+			showStartStopWidget();
+		}
+		// Show the start stop widget in the UI
+		private void showStartStopWidget() {
+			if (Connected) {
+				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+			}
+		}
+
+		// hide the start stop widget
+		private void hideStartStopWidget() {
+			if (!Connected || Workspaces.Count == 0) {
+				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
+			}
 		}
 
 		//#endregion // NewWorkspaceCommand
@@ -193,6 +362,169 @@ namespace RobotInitial.ViewModel
 		//}
         
 		//#endregion // RedoCommand
+
+		public ICommand RefreshRobotsCommand {
+			get {
+				if(_refreshRobotsCommand == null) {
+					_refreshRobotsCommand = new RelayCommand(param => this.updateRobotAddressList());
+				}
+				return _refreshRobotsCommand;
+			}
+		}
+
+		public ICommand DisconnectRobotCommand {
+			get {
+				if(_disconnectCommand == null) {
+					_disconnectCommand = new RelayCommand(param => this.disconnectCurrentRobot());
+				}
+				return _disconnectCommand;
+			}
+		}
+
+		public ICommand ConnectCommand {
+			get {
+				if (_connectCommand == null) {
+					_connectCommand = new RelayCommand(param => this.connectToRobot());
+				}
+				return _connectCommand;
+			}
+		}
+
+		private void setConnectionVisible(ConnectionVisible visible) {
+			switch(visible) {
+				case ConnectionVisible.CONNECT:
+					ConnectButtonVisibility = Visibility.Visible;
+					DisconnectButtonVisibility = Visibility.Hidden;
+					break;
+				case ConnectionVisible.DISCONNECT:
+					ConnectButtonVisibility = Visibility.Hidden;
+					DisconnectButtonVisibility = Visibility.Visible;
+					break;
+				case ConnectionVisible.CONNECT_ADDRESS:
+					ConnectButtonVisibility = Visibility.Visible;
+					DisconnectButtonVisibility = Visibility.Hidden;
+					AddressesEnabled = true;
+					break;
+				case ConnectionVisible.DISCONNECT_ADDRESS:
+					ConnectButtonVisibility = Visibility.Hidden;
+					DisconnectButtonVisibility = Visibility.Visible;
+					AddressesEnabled = false;
+					break;
+			}
+			NotifyPropertyChanged("ConnectButtonVisibility");
+			NotifyPropertyChanged("DisconnectButtonVisibility");
+			NotifyPropertyChanged("AddressesEnabled");
+		}
+
+		public void connectToRobot() {
+			// hide the server refresh
+			RefreshButtonVisibility = Visibility.Hidden;
+			NotifyPropertyChanged("RefreshButtonVisibility");
+
+			// Switch out the connection and disconnect buttons
+			setConnectionVisible(ConnectionVisible.DISCONNECT_ADDRESS);
+
+			// Launch separate thread
+			NoArgDelegate connector = new NoArgDelegate(makeConnection);
+			connector.BeginInvoke(null,null);
+		}
+
+		// Try to make a connection on a separate worker thread
+		private void makeConnection() {
+			if (CurrentAddressText == null) return;
+			try {
+				if (RobotNames.Contains(CurrentAddressText)) {
+					int index = RobotNames.IndexOf(CurrentAddressText);
+
+					// Connect to the Lynx from the list of IP Endpoints
+					Network.Instance.connectToLynx(_robotEndpoints[index]);
+				}
+				else {
+					// try to parse an IPAddress
+					IPAddress ip;
+					if (IPAddress.TryParse(CurrentAddressText, out ip)) {
+						// Connect using the input IP
+						Network.Instance.connectToLynx(new IPEndPoint(ip, Network.DefaultPort));
+					}
+
+					else {
+						// Try getting a Host entry
+						IPHostEntry IPEntry = Dns.GetHostEntry(CurrentAddressText);
+
+						// If successfull, have a go at connecting from the first address
+						Network.Instance.connectToLynx(new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort));
+					}
+				}
+
+				// Connection must have been a success here !
+				// Update the properties back on the main UI thread
+				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+					 new NoArgDelegate(connectionAccept));
+			}
+			catch (LynxBusyException exc) {
+				// Connection must have been a success here !
+				// Update the properties back on the main UI thread
+				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+					 new NoArgDelegate(connectionFailed));
+				Console.WriteLine("Lynx is currently Busy... Connection Failed");
+			}
+			catch (SocketException exc) {
+				// Connection must have been a success here !
+				// Update the properties back on the main UI thread
+				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+					 new NoArgDelegate(connectionFailed));
+				Console.WriteLine("Socket Exception During Connection: {0}", exc);
+			}
+		}
+
+		// Make changes on connection accepted
+		private void connectionAccept() {
+			Connected = true;
+
+			// Set UI values or stop the animation
+			Console.WriteLine("Connection SUCCEEEDED!!");
+
+			// Show the start stop widget
+			showStartStopWidget();
+
+			// Launch server poller
+
+		}
+
+		// Make changes on connection failure
+		private void connectionFailed() {
+			Connected = false;			
+			Console.WriteLine("Connection FAILED!!");
+
+			// Show the connect button and enable the address
+			setConnectionVisible(ConnectionVisible.CONNECT_ADDRESS);
+
+			// Show the server refresh
+			RefreshButtonVisibility = Visibility.Visible;
+			NotifyPropertyChanged("RefreshButtonVisibility");
+		}
+
+		// Disconnect the current robot
+		private void disconnectCurrentRobot() {
+			if(Network.Instance.isConnected()) {
+				Network.Instance.closeConnection();
+			}
+
+			// Not connected now!
+			Connected = false;
+
+			// Show the server refresh
+			RefreshButtonVisibility = Visibility.Visible;
+			NotifyPropertyChanged("RefreshButtonVisibility");
+			setConnectionVisible(ConnectionVisible.CONNECT_ADDRESS);
+
+			// hide the start stop widget
+			hideStartStopWidget();
+		}
+
+		
+
+
 
 		//#endregion // Command Definitions
 
@@ -393,8 +725,8 @@ namespace RobotInitial.ViewModel
 				// Closing all pages resets the properties to blank!
 				((PropertiesTabViewModel)((MainWindowView)Application.Current.MainWindow).PropertiesView.DataContext).setBlankProperties();
 
-				// Shamelessly reference the MainWindowView and its start stop control, sorry MVVM
-				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
+				// Hide the start stop widget
+				hideStartStopWidget();
 				NotifyPropertyChanged("SelectedIndex");
 				return;
 			}

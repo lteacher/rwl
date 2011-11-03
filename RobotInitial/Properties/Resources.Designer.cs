@@ -266,6 +266,34 @@ namespace RobotInitial.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot;?&gt;
+        ///&lt;Robots&gt;
+        ///	&lt;Robot&gt;
+        ///		&lt;DisplayName&gt;Lynx Robot 1&lt;/DisplayName&gt;
+        ///		&lt;HostName&gt;robot1.csem.flinders.edu.au&lt;/HostName&gt;
+        ///		&lt;IPAddress&gt;&lt;/IPAddress&gt;
+        ///	&lt;/Robot&gt;
+        ///	&lt;Robot&gt;
+        ///		&lt;DisplayName&gt;Lynx Robot 2&lt;/DisplayName&gt;
+        ///		&lt;HostName&gt;robot2.csem.flinders.edu.au&lt;/HostName&gt;
+        ///		&lt;IPAddress&gt;&lt;/IPAddress&gt;
+        ///	&lt;/Robot&gt;
+        ///	&lt;Robot&gt;
+        ///		&lt;DisplayName&gt;Lynx Robot 3&lt;/DisplayName&gt;
+        ///		&lt;HostName&gt;robot3.csem.flinders.edu.au&lt;/HostName&gt;
+        ///		&lt;IPAddress&gt;&lt;/IPAddress&gt;
+        ///	&lt;/Robot&gt;
+        ///	&lt;Robot&gt;
+        ///		&lt;DisplayName&gt;Lynx Robot 4&lt;/DisplayName&gt;
+        ///		&lt;HostName&gt;robo [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string Robots {
+            get {
+                return ResourceManager.GetString("Robots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Block Properties.
         /// </summary>
         public static string tabProperties {

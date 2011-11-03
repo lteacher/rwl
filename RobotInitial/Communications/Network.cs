@@ -8,55 +8,104 @@ using System.Net;
 using System.Net.Sockets;
 using RobotInitial.Model;
 using RobotInitial.Lynx_Server;
+using RobotInitial;
 
 namespace LynxTest2.Communications {
     class Network {
+		//public static List<IPEndPoint> lynxAddresses = new List<IPEndPoint>() {            
+		//    new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331)
+		//};
 
-        private static NetworkStream connection;
+		public static readonly Network Instance = new Network();
+		public static readonly int DefaultPort = 7331;
+        private NetworkStream connection;
+		private TcpClient client;
+		private IPEndPoint connectedRobot;
 
-        public static List<IPEndPoint> lynxAddresses = new List<IPEndPoint>() {            
-            new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331)
-        };
+		private Network() { /* Force non-instantiability */ } 
 
-         
-        public static void connectToLynx(IPEndPoint robot, StartBlock program){
-            TcpClient client = new TcpClient();
-            client.Connect(robot);
-            connection = client.GetStream();
+        // Initiate connection to a lynx robot 
+		public void connectToLynx(IPEndPoint robot) {
+			client = new TcpClient();
+			connectedRobot = robot;
+			client.Connect(robot);
+			connection = Instance.client.GetStream();
+		}
+
+		// Send the program, called on button start press
+		public void startProgram(StartBlock program) {
+			// Send a Execution request
+			connection.WriteByte(Request_Handler.EXECUTE_REQUEST);
+
+			// Get the response
+			int response = connection.ReadByte();
+
+			Console.Write("Response recieved: " + response + "\n");
+
+			if (response == Request_Handler.OK_RESPONSE) {
+				program.Serialise(connection);
+				Console.Write("Program sent \n");
+			}
+			if (response == Request_Handler.BUSY_RESPONSE) {
+				throw new RobotInitial.LynxBusyException();
+			}
+		}
+
+		// Check if a connection is available to a robot
+		public bool robotConnectionAvail() {
+			// Send a ping request
+			connection.WriteByte(Request_Handler.PING_REQUEST);
+
+			//Read response from server. 1 = ready, 0 = busy.
+			int response = connection.ReadByte();
+
+			// Close the connection
+			closeConnection();
+
+			return response == Request_Handler.OK_RESPONSE ? true : false;
+		}
+
+		// Close the connection to the Lynx
+		public void closeConnection() {
+			// Send a ping request
+			connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
+			client.Close();
+			connection.Close();
+		}
+
+		// Check if the connection is still active
+		public bool isConnected() {
+			return client.Connected;
+		}
+
+        public int requestProgramStatus()
+        {
+            // Send a status request
+            connection.WriteByte(Request_Handler.PROGRAM_STATUS_REQUEST);
 
             //Read response from server. 1 = ready, 0 = busy.
-            int response = connection.ReadByte();
-            Console.Write("Response recieved: " + response + "\n");
-
-            if (response == 1) {
-                program.Serialise(connection);
-                Console.Write("Program sent \n");
-            } else {
-                throw new RobotInitial.LynxBusyException();
-            }
-
-
+            return connection.ReadByte();
         }
 
-        public static void stopProgram() {
+        public void stopProgram() {
             if (connection != null) {
-                connection.WriteByte(83);
+                connection.WriteByte(Request_Handler.STOP_REQUEST);
             }
         }
 
-        public static void pauseProgram() {
+        public void pauseProgram() {
             if (connection != null) {
                 connection.WriteByte(80);
             }
         }
 
-        public static void resumeProgram() {
+        public void resumeProgram() {
             if (connection != null) {
                 connection.WriteByte(82);
             }
         }
 
-        public static void send(MemoryStream item, Stream stream) {
+        public void send(MemoryStream item, Stream stream) {
             //Byte buffer to hold item to be sent.
             byte[] message = item.GetBuffer();
 
@@ -70,7 +119,7 @@ namespace LynxTest2.Communications {
             stream.Write(message, 0, message.Length);
         }
 
-        public static MemoryStream recieve(Stream stream) {
+        public MemoryStream recieve(Stream stream) {
             MemoryStream ret = new MemoryStream();
 
             //Byte buffer to store incomming message length.

@@ -27,11 +27,11 @@ namespace RobotInitial.Lynx_Server {
             //loop.LoopPath = truepath;
             //start.Next = loop;
 
-            DefaultModelFactory fact = DefaultModelFactory.Instance;
+            //DefaultModelFactory fact = DefaultModelFactory.Instance;
 
-            StartBlock start = fact.CreateStartBlock();
+            //StartBlock start = fact.CreateStartBlock();
             //LoopBlock loop = fact.CreateLoopBlock();
-            MoveBlock move = fact.CreateMoveBlock();
+            //MoveBlock move = fact.CreateMoveBlock();
             //move.DurationUnit = MoveDurationUnit.ENCODERCOUNT;
             //move.Duration = 5000;
             //move.DurationUnit = MoveDurationUnit.DEGREES;
@@ -42,18 +42,18 @@ namespace RobotInitial.Lynx_Server {
             //move.LeftDirection = MoveDirection.STOP;
             //move.RightDirection = MoveDirection.STOP;
             //loop.LoopPath = move;
-            start.Next = move;
+            //start.Next = move;
 
             //WaitBlock wait = fact.CreateWaitBlock();
             //wait.WaitUntil = new FalseConditional();
             //move.Next = wait;
 
-            Console.Write("Contacting Server \n");
-            Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
+			//Console.Write("Contacting Server \n");
+			//Network.connectToLynx(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331), start);
 
             //Keep Console Open
-            while (true) {
-            }
+            //while (true) {
+            //}
         }
     }
 }

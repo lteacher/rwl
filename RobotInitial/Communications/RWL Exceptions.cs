@@ -13,7 +13,13 @@ namespace RobotInitial {
     class InvalidMessageFormatException : ApplicationException {
     }
 
-    class LynxIsNotAliveException : ApplicationException {
+    class ComPortInUseByOtherProcessException : ApplicationException {
+    }
+
+    class ComPortHasNotBeenClaimedException : ApplicationException {
+    }
+
+    class ComPortAlreadyClaimedException : ApplicationException {
     }
 
     class AlreadyConnectedException : ApplicationException {

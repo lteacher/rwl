@@ -42,49 +42,26 @@ namespace RobotInitial.Lynx_Server {
         private Protocol Protocol;
         public EndState state;
         private volatile Boolean pauseFlag = false;
-		private ModelExecutor executor;
 
         object initialiseLock = new Object();
         object runningLock = new Object();
 
-		//public Boolean Initialise() {
-		//    lock (initialiseLock) {
-		//        if (runningProgram) {
-		//            return false;
-		//        } else {
-		//            runningProgram = true;
-		//            Start = null;
-		//            Protocol = null;
-		//            terminate = Shutdown.None;
-		//            state = EndState.None;
-		//            runningProgramID = Thread.CurrentThread.ManagedThreadId;
-		//        }
-		//    }
+        public Boolean Initialise() {
+            lock (initialiseLock) {
+                if (runningProgram) {
+                    return false;
+                } else {
+                    runningProgram = true;
+                    Start = null;
+                    Protocol = null;
+                    terminate = Shutdown.None;
+                    state = EndState.None;
+                    runningProgramID = Thread.CurrentThread.ManagedThreadId;
+                }
+            }
 
-		//    return true;
-		//}
-
-		public Boolean Initialise() {
-			lock (initialiseLock) {
-				if (runningProgram) {
-					return false;
-				}
-				else {
-					runningProgram = true;
-					Start = null;
-					Protocol = null;
-					terminate = Shutdown.None;
-					state = EndState.None;
-					runningProgramID = Thread.CurrentThread.ManagedThreadId;
-				}
-			}
-
-			return true;
-		}
-
-		public bool isInitial() {
-			return runningProgram ? false : true;
-		}
+            return true;
+        }
 
         public void pause() {
             pauseFlag = true;
@@ -106,7 +83,6 @@ namespace RobotInitial.Lynx_Server {
             //Calling thread must currently have ownership of the VM
             if (Thread.CurrentThread.ManagedThreadId == runningProgramID) {
                 this.terminate = terminate;
-				state = EndState.TerminatedByClient;
             } else {
                 throw new VirtualMachineOwnershipException();
             }
@@ -116,44 +92,48 @@ namespace RobotInitial.Lynx_Server {
             //Calling thread must currently have ownership of the VM
             if (Thread.CurrentThread.ManagedThreadId == runningProgramID) {
                 runningProgram = false;
-				// On reset lets reset the state
-				state = EndState.None;
             } else {
                 throw new VirtualMachineOwnershipException();
             }
         }
 
-        public void RunProgram()
-        {
-            lock (runningLock)
-            {
-                try
-                {
-                    LynxMessagePort.Instance.ClaimComPort();
-                }
-                catch (ComPortInUseByOtherProcessException e)
-                {
-                    Console.WriteLine("COM1 is in use by another process, the program will not be exectued");
-                }
+        public void RunProgram() {
+<<<<<<< HEAD
+            lock (runningLock) {
+                Console.Write("Running program \n");
+                ModelExecutor executor = new ModelExecutor(Start, Protocol);
 
-                if (LynxMessagePort.Instance.HasComPort())
-                {
+                while (!executor.IsDone()) {
+                    //Check hardware/software shutdowns
+                    if (terminate != Shutdown.None){
+                        state = EndState.TerminatedByClient;
 
+						// Send the stop command
+						executor.StopExecution();
+                        break;
+                    }
+=======
+            try {
+                LynxMessagePort.Instance.ClaimComPort();
+            } catch (ComPortInUseByOtherProcessException e) {
+                Console.WriteLine("COM1 is in use by another process, the program will not be exectued");
+            }
+>>>>>>> 1c16845016fb937bf70ead9a3ef40eab488613a1
+
+            if (LynxMessagePort.Instance.HasComPort()) {
+                lock (runningLock) {
                     Console.Write("Running program \n");
-                    executor = new ModelExecutor(Start, Protocol);
+                    ModelExecutor executor = new ModelExecutor(Start, Protocol);
 
-                    while (!executor.IsDone())
-                    {
+                    while (!executor.IsDone()) {
                         //Check hardware/software shutdowns
-                        if (terminate != Shutdown.None)
-                        {
-                            executor.StopExecution();
+                        if (terminate != Shutdown.None) {
                             state = EndState.TerminatedByClient;
+                            executor.StopExecution();
                             break;
                         }
 
-                        if (pauseFlag)
-                        {
+                        if (pauseFlag) {
                             executor.Pause();
                             while (pauseFlag) { }   //busy wait
                             executor.Resume();
@@ -162,11 +142,8 @@ namespace RobotInitial.Lynx_Server {
                         //Run through next program instruction
                         executor.ExecuteOneBlock();
                     }
-
-                    if (state == EndState.None) state = EndState.Completed;
-                    LynxMessagePort.Instance.ReleaseComPort();
-  
                 }
+                LynxMessagePort.Instance.ReleaseComPort();
             }
         }
     }

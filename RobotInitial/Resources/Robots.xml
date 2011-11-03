@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<Robots>
+  <Robot>
+	 <IPAddress></IPAddress>
+	 <HostName>robot1.csem.flinders.edu.au</HostName>
+    <DisplayName>Lynx Robot 1</DisplayName>
+  </Robot>
+  <Robot>
+    <IPAddress></IPAddress>
+    <HostName>robot2.csem.flinders.edu.au</HostName>
+    <DisplayName>George</DisplayName>
+  </Robot>
+  <Robot>
+	 <IPAddress></IPAddress>
+	 <HostName>robot4.csem.flinders.edu.au</HostName>
+	 <DisplayName>Lynx Robot 4</DisplayName>
+  </Robot>
+	<Robot>
+		<IPAddress>127.0.0.1</IPAddress>
+	   <HostName></HostName>
+	   <DisplayName>LocalHost</DisplayName>
+	</Robot>
+</Robots>

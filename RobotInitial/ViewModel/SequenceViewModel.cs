@@ -38,8 +38,8 @@ namespace RobotInitial.ViewModel
 			start = new Rectangle();
 			start.Width = 75;
 			start.Height = 75;
-			start.RadiusX = 4.0;
-			start.RadiusY = 4.0;
+			start.RadiusX = 24.5;
+			start.RadiusY = 24.5;
 			start.Stroke = Brushes.Black;
 			start.StrokeDashArray = new DoubleCollection { 5.0, 2.0 };
 			start.Margin = new Thickness(25,0,25,0);

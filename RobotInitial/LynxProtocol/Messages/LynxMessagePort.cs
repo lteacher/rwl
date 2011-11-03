@@ -25,20 +25,46 @@ namespace RobotInitial.LynxProtocol {
         private const int DATABITS = 8;                     //default 8
         private const StopBits STOPBITS = StopBits.One;     //default StopBits.One
         private readonly SerialPort port;
-        private const int DELAYAFTERSEND = 45;
+        private const int DELAYAFTERSEND = 50;
 
         private LynxMessagePort() {
             port = new SerialPort(PORTNAME, BAUDRATE, PARITY, DATABITS, STOPBITS);
             port.NewLine = NEWLINE;
-            port.Open();
         }
 
         ~LynxMessagePort() {
+            ReleaseComPort();
+        }
+
+        public void ReleaseComPort() {
             port.Close();
+            Console.WriteLine("Closed COM port");
+        }
+
+        public void ClaimComPort() {
+            if (this.HasComPort()) {
+                //if this is thrown then the logic of the server/vm is screwed and we want to know about it
+                throw new ComPortAlreadyClaimedException();
+            }
+
+            try {
+                Console.WriteLine("Openning COM port");
+                port.Open();
+            } catch (UnauthorizedAccessException e) {
+                throw new ComPortInUseByOtherProcessException();
+            }
+        }
+
+        public bool HasComPort() {
+            return port.IsOpen;
         }
 
         //TODO: implement reliability (use checksum)
         public LynxMessage Send(LynxMessage m, bool isRequest) {
+            if (!port.IsOpen) {
+                throw new ComPortHasNotBeenClaimedException();
+            }
+
             LynxMessage response;
             lock (this) {
                 Console.WriteLine("Sending " + m.ToString() + " TO " + PORTNAME);

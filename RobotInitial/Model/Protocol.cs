@@ -11,5 +11,7 @@ namespace RobotInitial.Model {
         int RequestStatus();
         void OnExecutionStart();
         void OnExecutionFinish();
+        void Pause();
+        void Resume();
     }
 }

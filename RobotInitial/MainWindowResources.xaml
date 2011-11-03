@@ -7,6 +7,7 @@
     xmlns:e="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:b="clr-namespace:RobotInitial.Behaviours"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
     >
     
     <!--
@@ -60,13 +61,12 @@
     <DataTemplate x:Key="CloseableTabItemTemplate">
         <DockPanel Width="80">
             <Button
-                Command="{Binding DataContext.CloseWorkspaceCommand, RelativeSource={RelativeSource FindAncestor,
-                            AncestorType={x:Type vw:MainWindowView}}}"
+                Command="{Binding DataContext.CloseWorkspaceCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type vw:MainWindowView}}}"
                 Content="X"
                 Cursor="Hand"
                 DockPanel.Dock="Right"
                 Focusable="False"
-                FontFamily="Courier"
+                FontFamily="Comic Sans MS"
                 FontSize="9"
                 FontWeight="Bold"
                 Margin="0,1,0,0"
@@ -74,16 +74,16 @@
                 VerticalContentAlignment="Bottom"
                 Width="16" Height="16"/>
             <ContentPresenter 
-                Content="{Binding DataContext.ActiveWorkspaceViewModel.DisplayName, RelativeSource={RelativeSource FindAncestor,
-                            AncestorType={x:Type vw:MainWindowView}}}" 
+                Content="{Binding DataContext.ActiveWorkspaceViewModel.DisplayName, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type vw:MainWindowView}}}"
                 VerticalAlignment="Center"
+                TextBlock.FontFamily="Comic Sans MS"
                 />
         </DockPanel>
     </DataTemplate>
 
     <DataTemplate x:Key="BrickTabItemTemplate">
         <ContentPresenter 
-                Content="{Binding Path=DisplayName}" 
+                Content="{Binding DisplayName}" 
                 VerticalAlignment="Center"
                 />
     </DataTemplate>
@@ -105,56 +105,60 @@
     </DataTemplate>
 	
     <!-- Create the style for the Movement Task Block-->
-	<Style x:Key="MoveStyle" TargetType="c:TaskBlockItem">
+	<Style x:Key="MoveStyle" TargetType="{x:Type c:TaskBlockItem}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="c:TaskBlockItem">
-                    <Rectangle Fill="Green"  Height="58" Width="59"
-               		        Stroke="Black"  Margin="0,0,0,0" 
-               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
-                    </Rectangle>
+                <ControlTemplate TargetType="{x:Type c:TaskBlockItem}">
+                	<Grid>
+	                	<Rectangle Height="59" Width="59" Fill="Green" StrokeThickness="1" RadiusX="18" RadiusY="18" Stroke="Black"/>
+       					<Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
+                		<TextBlock Margin="0" TextWrapping="Wrap" Text="MOVE" VerticalAlignment="Center" FontFamily="Comic Sans MS" d:LayoutOverrides="Height" HorizontalAlignment="Center" FontWeight="Bold"/>
+					</Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
 	</Style>
 
     <!-- Create the style for the Loop Task Block-->
-    <Style x:Key="LoopStyle" TargetType="c:TaskBlockItem">
+    <Style x:Key="LoopStyle" TargetType="{x:Type c:TaskBlockItem}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="c:TaskBlockItem">
-                    <Rectangle Fill="LightSkyBlue"  Height="58" Width="59"
-               		        Stroke="Black"  Margin="0,0,0,0" 
-               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
-                    </Rectangle>
+                <ControlTemplate TargetType="{x:Type c:TaskBlockItem}">
+                    <Grid>
+                		<Rectangle Height="59" Width="59" Fill="LightSkyBlue" StrokeThickness="1" RadiusX="18" RadiusY="18" Stroke="Black"/>
+       					<Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
+                		<TextBlock Margin="0" TextWrapping="Wrap" Text="LOOP" VerticalAlignment="Center" FontFamily="Comic Sans MS" d:LayoutOverrides="Height" HorizontalAlignment="Center" FontWeight="Bold"/>
+                	</Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <!-- Create the style for the Switch Task Block-->
-    <Style x:Key="SwitchStyle" TargetType="c:TaskBlockItem">
+    <Style x:Key="SwitchStyle" TargetType="{x:Type c:TaskBlockItem}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="c:TaskBlockItem">
-                    <Rectangle Fill="Yellow"  Height="58" Width="59"
-               		        Stroke="Black"  Margin="0,0,0,0" 
-               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
-                    </Rectangle>
+                <ControlTemplate TargetType="{x:Type c:TaskBlockItem}">
+                    <Grid>
+                		<Rectangle Height="59" Width="59" Fill="Yellow" StrokeThickness="1" RadiusX="18" RadiusY="18" Stroke="Black"/>
+       					<Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
+                		<TextBlock Margin="0" TextWrapping="Wrap" Text="SWITCH" VerticalAlignment="Center" FontFamily="Comic Sans MS" d:LayoutOverrides="Height" HorizontalAlignment="Center" FontWeight="Bold"/>
+                	</Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
     <!-- Create the style for the Wait Task Block-->
-    <Style x:Key="WaitStyle" TargetType="c:TaskBlockItem">
+    <Style x:Key="WaitStyle" TargetType="{x:Type c:TaskBlockItem}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="c:TaskBlockItem">
-                    <Rectangle Fill="Red"  Height="58" Width="59"
-               		        Stroke="Black"  Margin="0,0,0,0" 
-               		        RadiusY="6.5" RadiusX="6.5" HorizontalAlignment="Center">
-                    </Rectangle>
+                <ControlTemplate TargetType="{x:Type c:TaskBlockItem}">
+                    <Grid>
+                		<Rectangle Height="59" Width="59" Fill="Red" StrokeThickness="1" RadiusX="18" RadiusY="18" Stroke="Black"/>
+       					<Rectangle Height="75" Width="75" Opacity="0.18" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
+                		<TextBlock Margin="0" TextWrapping="Wrap" Text="WAIT" VerticalAlignment="Center" FontFamily="Comic Sans MS" d:LayoutOverrides="Height" HorizontalAlignment="Center" FontWeight="Bold"/>
+                	</Grid>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

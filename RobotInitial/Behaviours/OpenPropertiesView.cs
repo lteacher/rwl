@@ -89,40 +89,6 @@ namespace RobotInitial.Behaviours
 			e.Handled = true;
 		}
 
-		// Do some fun times to get the workspace as usual!
-		//private WorkspaceView getWorspaceView(FrameworkElement source) {
-		//    FrameworkElement treeParent = source;
-		//    while (treeParent != null) {
-		//        if (treeParent == null) break;
-		//        treeParent = (FrameworkElement)VisualTreeHelper.GetParent(treeParent);
-
-		//        // If the treeparent is WorkspaceView then return it
-		//        if (treeParent is WorkspaceView) {
-		//            return treeParent as WorkspaceView;
-		//        }
-		//    }
-		//    return treeParent as WorkspaceView;
-		//}
-
-        //private static void DeleteThisHackTestMethod(RobotInitial.Model.Block block) {
-        //    if (block == null) {
-        //        return;
-        //    }
-        //    Console.WriteLine("Current: " + block);
-        //    if (block is RobotInitial.Model.LoopBlock) {
-        //        Console.WriteLine("Entering Loop Path");
-        //        DeleteThisHackTestMethod((block as RobotInitial.Model.LoopBlock).LoopPath);
-        //        Console.WriteLine("Exiting Loop Path");
-        //    } else if (block is RobotInitial.Model.SwitchBlock<bool>) {
-        //        Console.WriteLine("Entering True Path");
-        //        DeleteThisHackTestMethod((block as RobotInitial.Model.SwitchBlock<bool>).GetPath(true));
-        //        Console.WriteLine("Entering False Path");
-        //        DeleteThisHackTestMethod((block as RobotInitial.Model.SwitchBlock<bool>).GetPath(false));
-        //        Console.WriteLine("Exiting Switch");
-        //    }
-        //    DeleteThisHackTestMethod(block.Next);
-        //}
-
 		protected override void OnDetaching()
 		{
 			base.OnDetaching();
