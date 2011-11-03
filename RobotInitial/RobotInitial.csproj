@@ -74,6 +74,7 @@
     <Compile Include="Command\CommandBehaviorBinding.cs" />
     <Compile Include="Command\EventHandlerGenerator.cs" />
     <Compile Include="Communications\Network.cs" />
+    <Compile Include="Communications\LynxRobot.cs" />
     <Compile Include="Communications\RWL Exceptions.cs" />
     <Compile Include="Components.cs" />
     <Compile Include="Controls\TaskBlockItem.cs" />

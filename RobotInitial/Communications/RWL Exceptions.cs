@@ -15,4 +15,13 @@ namespace RobotInitial {
 
     class LynxIsNotAliveException : ApplicationException {
     }
+
+    class AlreadyConnectedException : ApplicationException {
+    }
+
+    class NotConnectedException : ApplicationException {
+    }
+
+    class LynxNotPausedException : ApplicationException {
+    }
 }
