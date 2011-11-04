@@ -64,7 +64,7 @@ namespace RobotInitial.ViewModel
 		public int SelectedCond {
 			get {
 				if (WaitModel.WaitUntil is IRSensorConditional) {
-					_selectedCond = (int)Math.Log((double)((IRSensorConditional)WaitModel.WaitUntil).IRSensors, 2);
+					//_selectedCond = (int)Math.Log((double)((IRSensorConditional)WaitModel.WaitUntil).IRSensors, 2);
 				}
 
 				return _selectedCond;
@@ -75,22 +75,22 @@ namespace RobotInitial.ViewModel
 					// Check which condition selected
 					switch(value) {
 						case 0: // IR Sensor - Front
-                            _irSensor.IRSensors = LynxIRPort.FRONT;
+                            //_irSensor.IRSensors = LynxIRPort.FRONT;
 							break;
 						case 1: // IR Sensor - Front Left
-                            _irSensor.IRSensors = LynxIRPort.REARLEFT;
+                            //_irSensor.IRSensors = LynxIRPort.REARLEFT;
 							break;
 						case 2: // IR Sensor - Front Right
-                            _irSensor.IRSensors = LynxIRPort.FRONTRIGHT;
+                            //_irSensor.IRSensors = LynxIRPort.FRONTRIGHT;
 							break;
 						case 3: // IR Sensor - Rear
-                            _irSensor.IRSensors = LynxIRPort.REAR;
+                            //_irSensor.IRSensors = LynxIRPort.REAR;
 							break;
 						case 4: // IR Sensor - Rear Left
-                            _irSensor.IRSensors = LynxIRPort.REARLEFT;
+                            //_irSensor.IRSensors = LynxIRPort.REARLEFT;
 							break;
 						case 5: // IR Sensor - Rear Right
-                            _irSensor.IRSensors = LynxIRPort.REARRIGHT;
+                            //_irSensor.IRSensors = LynxIRPort.REARRIGHT;
 							break;
 					}
 				}
@@ -146,10 +146,11 @@ namespace RobotInitial.ViewModel
 		// Operator number e.g. distance
 		public int OperatorNumber {
 			get {
-				return _irSensor.Distance;
+				//return _irSensor.Distance;
+				return 0;
 			}
 			set {
-				_irSensor.Distance = value;
+				//_irSensor.Distance = value;
 			}
 		}
 

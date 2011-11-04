@@ -12,10 +12,6 @@ using RobotInitial;
 
 namespace LynxTest2.Communications {
     class Network {
-		//public static List<IPEndPoint> lynxAddresses = new List<IPEndPoint>() {            
-		//    new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331)
-		//};
-
         public const int PING_TIMEOUT = 2000;
         public const int STANDARD_TIMEOUT = 6000;
 		public static readonly Network Instance = new Network();
@@ -31,10 +27,13 @@ namespace LynxTest2.Communications {
             connection = null;
 			client = new TcpClient();
 			connectedRobot = robot;
+			// Connect Asynchonously
             IAsyncResult result = client.BeginConnect(robot.Address, DefaultPort, null, null);
 
+			// Wait for success max timout duration
             bool success = result.AsyncWaitHandle.WaitOne(timeout);
 
+			// If unsuccessful throw a SocketException
             if(!success) {
                 client.Close();
                 throw new SocketException();

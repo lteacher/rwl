@@ -31,16 +31,24 @@ namespace RobotInitial.ViewModel {
 			get { return _condTypes; }
 		}
 
-		// Condition options and its property
-		private ObservableCollection<ObservableCollection<string>> _condOptions = new ObservableCollection<ObservableCollection<string>>();
-		public ObservableCollection<string> CondOptions {
-			get { return _condOptions[0]; }
-		}
-
 		// Condition operators and its property
 		private ObservableCollection<ObservableCollection<string>> _condOperators = new ObservableCollection<ObservableCollection<string>>();
 		public ObservableCollection<string> CondOperators {
 			get { return _condOperators[0]; }
+		}
+
+		// Sensor Properties Visibility
+		public Visibility SensorPaneVisibility {
+			get {
+				return SelectedCond == 0 ? Visibility.Visible : Visibility.Hidden;
+			}
+		}
+
+		// Counter Properties Visibility
+		public Visibility CounterPaneVisibility {
+			get {
+				return SelectedCond == 1 ? Visibility.Visible : Visibility.Hidden;
+			}
 		}
 
 		private int _selectedCond = 0;
@@ -49,58 +57,40 @@ namespace RobotInitial.ViewModel {
 		public int SelectedCond {
 			get {
 				if (LoopModel.Condition is IRSensorConditional) {
-                    _selectedCond = (int)Math.Log((double)((IRSensorConditional)LoopModel.Condition).IRSensors, 2);
-					Visibility = Visibility.Visible;
-					NotifyPropertyChanged("Visibility");
+					_selectedCond = 0;
+				}
+				else if(LoopModel.Condition is CountConditional) {
+					_selectedCond = 1;
 				}
 				else if(LoopModel.Condition is FalseConditional) {
-					_selectedCond = 6;
-					Visibility = Visibility.Hidden;
-					NotifyPropertyChanged("Visibility");
+					_selectedCond = 2;
 				}
-
+				//NotifyVisibility();
 				return _selectedCond;
 			}
 			set {
 				_selectedCond = value;
-				
-				if (CondMode) {
-					Visibility = Visibility.Visible;
-					NotifyPropertyChanged("Visibility");
-					// Check which condition selected
-					switch (value) {
-						case 0: // IR Sensor - Front
-                            _irSensor.IRSensors = LynxIRPort.FRONT;
-							LoopModel.Condition = _irSensor;
-							break;
-						case 1: // IR Sensor - Front Left
-                            _irSensor.IRSensors = LynxIRPort.FRONTLEFT;
-							LoopModel.Condition = _irSensor;
-							break;
-						case 2: // IR Sensor - Front Right
-                            _irSensor.IRSensors = LynxIRPort.FRONTRIGHT;
-							LoopModel.Condition = _irSensor;
-							break;
-						case 3: // IR Sensor - Rear
-                            _irSensor.IRSensors = LynxIRPort.REAR;
-							LoopModel.Condition = _irSensor;
-							break;
-						case 4: // IR Sensor - Rear Left
-                            _irSensor.IRSensors = LynxIRPort.REARLEFT;
-							LoopModel.Condition = _irSensor;
-							break;
-						case 5: // IR Sensor - Rear Right
-                            _irSensor.IRSensors = LynxIRPort.REARRIGHT;
-							LoopModel.Condition = _irSensor;
-							break;
-						case 6: // Forever
-                            LoopModel.Condition = DefaultModelFactory.Instance.CreateFalseConditional();
-							Visibility = Visibility.Hidden;
-							NotifyPropertyChanged("Visibility");
-							break;
-					}
+				// Check which condition selected
+				switch (value) {
+					case 0: // IR Sensor
+						LoopModel.Condition = _irSensor;
+						break;
+					case 1: // Count
+						LoopModel.Condition = _countCondition;
+						break;
+					case 2: // Forever
+						LoopModel.Condition = DefaultModelFactory.Instance.CreateFalseConditional();
+						break;
 				}
+				NotifyVisibility();
+				NotifyPropertyChanged("FrontDistance");
 			}
+		}
+
+		// Update the visibility of the properties grids
+		private void NotifyVisibility() {
+			NotifyPropertyChanged("SensorPaneVisibility");
+			NotifyPropertyChanged("CounterPaneVisibility");
 		}
 
 		// The selected operator
@@ -121,29 +111,27 @@ namespace RobotInitial.ViewModel {
 			}
 			set {
 				_selectedOperator = value;
-				if (CondMode) {
-					// Selected value is an IRSensor value
-					if (SelectedCond >= 0 && SelectedCond <= 5) {
-						switch (value) {
-							case 0: // Equal To (==)
-								_irSensor.EqualityOperator = Operator.EQUAL;
-								break;
-							case 1: // Not Equal To (!=)
-								_irSensor.EqualityOperator = Operator.NOTEQUAL;
-								break;
-							case 2: // Less Than (<)
-								_irSensor.EqualityOperator = Operator.LESS;
-								break;
-							case 3: // Less Than or Equal To (<=)
-								_irSensor.EqualityOperator = Operator.EQUALORLESS;
-								break;
-							case 4: // Greater Than (>)
-								_irSensor.EqualityOperator = Operator.GREATER;
-								break;
-							case 5: // Greater Than or Equal To (>=)
-								_irSensor.EqualityOperator = Operator.EQUALORGREATER;
-								break;
-						}
+				// Selected value is an IRSensor value
+				if (SelectedCond >= 0 && SelectedCond <= 5) {
+					switch (value) {
+						case 0: // Equal To (==)
+							_irSensor.EqualityOperator = Operator.EQUAL;
+							break;
+						case 1: // Not Equal To (!=)
+							_irSensor.EqualityOperator = Operator.NOTEQUAL;
+							break;
+						case 2: // Less Than (<)
+							_irSensor.EqualityOperator = Operator.LESS;
+							break;
+						case 3: // Less Than or Equal To (<=)
+							_irSensor.EqualityOperator = Operator.EQUALORLESS;
+							break;
+						case 4: // Greater Than (>)
+							_irSensor.EqualityOperator = Operator.GREATER;
+							break;
+						case 5: // Greater Than or Equal To (>=)
+							_irSensor.EqualityOperator = Operator.EQUALORGREATER;
+							break;
 					}
 				}
 			}
@@ -152,61 +140,121 @@ namespace RobotInitial.ViewModel {
 		// Operator number e.g. distance
 		public int OperatorNumber {
 			get {
-				return _irSensor.Distance;
+				//return _irSensor.Distance;
+				return 0;
 			}
 			set {
-				_irSensor.Distance = value;
+				//_irSensor.Distance = value;
 			}
 		}
 
-		// Binding for radiobuttons, requires annoying logic
-		private bool _condMode = false;
-		private bool _repeatMode = true;
-
-		// Condition mode selected
-		public bool CondMode {
-			get {
-				return _condMode;
-			}
+		//------------ SENSOR ENABLING BINDINGS ----------------------
+		public bool FrontEnabled {
+			get { return _irSensor.GetPortState(LynxIRPort.FRONT); }
 			set {
-				if (_repeatMode) {
-					_repeatMode = false;
-					_condMode = true;
-					LoopModel.Condition = _irSensor;
-					NotifyPropertyChanged("RepeatMode");
-					NotifyPropertyChanged("CondMode");
-					NotifyPropertyChanged("SelectedOperator");
-					NotifyPropertyChanged("SelectedCond");
-					NotifyPropertyChanged("OperatorNumber");
-				}
+				_irSensor.SetPortState(LynxIRPort.FRONT, value);
+				NotifyPropertyChanged("FrontVisibility");
 			}
 		}
 
-		// Timer mode selected
-		public bool RepeatMode {
-			get {
-				return _repeatMode;
-			}
+		public bool FrontLeftEnabled {
+			get { return _irSensor.GetPortState(LynxIRPort.FRONTLEFT); }
 			set {
-				if (_condMode) {
-					_condMode = false;
-					_repeatMode = true;
-					LoopModel.Condition = _countCondition;
-					NotifyPropertyChanged("CondMode");
-					NotifyPropertyChanged("RepeatMode");
-					NotifyPropertyChanged("RepeatCount");
-				}
+				_irSensor.SetPortState(LynxIRPort.FRONTLEFT, value);
+				NotifyPropertyChanged("FrontLeftVisibility");
 			}
 		}
 
-		// Used for setting forever mode
-		private Visibility _isVisible = Visibility.Visible;
-		public Visibility Visibility {
-			get { return _isVisible; }
+		public bool FrontRightEnabled {
+			get { return _irSensor.GetPortState(LynxIRPort.FRONTRIGHT); }
 			set {
-				_isVisible = value;
+				_irSensor.SetPortState(LynxIRPort.FRONTRIGHT, value);
+				NotifyPropertyChanged("FrontRightVisibility");
 			}
 		}
+
+		public bool RearEnabled {
+			get { return _irSensor.GetPortState(LynxIRPort.REAR); }
+			set {
+				_irSensor.SetPortState(LynxIRPort.REAR, value);
+				NotifyPropertyChanged("RearVisibility");
+			}
+		}
+
+		public bool RearLeftEnabled {
+			get { return _irSensor.GetPortState(LynxIRPort.REARLEFT); }
+			set {
+				_irSensor.SetPortState(LynxIRPort.REARLEFT, value);
+				NotifyPropertyChanged("RearLeftVisibility");
+			}
+		}
+
+		public bool RearRightEnabled {
+			get { return _irSensor.GetPortState(LynxIRPort.REARRIGHT); }
+			set {
+				_irSensor.SetPortState(LynxIRPort.REARRIGHT, value);
+				NotifyPropertyChanged("RearRightVisibility");
+			}
+		}
+		//------------ END SENSOR ENABLING BINDINGS ----------------------
+
+		//------------ SENSOR DISTANCE BINDINGS ----------------------
+		public int FrontDistance {
+			get { return _irSensor.GetDistance(LynxIRPort.FRONT); }
+			set { _irSensor.SetDistance(LynxIRPort.FRONT, value); }
+		}
+
+		public int FrontLeftDistance {
+			get { return _irSensor.GetDistance(LynxIRPort.FRONTLEFT); }
+			set { _irSensor.SetDistance(LynxIRPort.FRONTLEFT, value); }
+		}
+
+		public int FrontRightDistance {
+			get { return _irSensor.GetDistance(LynxIRPort.FRONTRIGHT); }
+			set { _irSensor.SetDistance(LynxIRPort.FRONTRIGHT, value); }
+		}
+
+		public int RearDistance {
+			get { return _irSensor.GetDistance(LynxIRPort.REAR); }
+			set { _irSensor.SetDistance(LynxIRPort.REAR, value); }
+		}
+
+		public int RearLeftDistance {
+			get { return _irSensor.GetDistance(LynxIRPort.REARLEFT); }
+			set { _irSensor.SetDistance(LynxIRPort.REARLEFT, value); }
+		}
+
+		public int RearRightDistance {
+			get { return _irSensor.GetDistance(LynxIRPort.REARRIGHT); }
+			set { _irSensor.SetDistance(LynxIRPort.REARRIGHT, value); }
+		}
+		//------------ END SENSOR DISTANCE BINDINGS ----------------------
+
+		//------------ SENSOR VISIBILITY BINDINGS ----------------------
+		public Visibility FrontVisibility {
+			get { return FrontEnabled ? Visibility.Visible : Visibility.Hidden; }
+		}
+
+		public Visibility FrontLeftVisibility {
+			get { return FrontLeftEnabled ? Visibility.Visible : Visibility.Hidden; }
+		}
+
+		public Visibility FrontRightVisibility {
+			get { return FrontRightEnabled ? Visibility.Visible : Visibility.Hidden; }
+		}
+
+		public Visibility RearVisibility {
+			get { return RearEnabled ? Visibility.Visible : Visibility.Hidden; }
+		}
+
+		public Visibility RearLeftVisibility {
+			get { return RearLeftEnabled ? Visibility.Visible : Visibility.Hidden; }
+		}
+
+		public Visibility RearRightVisibility {
+			get { return RearRightEnabled ? Visibility.Visible : Visibility.Hidden; }
+		}
+		//------------ END SENSOR VISIBILITY BINDINGS ----------------------
 
 		public LoopPropertiesViewModel() {
 			// the default condition for a wait block is a TimeCondition
@@ -215,35 +263,23 @@ namespace RobotInitial.ViewModel {
 			// Set the condition from the default type
 			if (LoopModel.Condition is CountConditional) {
 				_countCondition = (CountConditional)LoopModel.Condition;
-				RepeatMode = true;
 			}
 			else {
 				_countCondition = DefaultModelFactory.Instance.CreateCountConditional();
-				CondMode = true;
 			}
 
+			// If the condition is an IRSensor
 			if (LoopModel.Condition is IRSensorConditional) {
 				_irSensor = (IRSensorConditional)LoopModel.Condition;
-				CondMode = true;
 			}
 			else {
 				_irSensor = DefaultModelFactory.Instance.CreateIRSensorConditional();
-				RepeatMode = true;
 			}
 
 			// Initiliase the condition types
-			_condTypes.Add("IR Sensor - Front");
-			_condTypes.Add("IR Sensor - Front Left");
-			_condTypes.Add("IR Sensor - Front Right");
-			_condTypes.Add("IR Sensor - Rear");
-			_condTypes.Add("IR Sensor - Rear Left");
-			_condTypes.Add("IR Sensor - Rear Right");
+			_condTypes.Add("IR Sensor");
+			_condTypes.Add("Counter");
 			_condTypes.Add("Forever");
-
-			// Initialise the condition options, the in order of above
-			ObservableCollection<string> sensorOptions = new ObservableCollection<string>();
-			sensorOptions.Add("Range");
-			_condOptions.Add(sensorOptions);
 
 			// Initialise the condition operators, the in order of above
 			ObservableCollection<string> sensorOperators = new ObservableCollection<string>();

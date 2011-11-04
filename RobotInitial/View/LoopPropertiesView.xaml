@@ -6,45 +6,99 @@
              xmlns:vm="clr-namespace:RobotInitial.ViewModel"
              xmlns:RobotInitial_Validation="clr-namespace:RobotInitial.Validation" x:Class="RobotInitial.View.LoopPropertiesView"
              mc:Ignorable="d">
-    <UserControl.DataContext>
-        <vm:LoopPropertiesViewModel/>
-    </UserControl.DataContext>
+  <UserControl.DataContext>
+	 <vm:LoopPropertiesViewModel/>
+  </UserControl.DataContext>
     <Grid MinWidth="900" MinHeight="170" >
     	<Rectangle Fill="LightSkyBlue" Stroke="Black" RadiusX="24.5" RadiusY="24.5" StrokeThickness="8"/>
         <TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontSize="18.667" FontFamily="Copperplate Gothic Bold" FontWeight="Bold" TextDecorations="Underline" Margin="0,8,0,0" Height="22"><Run Language="en-au" Text="Loop Block Properties"/></TextBlock>
-        <Grid Margin="8,8,433.165,8">
-        	<Grid VerticalAlignment="Center" HorizontalAlignment="Center" Height="86.84" Width="412.169">
-        		<TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="186.583,0,117.96,0" Height="22"><Run Language="en-au" Text="CONDITION"/></TextBlock>
-        		<Label Content="UNTIL" HorizontalAlignment="Left" Margin="10.138,19.665,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
-        		<ComboBox IsEnabled="{Binding CondMode}" Margin="67.053,22,171.783,0" VerticalAlignment="Top" ItemsSource="{Binding CondTypes}" SelectedIndex="{Binding SelectedCond}" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment" />
-        		<ComboBox Visibility="{Binding Visibility}" IsEnabled="{Binding CondMode}" SelectedIndex="0" Margin="0,22,65,0" ItemsSource="{Binding CondOptions}" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontWeight="Bold" HorizontalAlignment="Right" Width="104.95" d:LayoutOverrides="HorizontalAlignment"/>
-        		<RadioButton Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="171.5,4.04,0,0" IsChecked="{Binding CondMode}"/>
-                <ComboBox Visibility="{Binding Visibility}" IsEnabled="{Binding CondMode}" SelectedIndex="{Binding SelectedOperator}" Margin="0,49.66,64.986,0" ItemsSource="{Binding CondOperators}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="279.491" FontFamily="Comic Sans MS" FontWeight="Bold"/>
-                <TextBox Visibility="{Binding Visibility}" IsEnabled="{Binding CondMode}"  TextWrapping="Wrap" Margin="0,0,7.722,15.314" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" Width="56.389" VerticalAlignment="Bottom">
-        			<Binding Path="OperatorNumber" UpdateSourceTrigger="PropertyChanged">
-        				<Binding.ValidationRules>
-        					<RobotInitial_Validation:NumericOnlyRule/>
-        				</Binding.ValidationRules>
-        			</Binding>
-        		</TextBox>
-                <Label Visibility="{Binding Visibility}" Content="IS" HorizontalAlignment="Left" Margin="40.498,46.998,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
-
+        <Grid Margin="0 15 0 0" VerticalAlignment="Center" Height="124.92" HorizontalAlignment="Center">
+        	<Grid x:Name="ConditionTop" Margin="59.333,1.511,214.085,0" Height="30.297" VerticalAlignment="Top">
+                <ComboBox VerticalContentAlignment="Top" HorizontalContentAlignment="Center" ItemsSource="{Binding CondTypes}" SelectedIndex="{Binding SelectedCond}" Margin="160.668,1.498,4.787,2.835" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16"/>
+        		<TextBlock TextWrapping="Wrap" TextAlignment="Center" Margin="49.334,4.5,0,3.5" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" Width="110"><Run Language="en-au" Text="LOOP UNTIL"/></TextBlock>
         	</Grid>
-        </Grid>
-        <Grid Margin="449.67,8,8,8">
-        	<Grid HorizontalAlignment="Center" Margin="0,33.895,0,71.811" Width="290.8" d:LayoutOverrides="Height" VerticalAlignment="Center">
-        		<TextBlock TextWrapping="Wrap" VerticalAlignment="Top" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" Margin="112.333,0,111.377,0" Height="22"><Run Language="en-au" Text="REPEAT"/></TextBlock>
-        		<Label Content="NO MORE THAN" HorizontalAlignment="Left" Margin="0.942,19.713,0,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold"/>
-        		<TextBox IsEnabled="{Binding RepeatMode}" TextWrapping="Wrap" Margin="122.25,23.534,111.478,0" MaxLength="6" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" VerticalAlignment="Top">
-        			<Binding Path="RepeatCount" UpdateSourceTrigger="PropertyChanged">
-        				<Binding.ValidationRules>
-        					<RobotInitial_Validation:NumericOnlyRule/>
-        				</Binding.ValidationRules>
-        			</Binding>
-        		</TextBox>
-        		<Label Content="TIMES" HorizontalAlignment="Right" Margin="0,19.713,55.225,0" VerticalAlignment="Top" FontFamily="Comic Sans MS" FontSize="13.333" FontWeight="Bold" Width="58.67"/>
-        		<RadioButton Content="" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="99.333,3.753,0,0" IsChecked="{Binding RepeatMode}"/>
-
+        	<Grid x:Name="SensorPane" Visibility="{Binding SensorPaneVisibility}" Margin="10.208,40,-0.79,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="634.393" Height="83.779" d:IsHidden="True">
+        		<Grid Height="22.723" Margin="102,-4.668,220.402,0" VerticalAlignment="Top">
+        			<ComboBox SelectedIndex="{Binding SelectedOperator}" ItemsSource="{Binding CondOperators}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="203.991" FontFamily="Comic Sans MS" FontWeight="Bold"/>
+        			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Width="76.334" TextAlignment="Center" Margin="34,3.418,0,2.008" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment"><Run Language="en-au" Text="Distance is"/></TextBlock>
+        		</Grid>
+        		<Grid Margin="81.858,26.267,112.222,30.088" VerticalAlignment="Top">
+        			<Grid Margin="0" Height="24.924" VerticalAlignment="Top" HorizontalAlignment="Center">
+        				<TextBox Visibility="{Binding FrontVisbility}" TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
+        					<Binding Path="FontDistance" UpdateSourceTrigger="PropertyChanged">
+        						<Binding.ValidationRules>
+        							<RobotInitial_Validation:NumericOnlyRule/>
+        						</Binding.ValidationRules>
+        					</Binding>
+        				</TextBox>
+                        <CheckBox Content="Front" IsChecked="{Binding FrontEnabled}" Margin="0,2.201,60.254,0" FontFamily="Comic Sans MS" FontWeight="Bold" Height="22.723" VerticalAlignment="Top"/>
+        			</Grid>
+        			<Grid HorizontalAlignment="Left" Width="139.754" Height="24.924" VerticalAlignment="Top">
+                        <TextBox TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" Visibility="{Binding FrontLeftVisibility}" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
+                            <Binding Path="LeftDistance" UpdateSourceTrigger="PropertyChanged">
+        						<Binding.ValidationRules>
+        							<RobotInitial_Validation:NumericOnlyRule/>
+        						</Binding.ValidationRules>
+        					</Binding>
+        				</TextBox>
+                        <CheckBox Content="Front Left" IsChecked="{Binding FrontLeftEnabled}" Margin="0,2.201,60.254,0" FontFamily="Comic Sans MS" FontWeight="Bold" Height="22.723" VerticalAlignment="Top"/>
+        			</Grid>
+        			<Grid HorizontalAlignment="Right" Width="145.753" Height="24.924" VerticalAlignment="Top">
+                        <TextBox TextWrapping="Wrap" MaxLength="4" Visibility="{Binding FrontRightVisibility}" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
+        					<Binding Path="FrontRightDistance" UpdateSourceTrigger="PropertyChanged">
+        						<Binding.ValidationRules>
+        							<RobotInitial_Validation:NumericOnlyRule/>
+        						</Binding.ValidationRules>
+        					</Binding>
+        				</TextBox>
+                        <CheckBox Content="Front Right" IsChecked="{Binding FrontRightEnabled}" Margin="0,2.201,60.254,0" FontFamily="Comic Sans MS" FontWeight="Bold" Height="22.723" VerticalAlignment="Top"/>
+        			</Grid>
+        		</Grid>
+        		<Grid Height="26.591" Margin="81.858,0,111.888,1.688" VerticalAlignment="Bottom">
+                    <Grid x:Name="RearDistance" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Center">
+                        <TextBox TextWrapping="Wrap" Visibility="{Binding RearVisibility}" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.584" Margin="0,0,-5.835,0">
+                            <Binding Path="RearDistance" UpdateSourceTrigger="PropertyChanged">
+        						<Binding.ValidationRules>
+        							<RobotInitial_Validation:NumericOnlyRule/>
+        						</Binding.ValidationRules>
+        					</Binding>
+        				</TextBox>
+                        <CheckBox Content="Rear" IsChecked="{Binding RearEnabled}" Margin="-6.667,2.201,59.557,0" FontFamily="Comic Sans MS" FontWeight="Bold" Height="22.723" VerticalAlignment="Top"/>
+        			</Grid>
+        			<Grid Margin="0" HorizontalAlignment="Left" Width="139.754" VerticalAlignment="Top">
+                        <TextBox x:Name="RearLeftDistance" Visibility="{Binding RearLeftVisibility}" TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
+                            <Binding Path="RearLeftDistance" UpdateSourceTrigger="PropertyChanged">
+        						<Binding.ValidationRules>
+        							<RobotInitial_Validation:NumericOnlyRule/>
+        						</Binding.ValidationRules>
+        					</Binding>
+        				</TextBox>
+                        <CheckBox Content="Rear Left" IsChecked="{Binding RearLeftEnabled}" Margin="0,2.201,60.254,0" FontFamily="Comic Sans MS" FontWeight="Bold" Height="22.723" VerticalAlignment="Top"/>
+        			</Grid>
+        			<Grid Margin="0" HorizontalAlignment="Right" Width="145.419" VerticalAlignment="Top">
+                        <TextBox x:Name="RearRightDistance" Visibility="{Binding RearRightVisibility}" TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
+        					<Binding Path="RearRightDistance" UpdateSourceTrigger="PropertyChanged">
+        						<Binding.ValidationRules>
+        							<RobotInitial_Validation:NumericOnlyRule/>
+        						</Binding.ValidationRules>
+        					</Binding>
+        				</TextBox>
+        				<CheckBox Content="Rear Right" IsChecked="{Binding RearRightEnabled}" Margin="0,2.201,60.254,0" FontFamily="Comic Sans MS" FontWeight="Bold" Height="22.723" VerticalAlignment="Top"/>
+        			</Grid>
+        		</Grid>
+        	</Grid>
+            <Grid x:Name="CounterPane" Visibility="{Binding CounterPaneVisibility}" Margin="10.208,39.141,-0.79,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="634.393" Height="83.779">
+        		<Grid Height="22.723" Margin="171.5,-4.668,150.902,0" VerticalAlignment="Top">
+        			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Width="52.334" TextAlignment="Center" Margin="47,3.418,0,2.008" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment"><Run Language="en-au" Text="Reaches"/></TextBlock>
+        			<TextBox TextWrapping="Wrap" Margin="101.333,0,0,0" MaxLength="6" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50.324">
+        				<Binding Path="RepeatCount" UpdateSourceTrigger="PropertyChanged">
+        					<Binding.ValidationRules>
+        						<RobotInitial_Validation:NumericOnlyRule/>
+        					</Binding.ValidationRules>
+        				</Binding>
+        			</TextBox>
+        			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Width="39.334" TextAlignment="Center" Margin="154,3.418,0,2.008" FontFamily="Comic Sans MS" FontWeight="Bold"><Run Language="en-au" Text="times"/></TextBlock>
+        		</Grid>
         	</Grid>
         </Grid>
 

@@ -54,6 +54,9 @@ namespace RobotInitial.Behaviours {
 			// Get the start block
 			RobotInitial.Model.StartBlock startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
 
+			// TEMPORARY, Print the pseudocode
+			Console.WriteLine(startBlock.ToString());
+
 			// Make sure the connection is still active
 			if(mainWindowViewModel.Connected == false) {
 				Console.WriteLine("NOT CONNECTED");
@@ -68,8 +71,7 @@ namespace RobotInitial.Behaviours {
                 return;
             }
 
-			// TEMPORARY, Print the pseudocode
-			Console.WriteLine(startBlock.ToString());
+			
 
 			// Start the program
 			try {
