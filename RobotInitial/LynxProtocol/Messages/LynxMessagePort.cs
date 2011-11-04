@@ -47,10 +47,13 @@ namespace RobotInitial.LynxProtocol {
                 throw new ComPortAlreadyClaimedException();
             }
 
-            try {
+            try
+            {
                 Console.WriteLine("Openning COM port");
                 port.Open();
-            } catch (UnauthorizedAccessException e) {
+            }
+            catch (UnauthorizedAccessException e)
+            {
                 throw new ComPortInUseByOtherProcessException();
             }
         }

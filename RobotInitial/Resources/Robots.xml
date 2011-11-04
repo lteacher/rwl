@@ -3,7 +3,7 @@
   <Robot>
 	 <IPAddress></IPAddress>
 	 <HostName>robot1.csem.flinders.edu.au</HostName>
-    <DisplayName>Lynx Robot 1</DisplayName>
+    <DisplayName>Awesome Bot</DisplayName>
   </Robot>
   <Robot>
     <IPAddress></IPAddress>
@@ -11,9 +11,14 @@
     <DisplayName>George</DisplayName>
   </Robot>
   <Robot>
+    <IPAddress></IPAddress>
+    <HostName>robot3.csem.flinders.edu.au</HostName>
+    <DisplayName>The Invisible Bot</DisplayName>
+  </Robot>
+  <Robot>
 	 <IPAddress></IPAddress>
 	 <HostName>robot4.csem.flinders.edu.au</HostName>
-	 <DisplayName>Lynx Robot 4</DisplayName>
+	 <DisplayName>The Crippler</DisplayName>
   </Robot>
 	<Robot>
 		<IPAddress>127.0.0.1</IPAddress>

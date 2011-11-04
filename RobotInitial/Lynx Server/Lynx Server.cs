@@ -10,7 +10,7 @@ namespace RobotInitial.Lynx_Server
     {
         private TcpListener tcpListener;
         private Thread requestThread;
-        private Request_Handler currentRequest;
+        private Request_Handler currentRequest = new Request_Handler();
         private TcpClient client;
 
         private static TextWriter logFile = File.AppendText("log.txt");
@@ -27,10 +27,12 @@ namespace RobotInitial.Lynx_Server
                 //Check for TCP/IP connection requests
                 client = tcpListener.AcceptTcpClient();
 
+
                 //Send request off to a new thread to be handled
-                currentRequest = new Request_Handler(client);
-                requestThread = new Thread(currentRequest.processRequest);
-                requestThread.Start();
+                currentRequest.setClient(client);
+                currentRequest.processRequest();
+                //requestThread = new Thread(currentRequest.processRequest);
+                //requestThread.Start();
             }  
         }
 

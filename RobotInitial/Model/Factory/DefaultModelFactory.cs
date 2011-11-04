@@ -26,8 +26,8 @@ namespace RobotInitial.Model {
             block.RightDirection = MoveDirection.FORWARD;
             block.LeftPower = 50;
             block.RightPower = 50;
-            block.LeftDuration = 500;
-            block.RightDuration = 500;
+            block.LeftDuration = 1600;
+            block.RightDuration = 1600;
             block.DurationUnit = MoveDurationUnit.ENCODERCOUNT;
             block.BrakeAfterMove = true;
             return block;
@@ -75,7 +75,7 @@ namespace RobotInitial.Model {
 
         public IRSensorConditional CreateIRSensorConditional() {
             IRSensorConditional cond = new IRSensorConditional();
-            cond.Distance = 10;
+            cond.Distance = 50;
             cond.IRSensors = LynxIRPort.FRONT;
             cond.EqualityOperator = Operator.LESS;
             return cond;

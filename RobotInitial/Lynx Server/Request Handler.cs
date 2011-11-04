@@ -29,13 +29,11 @@ namespace RobotInitial.Lynx_Server {
 		private bool keepLooping;
 		private int programStatus = NO_PROGRAM_RESPONSE;
 
-        public Request_Handler(TcpClient client) {
-            this.client = client;
-			clientStream = client.GetStream();
-        }
+        public Request_Handler() { }
 
 		// Process the client request
-		public void processRequest() {
+        public void processRequest()
+        {
 			keepLooping = true;
 
 			// Keep listening till told otherwise!
@@ -98,6 +96,12 @@ namespace RobotInitial.Lynx_Server {
 			}
 		}
 
+        public void setClient(TcpClient client)
+        {
+            this.client = client;
+            clientStream = client.GetStream();
+        }
+
 		public void closeConnection() {
 			client.Close();
 			clientStream.Close();
@@ -118,7 +122,8 @@ namespace RobotInitial.Lynx_Server {
 		}
 
 		// Process a program that is ready to run
-		private void processInboundProgram() {
+        private void processInboundProgram()
+        {
 			// Send a busy response if the VM is in use
 			if (!VM.isInitial()) {
 				clientStream.WriteByte(BUSY_RESPONSE);

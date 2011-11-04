@@ -16,6 +16,8 @@ namespace LynxTest2.Communications {
 		//    new IPEndPoint(IPAddress.Parse("127.0.0.1"), 7331)
 		//};
 
+        public const int PING_TIMEOUT = 2000;
+        public const int STANDARD_TIMEOUT = 6000;
 		public static readonly Network Instance = new Network();
 		public static readonly int DefaultPort = 7331;
         private NetworkStream connection;
@@ -25,11 +27,21 @@ namespace LynxTest2.Communications {
 		private Network() { /* Force non-instantiability */ } 
 
         // Initiate connection to a lynx robot 
-		public void connectToLynx(IPEndPoint robot) {
+		public void connectToLynx(IPEndPoint robot, int timeout) {
+            connection = null;
 			client = new TcpClient();
 			connectedRobot = robot;
-			client.Connect(robot);
-			connection = Instance.client.GetStream();
+            IAsyncResult result = client.BeginConnect(robot.Address, DefaultPort, null, null);
+
+            bool success = result.AsyncWaitHandle.WaitOne(timeout);
+
+            if(!success) {
+                client.Close();
+                throw new SocketException();
+            }
+
+			//client.Connect(robot);
+            if(client.Connected) connection = Instance.client.GetStream();
 		}
 
 		// Send the program, called on button start press

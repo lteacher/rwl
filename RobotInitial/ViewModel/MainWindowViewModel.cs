@@ -110,6 +110,8 @@ namespace RobotInitial.ViewModel
 			// Create a new workspace
 			CreateNewWorkspace();
 
+            Application.Current.MainWindow.Closing +=new CancelEventHandler(MainWindow_Closing);
+
 			// Just add a bricktabs probably there wont ever be any more tabs
 			BrickTabs.Add(new TaskBlockTabView());
 
@@ -117,19 +119,31 @@ namespace RobotInitial.ViewModel
 			ConnectButtonVisibility = Visibility.Visible;
 			DisconnectButtonVisibility = Visibility.Hidden;
 
-			////=== TESTING ONLY, START A LOCAL LYNX SERVER!
-			//Thread ServerThread;
-			//Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
-			//ServerThread = new Thread(server.start);
-			//ServerThread.Start();
-			//Console.WriteLine("SERVER IS RUNNING");
-			////====================================================
+            //=== TESTING ONLY, START A LOCAL LYNX SERVER!
+            Thread ServerThread;
+            Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
+            ServerThread = new Thread(server.start);
+            ServerThread.Start();
+            Console.WriteLine("SERVER IS RUNNING");
+            //====================================================
 
 			// Update the RobotNames address list
 			updateRobotAddressList();
 		}
+
+        public void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            Console.WriteLine("OH NOES THE WINDOWS IS CLOSING!!");
+            if (Connected)
+            {
+                Console.WriteLine("Disconnecting!!");
+                Network.Instance.closeConnection();
+            }
+        }
 			
 		public void updateRobotAddressList() {
+            RobotNames.Clear();
+            _robotEndpoints.Clear();
 			CurrentAddressText = "Updating Robot List";
 			AddressesEnabled = false;
 			NotifyPropertyChanged("AddressesEnabled");
@@ -158,7 +172,7 @@ namespace RobotInitial.ViewModel
 									IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(value), Network.DefaultPort);
 
 									// Connect to the address
-									Network.Instance.connectToLynx(endpoint);
+									Network.Instance.connectToLynx(endpoint,Network.PING_TIMEOUT);
 
 									// Make sure the server is running 
 									if (Network.Instance.robotConnectionAvail()) {
@@ -183,7 +197,7 @@ namespace RobotInitial.ViewModel
 										IPEndPoint endpoint = new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort);
 
 										// Connect to the address
-										Network.Instance.connectToLynx(endpoint);
+                                        Network.Instance.connectToLynx(endpoint, Network.PING_TIMEOUT);
 
 										// Make sure the server is running 
 										if (Network.Instance.robotConnectionAvail()) {
@@ -226,6 +240,11 @@ namespace RobotInitial.ViewModel
 
 		// Update a bunch of properties
 		private void robotNamesUpdated() {
+            Console.WriteLine("CURRENT ROBOT NAMES ARE: ");
+            foreach (string str in RobotNames)
+            {
+                Console.WriteLine(str);
+            }
 			AddressesEnabled = true;
 			CurrentAddressText = RobotNames.Count>0 ? RobotNames[0]: "No Default Robots Available (Enter an IPAddress)";
 			NotifyPropertyChanged("AddressesEnabled");
@@ -437,14 +456,14 @@ namespace RobotInitial.ViewModel
 					int index = RobotNames.IndexOf(CurrentAddressText);
 
 					// Connect to the Lynx from the list of IP Endpoints
-					Network.Instance.connectToLynx(_robotEndpoints[index]);
+                    Network.Instance.connectToLynx(_robotEndpoints[index], Network.STANDARD_TIMEOUT);
 				}
 				else {
 					// try to parse an IPAddress
 					IPAddress ip;
 					if (IPAddress.TryParse(CurrentAddressText, out ip)) {
 						// Connect using the input IP
-						Network.Instance.connectToLynx(new IPEndPoint(ip, Network.DefaultPort));
+                        Network.Instance.connectToLynx(new IPEndPoint(ip, Network.DefaultPort), Network.STANDARD_TIMEOUT);
 					}
 
 					else {
@@ -452,7 +471,7 @@ namespace RobotInitial.ViewModel
 						IPHostEntry IPEntry = Dns.GetHostEntry(CurrentAddressText);
 
 						// If successfull, have a go at connecting from the first address
-						Network.Instance.connectToLynx(new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort));
+                        Network.Instance.connectToLynx(new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort), Network.STANDARD_TIMEOUT);
 					}
 				}
 
