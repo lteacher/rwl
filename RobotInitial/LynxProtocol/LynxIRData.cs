@@ -12,17 +12,25 @@ namespace RobotInitial.LynxProtocol {
             distances = args.Clone() as int[];
         }
 
-        public List<int> GetDistances(LynxIRPort port) {
-            List<int> requestedDistances = new List<int>();
-            int portInt = (int)port;
+        //public List<int> GetDistances(LynxIRPort port) {
+        //    List<int> requestedDistances = new List<int>();
+        //    int portInt = (int)port;
 
-            for (int i = 0; portInt != 0; ++i, portInt >>= 1) {
-                if ((portInt & 1) == 1) {
-                    requestedDistances.Add(i >= 0 && i < distances.Length ? distances[i] : -1);
-                }
-            }
+        //    for (int i = 0; portInt != 0; ++i, portInt >>= 1) {
+        //        if ((portInt & 1) == 1) {
+        //            requestedDistances.Add(i >= 0 && i < distances.Length ? distances[i] : -1);
+        //        }
+        //    }
 
-            return requestedDistances;
+        //    return requestedDistances;
+        //}
+
+        //private static bool IsPowerOfTwo(int x) {
+        //    return (x != 0) && ((x & (x - 1)) == 0);
+        //}
+
+        public int GetDistance(LynxIRPort port) {
+            return distances[(int)port];
         }
 
         //public static void Main() {

@@ -4,6 +4,7 @@ using RobotInitial.Model;
 using System.Collections.Generic;
 using System.Threading;
 using RobotInitial.LynxProtocol;
+using System.IO;
 
 namespace RobotInitial.Lynx_Server {
 
@@ -123,37 +124,35 @@ namespace RobotInitial.Lynx_Server {
             }
         }
 
-        public void RunProgram()
-        {
-            lock (runningLock)
-            {
-                try
-                {
+        public void RunProgram() {
+            lock (runningLock) {
+                try {
                     LynxMessagePort.Instance.ClaimComPort();
-                }
-                catch (ComPortInUseByOtherProcessException e)
-                {
-                    Console.WriteLine("COM1 is in use by another process, the program will not be exectued");
+                } catch (UnauthorizedAccessException e) {
+                    Console.WriteLine("COM1 is in use by another process. The program will not be executed");
+                    return;
+                } catch (ComPortAlreadyClaimedException e) {
+                    Console.WriteLine("The COM port was claimed without being released, due to an error occured on the server. The program will not be executed.");
+                    return;
+                } catch (IOException e) {
+                    Console.WriteLine("An error has occured with the COM port, the program will not be executed");
+                    return;
                 }
 
-                if (LynxMessagePort.Instance.HasComPort())
-                {
+                if (LynxMessagePort.Instance.HasComPort()) {
 
                     Console.Write("Running program \n");
                     executor = new ModelExecutor(Start, Protocol);
 
-                    while (!executor.IsDone())
-                    {
+                    while (!executor.IsDone()) {
                         //Check hardware/software shutdowns
-                        if (terminate != Shutdown.None)
-                        {
+                        if (terminate != Shutdown.None) {
                             executor.StopExecution();
                             state = EndState.TerminatedByClient;
                             break;
                         }
 
-                        if (pauseFlag)
-                        {
+                        if (pauseFlag) {
                             executor.Pause();
                             while (pauseFlag) { }   //busy wait
                             executor.Resume();
@@ -165,7 +164,7 @@ namespace RobotInitial.Lynx_Server {
 
                     if (state == EndState.None) state = EndState.Completed;
                     LynxMessagePort.Instance.ReleaseComPort();
-  
+
                 }
             }
         }
