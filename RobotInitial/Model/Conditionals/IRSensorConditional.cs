@@ -95,7 +95,8 @@ namespace RobotInitial.Model {
         }
 
         public int GetDistance(LynxIRPort port) {
-            return distances.ContainsKey(port) ? distances[port] : -1;
+            return distances[port];
+            //return distances.ContainsKey(port) ? distances[port] : DefaultModelFactory.IRDISTANCEDEFAULT;
         }
 
         internal IRSensorConditional() {
