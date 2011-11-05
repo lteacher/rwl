@@ -103,8 +103,6 @@ namespace RobotInitial.LynxProtocol {
         }
 
         public void OnExecutionFinish() {
-            Console.WriteLine("program ended/terminated");
-
             //flag stop before lock attempt to pre-empt any movement commands
             bool executeStop;
             lock (flagReadLock) {
