@@ -136,6 +136,7 @@ namespace RobotInitial.Lynx_Server {
                         }
 
                         //Run through next program instruction
+                        //if the executor is paused it will just return instantly without doing anything
                         executor.ExecuteOneBlock();
                     }
 

@@ -7,6 +7,7 @@ namespace RobotInitial.Model {
     class ModelExecutor {
         private Stack<Block> execStack = new Stack<Block>();
         private volatile bool finishCalled = false;
+        private volatile bool paused = false;
 
         public StartBlock Start { get; private set; }
         public Protocol Protocol { get; private set; }
@@ -27,7 +28,7 @@ namespace RobotInitial.Model {
         }
 
         public void ExecuteOneBlock() {
-            if (IsDone()) {
+            if (IsDone() || paused) {
                 return;
             }
 
@@ -58,10 +59,14 @@ namespace RobotInitial.Model {
         }
 
         public void Pause() {
+            paused = true;
+            //repeated pauses is handled in the protocol with synchrnisation
             Protocol.Pause();
         }
 
         public void Resume() {
+            paused = false;
+            //repeated resumes is handled in the protocol with synchrnisation
             Protocol.Resume();
         }
 
