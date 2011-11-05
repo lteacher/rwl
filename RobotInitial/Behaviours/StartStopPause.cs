@@ -10,16 +10,20 @@ using System.Windows;
 using LynxTest2.Communications;
 using System.Net;
 using RobotInitial.Lynx_Server;
+using RobotInitial.Model;
+using System.Windows.Threading;
 
 namespace RobotInitial.Behaviours {
 	class StartStopPause : Behavior<Grid> {
+
+		private delegate void NoArgDelegate();
+		private delegate void StartProgramDelegate(StartBlock arg);
 
 		protected override void OnAttached() {
 			base.OnAttached();
 
 			if(AssociatedObject.Name == "StartButtonGrid") {
 				AssociatedObject.MouseDown += new System.Windows.Input.MouseButtonEventHandler(DoStartButtonAction);
-
 			}
 			else if(AssociatedObject.Name == "StopButtonGrid") {
 				AssociatedObject.MouseDown += new System.Windows.Input.MouseButtonEventHandler(DoStopButtonAction);
@@ -44,6 +48,57 @@ namespace RobotInitial.Behaviours {
 			Console.WriteLine("Nothing Happened!!!");
 		}
 
+		// Start the program up on a separate thread
+		private void startProgram(StartBlock start) {
+			// Check the status is not running
+			int response = Network.Instance.requestProgramStatus();
+			if (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+				Console.WriteLine("PROGRAM IS RUNNING!!");
+				return;
+			}
+
+			// Start the program
+			try {
+				Network.Instance.startProgram(start);
+			}
+			catch (LynxBusyException exc) {
+				Console.WriteLine("LYNX IS BUSY!");
+				return;
+			}
+
+			// Get the status here
+			response = Network.Instance.requestProgramStatus();
+
+			// Start the program running animation and await status
+			while (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+				Console.WriteLine("Waiting for completion!");
+				response = Network.Instance.requestProgramStatus();
+			}
+
+			Console.WriteLine("Program Completed!");
+
+			// Get back to the UI thread
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+				 new NoArgDelegate(updateUIAfterProgram));
+		}
+
+		private void updateUIAfterProgram() {
+			// Unhide the start button
+
+			// Stop the playing animation
+
+		}
+
+		// Stop the program on a separate thread
+		private void stopProgram() {
+			// Stop the program
+			Network.Instance.stopProgram();
+
+			// Get back to the UI thread and make updates
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+				 new NoArgDelegate(updateUIAfterProgram));
+		}
+
 		private void DoStartButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
 			// Get the Main Window view
 			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
@@ -52,7 +107,7 @@ namespace RobotInitial.Behaviours {
 			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
 
 			// Get the start block
-			RobotInitial.Model.StartBlock startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
+			StartBlock startBlock = mainWindowViewModel.ActiveWorkspaceViewModel.GetConnectedModel();
 
 			// TEMPORARY, Print the pseudocode
 			Console.WriteLine(startBlock.ToString());
@@ -63,36 +118,11 @@ namespace RobotInitial.Behaviours {
 				return;
 			}
 
-            // Check the status is not running
-            int response = Network.Instance.requestProgramStatus();
-            if (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE)
-            {
-                Console.WriteLine("PROGRAM IS RUNNING!!");
-                return;
-            }
+			// Hide the UI Play button
 
-			
-
-			// Start the program
-			try {
-				Network.Instance.startProgram(startBlock);
-			} catch(LynxBusyException exc) {
-				Console.WriteLine("LYNX IS BUSY!");
-				return;
-			}
-
-			// Start the program running animation and await status, 
-
-			// The status waiting is completed, stop the running animation and reset the widget
-
-			////============== TEMPORARY HACK FOR TESTING ======================
-			//// Use a real address here! get it from a drop down or something ?
-			//string robotAddIpAddress = "127.0.0.1";
-
-			//// Connect to the Lynx Robot OR run the start command someway
-			//// I would like to just set and start the program here and have a separate area to connect in the toolbar maybe
-			//Network.connectToLynx(new IPEndPoint(IPAddress.Parse(robotAddIpAddress), 7331), startBlock);
-			////============== TEMPORARY HACK FOR TESTING ======================
+			// Create and launch the thread to start the program
+			StartProgramDelegate programLauncher = new StartProgramDelegate(startProgram);
+			programLauncher.BeginInvoke(startBlock,null,null);
 		}
 
 		private void DoStopButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -108,16 +138,11 @@ namespace RobotInitial.Behaviours {
 				return;
 			}
 
-			// Make sure the program is still running
+			// Create and launch the thread to start the program
+			NoArgDelegate programLauncher = new NoArgDelegate(stopProgram);
+			programLauncher.BeginInvoke(null, null);
 
-			// Stop the program
-			Network.Instance.stopProgram();
-
-			// Stop the running animation
-
-			// Reset the start stop widget
-
-			Console.WriteLine("Nothing Happened!!!");
+			Console.WriteLine("Stopping Program");
 		}
 	}
 }
