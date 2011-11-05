@@ -25,7 +25,7 @@
         		<Grid Margin="81.858,26.267,112.222,30.088" VerticalAlignment="Top">
         			<Grid Margin="0" Height="24.924" VerticalAlignment="Top" HorizontalAlignment="Center">
         				<TextBox Visibility="{Binding FrontVisbility}" TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
-        					<Binding Path="FontDistance" UpdateSourceTrigger="PropertyChanged">
+        					<Binding Path="FrontDistance" UpdateSourceTrigger="PropertyChanged">
         						<Binding.ValidationRules>
         							<RobotInitial_Validation:NumericOnlyRule/>
         						</Binding.ValidationRules>
@@ -35,7 +35,7 @@
         			</Grid>
         			<Grid HorizontalAlignment="Left" Width="139.754" Height="24.924" VerticalAlignment="Top">
                         <TextBox TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" Visibility="{Binding FrontLeftVisibility}" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
-                            <Binding Path="LeftDistance" UpdateSourceTrigger="PropertyChanged">
+                            <Binding Path="FrontLeftDistance" UpdateSourceTrigger="PropertyChanged">
         						<Binding.ValidationRules>
         							<RobotInitial_Validation:NumericOnlyRule/>
         						</Binding.ValidationRules>

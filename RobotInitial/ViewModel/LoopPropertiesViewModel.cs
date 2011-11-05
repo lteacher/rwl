@@ -154,6 +154,7 @@ namespace RobotInitial.ViewModel {
 			set {
 				_irSensor.SetPortState(LynxIRPort.FRONT, value);
 				NotifyPropertyChanged("FrontVisibility");
+				NotifyPropertyChanged("FrontDistance");
 			}
 		}
 
@@ -162,6 +163,7 @@ namespace RobotInitial.ViewModel {
 			set {
 				_irSensor.SetPortState(LynxIRPort.FRONTLEFT, value);
 				NotifyPropertyChanged("FrontLeftVisibility");
+				NotifyPropertyChanged("FrontLeftDistance");
 			}
 		}
 
@@ -170,6 +172,7 @@ namespace RobotInitial.ViewModel {
 			set {
 				_irSensor.SetPortState(LynxIRPort.FRONTRIGHT, value);
 				NotifyPropertyChanged("FrontRightVisibility");
+				NotifyPropertyChanged("FrontRightDistance");
 			}
 		}
 
@@ -178,6 +181,7 @@ namespace RobotInitial.ViewModel {
 			set {
 				_irSensor.SetPortState(LynxIRPort.REAR, value);
 				NotifyPropertyChanged("RearVisibility");
+				NotifyPropertyChanged("RearDistance");
 			}
 		}
 
@@ -186,6 +190,7 @@ namespace RobotInitial.ViewModel {
 			set {
 				_irSensor.SetPortState(LynxIRPort.REARLEFT, value);
 				NotifyPropertyChanged("RearLeftVisibility");
+				NotifyPropertyChanged("RearLeftDistance");
 			}
 		}
 
@@ -194,6 +199,7 @@ namespace RobotInitial.ViewModel {
 			set {
 				_irSensor.SetPortState(LynxIRPort.REARRIGHT, value);
 				NotifyPropertyChanged("RearRightVisibility");
+				NotifyPropertyChanged("RearDistance");
 			}
 		}
 		//------------ END SENSOR ENABLING BINDINGS ----------------------
