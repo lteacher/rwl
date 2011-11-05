@@ -25,6 +25,8 @@ namespace RobotInitial.Model {
                 WaitUntil.Initilize();
             }
 
+            WaitUntil.Update();
+
             if (WaitUntil.Evaluate(protocol)) {
                 //continue to next block
                 initilised = false;
