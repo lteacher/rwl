@@ -186,7 +186,6 @@ namespace RobotInitial.Lynx_Server {
 		// Send the status of the program back to the caller
 		private void sendProgramStatus() {
             clientStream.WriteByte((byte)programStatus);
-			Console.Write("Sent Status \n");
 		}
 
 		//public void processRequest() {

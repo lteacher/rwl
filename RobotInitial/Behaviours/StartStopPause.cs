@@ -53,7 +53,7 @@ namespace RobotInitial.Behaviours {
 			// Check the status is not running
 			int response = Network.Instance.requestProgramStatus();
 			if (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
-				Console.WriteLine("PROGRAM IS RUNNING!!");
+				Console.WriteLine("Program Already Running!!");
 				return;
 			}
 
@@ -69,9 +69,10 @@ namespace RobotInitial.Behaviours {
 			// Get the status here
 			response = Network.Instance.requestProgramStatus();
 
+			Console.WriteLine("Waiting for completion!");
+
 			// Start the program running animation and await status
 			while (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
-				Console.WriteLine("Waiting for completion!");
 				response = Network.Instance.requestProgramStatus();
 			}
 

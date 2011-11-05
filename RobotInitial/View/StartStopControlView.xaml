@@ -56,7 +56,7 @@
 		</EventTrigger>
 	</UserControl.Triggers>
 	
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Visibility="Hidden">
         <Rectangle Height="75" Width="100" Fill="DarkGray" Stroke="Black" Opacity="0.10" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5"/>
         <Grid x:Name="StartButtonGrid" Margin="32.5,20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Opacity="0.395" MouseLeave="ResetColours" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange">
             <i:Interaction.Behaviors>
