@@ -8,29 +8,22 @@ using System.ComponentModel;
 using System.Collections.ObjectModel;
 
 namespace RobotInitial.ViewModel {
-	class SwitchPropertiesViewModel : ViewModelBase, INotifyPropertyChanged {
+	class SwitchPropertiesViewModel : ConditionalPropertiesViewModel, INotifyPropertyChanged {
 		private SwitchBlock<bool> _switchModel = DefaultModelFactory.Instance.CreateSwitchBlock<bool>();
 		public SwitchBlock<bool> SwitchModel { get { return _switchModel; } set { _switchModel = value; } }
 
-		// IR Condition
-		private IRSensorConditional _irSensor;
-
-		// Condition types and its property
-		private ObservableCollection<string> _condTypes = new ObservableCollection<string>();
-		public ObservableCollection<string> CondTypes {
-			get { return _condTypes; }
+		// Sensor Properties Visibility
+		public Visibility SensorPaneVisibility {
+			get {
+				return SelectedCond == 0 ? Visibility.Visible : Visibility.Hidden;
+			}
 		}
 
-		// Condition options and its property
-		private ObservableCollection<ObservableCollection<string>> _condOptions = new ObservableCollection<ObservableCollection<string>>();
-		public ObservableCollection<string> CondOptions {
-			get { return _condOptions[0]; }
-		}
-
-		// Condition operators and its property
-		private ObservableCollection<ObservableCollection<string>> _condOperators = new ObservableCollection<ObservableCollection<string>>();
-		public ObservableCollection<string> CondOperators {
-			get { return _condOperators[0]; }
+		// Counter Properties Visibility
+		public Visibility CounterPaneVisibility {
+			get {
+				return SelectedCond == 1 ? Visibility.Visible : Visibility.Hidden;
+			}
 		}
 
 		private int _selectedCond = 0;
@@ -38,136 +31,53 @@ namespace RobotInitial.ViewModel {
 		// Track the selected index
 		public int SelectedCond {
 			get {
-				if(SwitchModel.Condition is IRSensorConditional) {
-                    //_selectedCond = (int)Math.Log((double)((IRSensorConditional)SwitchModel.Condition).IRSensors, 2);
+				if (SwitchModel.Condition is IRSensorConditional) {
+					_selectedCond = 0;
 				}
-					 
+				if (SwitchModel.Condition is RBGConditional) {
+					_selectedCond = 1;
+				}
 				return _selectedCond;
 			}
 			set {
 				_selectedCond = value;
-
 				// Check which condition selected
 				switch (value) {
-					case 0: // IR Sensor - Front
-					//	_irSensor.IRSensors = LynxIRPort.FRONT;
+					case 0: // IR Sensor
 						SwitchModel.Condition = _irSensor;
 						break;
-					case 1: // IR Sensor - Front Left
-                       // _irSensor.IRSensors = LynxIRPort.FRONTLEFT;
-						SwitchModel.Condition = _irSensor;
+					case 1: // RandomBoolean
+						SwitchModel.Condition = DefaultModelFactory.Instance.CreateRBGConditional();
 						break;
-					case 2: // IR Sensor - Front Right
-                       // _irSensor.IRSensors = LynxIRPort.FRONTRIGHT;
-						SwitchModel.Condition = _irSensor;
-						break;
-					case 3: // IR Sensor - Rear
-                        //_irSensor.IRSensors = LynxIRPort.REAR;
-						SwitchModel.Condition = _irSensor;
-						break;
-					case 4: // IR Sensor - Rear Left
-						//_irSensor.IRSensors = LynxIRPort.REARLEFT;
-						SwitchModel.Condition = _irSensor;
-						break;
-					case 5: // IR Sensor - Rear Right
-						//_irSensor.IRSensors = LynxIRPort.REARLEFT;
-						SwitchModel.Condition = _irSensor;
-						break;
+
 				}
-			}
-		}
-
-		// The selected operator
-		private int _selectedOperator = 0;
-
-		// Handle the selected operator
-		public int SelectedOperator {
-			get {
-				if (SwitchModel.Condition is IRSensorConditional) {
-					if(_irSensor.EqualityOperator == Operator.EQUAL) _selectedOperator = 0;
-					else if(_irSensor.EqualityOperator == Operator.NOTEQUAL) _selectedOperator = 1;
-					else if (_irSensor.EqualityOperator == Operator.LESS) _selectedOperator = 2;
-					else if (_irSensor.EqualityOperator == Operator.EQUALORLESS) _selectedOperator = 3;
-					else if (_irSensor.EqualityOperator == Operator.GREATER) _selectedOperator = 4;
-					else if (_irSensor.EqualityOperator == Operator.EQUALORGREATER) _selectedOperator = 5;
-				} 
-				return _selectedOperator; 
-			}
-			set {
-				_selectedOperator = value;
-
-				// Selected value is an IRSensor value
-				if (SelectedCond >= 0 && SelectedCond <= 5) {
-					switch (value) {
-						case 0: // Equal To (==)
-							_irSensor.EqualityOperator = Operator.EQUAL;
-							break;
-						case 1: // Not Equal To (!=)
-							_irSensor.EqualityOperator = Operator.NOTEQUAL;
-							break;
-						case 2: // Less Than (<)
-							_irSensor.EqualityOperator = Operator.LESS;
-							break;
-						case 3: // Less Than or Equal To (<=)
-							_irSensor.EqualityOperator = Operator.EQUALORLESS;
-							break;
-						case 4: // Greater Than (>)
-							_irSensor.EqualityOperator = Operator.GREATER;
-							break;
-						case 5: // Greater Than or Equal To (>=)
-							_irSensor.EqualityOperator = Operator.EQUALORGREATER;
-							break;
-					}
-				}
-			}
-		}
-
-		// Operator number e.g. distance
-		public int OperatorNumber {
-			get {
-				//return _irSensor.Distance;
-				return 0;
-			}
-			set {
-				//_irSensor.Distance = value;
-			}
-		}
-
-		// Used for setting forever mode
-		private Visibility _isVisible = Visibility.Visible;
-		public Visibility Visibility {
-			get { return _isVisible; }
-			set {
-				_isVisible = value;
+				NotifyVisibility();
+				NotifyAllSensors();
 			}
 		}
 
 		public SwitchPropertiesViewModel() {
-			// the only condition for a Switch block is a IR Sensor at the moment
-			_irSensor = (IRSensorConditional)SwitchModel.Condition;
+
+			// If the condition is an IRSensor
+			if (SwitchModel.Condition is IRSensorConditional) {
+				_irSensor = (IRSensorConditional)SwitchModel.Condition;
+			}
+			else {
+				_irSensor = DefaultModelFactory.Instance.CreateIRSensorConditional();
+			}
 
 			// Initiliase the condition types
-			_condTypes.Add("IR Sensor - Front");
-			_condTypes.Add("IR Sensor - Front Left");
-			_condTypes.Add("IR Sensor - Front Right");
-			_condTypes.Add("IR Sensor - Rear");
-			_condTypes.Add("IR Sensor - Rear Left");
-			_condTypes.Add("IR Sensor - Rear Right");
+			CondTypes.Add("IR Sensor");
+			CondTypes.Add("Random Boolean");
+		}
 
-			// Initialise the condition options, the in order of above
-			ObservableCollection<string> sensorOptions = new ObservableCollection<string>();
-			sensorOptions.Add("Range");
-			_condOptions.Add(sensorOptions);
+		// Override depending on properties type
+		public override void NotifyVisibility() {
+			NotifyPropertyChanged("SensorPaneVisibility");
+		}
 
-			// Initialise the condition operators, the in order of above
-			ObservableCollection<string> sensorOperators = new ObservableCollection<string>();
-			sensorOperators.Add("Equal To (==)");
-			sensorOperators.Add("Not Equal To (!=)");
-			sensorOperators.Add("Less Than (<)");
-			sensorOperators.Add("Less Than or Equal To (<=)");
-			sensorOperators.Add("Greater Than (>)");
-			sensorOperators.Add("Greater Than or Equal To (>=)");
-			_condOperators.Add(sensorOperators);
+		protected override void OnPropertyChanged(string propertyName) {
+			NotifyPropertyChanged(propertyName);
 		}
 
 		public event PropertyChangedEventHandler PropertyChanged;

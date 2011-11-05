@@ -137,6 +137,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ConditionalPropertiesViewModel.cs" />
     <Compile Include="ViewModel\ControlBlockViewModel.cs" />
     <Compile Include="ViewModel\LoopControlBlockViewModel.cs" />
     <Compile Include="ViewModel\LoopPropertiesViewModel.cs" />

@@ -17,14 +17,14 @@
                 <ComboBox VerticalContentAlignment="Top" HorizontalContentAlignment="Center" ItemsSource="{Binding CondTypes}" SelectedIndex="{Binding SelectedCond}" Margin="160.668,1.498,4.787,2.835" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16"/>
         		<TextBlock TextWrapping="Wrap" TextAlignment="Center" Margin="49.334,4.5,0,3.5" FontFamily="Comic Sans MS" FontWeight="Bold" FontSize="16" HorizontalAlignment="Left" Width="110"><Run Language="en-au" Text="LOOP UNTIL"/></TextBlock>
         	</Grid>
-        	<Grid x:Name="SensorPane" Visibility="{Binding SensorPaneVisibility}" Margin="10.208,40,-0.79,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="634.393" Height="83.779" d:IsHidden="True">
+        	<Grid x:Name="SensorPane" Visibility="{Binding SensorPaneVisibility}" Margin="10.208,40,-0.79,0" HorizontalAlignment="Center" VerticalAlignment="Top" Width="634.393" Height="83.779">
         		<Grid Height="22.723" Margin="102,-4.668,220.402,0" VerticalAlignment="Top">
         			<ComboBox SelectedIndex="{Binding SelectedOperator}" ItemsSource="{Binding CondOperators}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="203.991" FontFamily="Comic Sans MS" FontWeight="Bold"/>
         			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Width="76.334" TextAlignment="Center" Margin="34,3.418,0,2.008" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment"><Run Language="en-au" Text="Distance is"/></TextBlock>
         		</Grid>
         		<Grid Margin="81.858,26.267,112.222,30.088" VerticalAlignment="Top">
         			<Grid Margin="0" Height="24.924" VerticalAlignment="Top" HorizontalAlignment="Center">
-        				<TextBox Visibility="{Binding FrontVisbility}" TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
+                        <TextBox Visibility="{Binding FrontVisibility}" TextWrapping="Wrap" MaxLength="4" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" HorizontalAlignment="Right" VerticalAlignment="Top" Width="56.389">
         					<Binding Path="FrontDistance" UpdateSourceTrigger="PropertyChanged">
         						<Binding.ValidationRules>
         							<RobotInitial_Validation:NumericOnlyRule/>
@@ -86,8 +86,9 @@
         				<CheckBox Content="Rear Right" IsChecked="{Binding RearRightEnabled}" Margin="0,2.201,60.254,0" FontFamily="Comic Sans MS" FontWeight="Bold" Height="22.723" VerticalAlignment="Top"/>
         			</Grid>
         		</Grid>
+                <ComboBox SelectedIndex="{Binding LogicalEvaluator}" ItemsSource="{Binding LogicalEvaluators}" VerticalAlignment="Top" HorizontalAlignment="Right" Width="115.991" FontFamily="Comic Sans MS" FontWeight="Bold" Margin="0,-4.667,103.402,0" d:LayoutOverrides="HorizontalAlignment, VerticalAlignment"/>
         	</Grid>
-            <Grid x:Name="CounterPane" Visibility="{Binding CounterPaneVisibility}" Margin="10.208,39.141,-0.79,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="634.393" Height="83.779">
+            <Grid x:Name="CounterPane" Visibility="{Binding CounterPaneVisibility}" Margin="10.208,39.141,-0.79,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="634.393" Height="83.779" d:IsHidden="True">
         		<Grid Height="22.723" Margin="171.5,-4.668,150.902,0" VerticalAlignment="Top">
         			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Width="52.334" TextAlignment="Center" Margin="47,3.418,0,2.008" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment"><Run Language="en-au" Text="Reaches"/></TextBlock>
         			<TextBox TextWrapping="Wrap" Margin="101.333,0,0,0" MaxLength="6" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50.324">

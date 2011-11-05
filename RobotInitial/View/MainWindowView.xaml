@@ -123,8 +123,8 @@
         
         <Grid x:Name="LayoutRoot">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.669*"/>
-                <RowDefinition Height="0.331*"/>
+                <RowDefinition Height="0.667*"/>
+                <RowDefinition Height="0.333*"/>
             </Grid.RowDefinitions>
             <TabControl
                 IsSynchronizedWithCurrentItem="True"
