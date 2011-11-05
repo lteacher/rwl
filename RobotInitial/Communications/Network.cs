@@ -64,6 +64,8 @@ namespace LynxTest2.Communications {
 
 		// Check if a connection is available to a robot
 		public bool robotConnectionAvail() {
+			if(!isConnected()) return false;
+
 			// Send a ping request
 			connection.WriteByte(Request_Handler.PING_REQUEST);
 
@@ -78,8 +80,7 @@ namespace LynxTest2.Communications {
 
 		// Close the connection to the Lynx
 		public void closeConnection() {
-			// Send a ping request
-			connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
+			if (isConnected()) connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
 			client.Close();
 			connection.Close();
 		}

@@ -119,13 +119,13 @@ namespace RobotInitial.ViewModel
 			ConnectButtonVisibility = Visibility.Visible;
 			DisconnectButtonVisibility = Visibility.Hidden;
 
-			////=== TESTING ONLY, START A LOCAL LYNX SERVER!
-			//Thread ServerThread;
-			//Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
-			//ServerThread = new Thread(server.start);
-			//ServerThread.Start();
-			//Console.WriteLine("SERVER IS RUNNING");
-			////====================================================
+			//=== TESTING ONLY, START A LOCAL LYNX SERVER!
+			Thread ServerThread;
+			Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
+			ServerThread = new Thread(server.start);
+			ServerThread.Start();
+			Console.WriteLine("SERVER IS RUNNING");
+			//====================================================
 
 			// Update the RobotNames address list
 			updateRobotAddressList();
@@ -170,6 +170,9 @@ namespace RobotInitial.ViewModel
 									IPHostEntry IPEntry = Dns.GetHostEntry(value);
 									IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(value), Network.DefaultPort);
 
+									// Debug text
+									Console.WriteLine("Pinging ({0})...", value);
+
 									// Connect to the address
 									Network.Instance.connectToLynx(endpoint,Network.PING_TIMEOUT);
 
@@ -183,7 +186,7 @@ namespace RobotInitial.ViewModel
 									}
 								}
 								catch (SocketException exc) {
-									Console.WriteLine("EXCEPTION ({1}): {0}", exc, value);
+									Console.WriteLine("Connection to ({0}) Failed", value);
 								}
 							}
 							else {
@@ -194,6 +197,9 @@ namespace RobotInitial.ViewModel
 										// NOTE: Here im using the first address, there could be more than one!!
 										IPHostEntry IPEntry = Dns.GetHostEntry(value);
 										IPEndPoint endpoint = new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort);
+
+										// Debug text
+										Console.WriteLine("Pinging ({0})...", value);
 
 										// Connect to the address
                                         Network.Instance.connectToLynx(endpoint, Network.PING_TIMEOUT);
@@ -208,7 +214,7 @@ namespace RobotInitial.ViewModel
 										}
 									}
 									catch (SocketException exc) {
-										Console.WriteLine("EXCEPTION ({1}): {0}", exc, value);
+										Console.WriteLine("Connection to ({0}) Failed", value);
 									}
 								}
 							}
@@ -239,7 +245,7 @@ namespace RobotInitial.ViewModel
 
 		// Update a bunch of properties
 		private void robotNamesUpdated() {
-            Console.WriteLine("CURRENT ROBOT NAMES ARE: ");
+            Console.WriteLine("Current Available Robots: ");
             foreach (string str in RobotNames)
             {
                 Console.WriteLine(str);
