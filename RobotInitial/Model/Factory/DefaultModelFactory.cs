@@ -8,6 +8,8 @@ using System.Text;
 namespace RobotInitial.Model {
     //creates blocks with default parameters
     sealed class DefaultModelFactory :ModelFactory {
+        public const int IRDISTANCEDEFAULT = 50;
+
         //private constructor
         private DefaultModelFactory() { }
 
@@ -75,7 +77,7 @@ namespace RobotInitial.Model {
 
         public IRSensorConditional CreateIRSensorConditional() {
             IRSensorConditional cond = new IRSensorConditional();
-            cond.SetDistance(LynxIRPort.FRONT, 50);
+            cond.SetDistance(LynxIRPort.FRONT, IRDISTANCEDEFAULT);
             cond.SetPortState(LynxIRPort.FRONT, true);
             cond.EqualityOperator = Operator.LESS;
             cond.LogicalOperator = LogicalOperator.OR;

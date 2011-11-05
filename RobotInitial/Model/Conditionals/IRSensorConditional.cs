@@ -33,23 +33,23 @@ namespace RobotInitial.Model {
             return false;
         }
 
-        public static string ToString(this Operator _operator) {
-            switch (_operator) {
-                case Operator.EQUAL:
-                    return "==";
-                case Operator.GREATER:
-                    return ">";
-                case Operator.LESS:
-                    return "<";
-                case Operator.EQUALORGREATER:
-                    return ">=";
-                case Operator.EQUALORLESS:
-                    return "<=";
-                case Operator.NOTEQUAL:
-                    return "!=";
-            }
-            return "undefined";
-        }
+        //public static string ToString(this Operator _operator) {
+        //    switch (_operator) {
+        //        case Operator.EQUAL:
+        //            return "==";
+        //        case Operator.GREATER:
+        //            return ">";
+        //        case Operator.LESS:
+        //            return "<";
+        //        case Operator.EQUALORGREATER:
+        //            return ">=";
+        //        case Operator.EQUALORLESS:
+        //            return "<=";
+        //        case Operator.NOTEQUAL:
+        //            return "!=";
+        //    }
+        //    return "undefined";
+        //}
     }
 
     public enum LogicalOperator {
@@ -57,17 +57,17 @@ namespace RobotInitial.Model {
         AND
     }
 
-    static class LogicalOperatorExt {
-        public static string ToString(this LogicalOperator _operator) {
-            switch (_operator) {
-                case LogicalOperator.OR:
-                    return "Any";
-                case LogicalOperator.AND:
-                    return "All";
-            }
-            return "undefined";
-        }
-    }
+    //static class LogicalOperatorExt {
+    //    public static string ToString(this LogicalOperator _operator) {
+    //        switch (_operator) {
+    //            case LogicalOperator.OR:
+    //                return "||";
+    //            case LogicalOperator.AND:
+    //                return "&&";
+    //        }
+    //        return "undefined";
+    //    }
+    //}
 
     [Serializable()]
     class IRSensorConditional : Conditional<bool> {
@@ -81,6 +81,9 @@ namespace RobotInitial.Model {
         //activate/deactivate a port
         public void SetPortState(LynxIRPort port, bool state) {
             portStates[port] = state;
+            if (!distances.ContainsKey(port)) {
+                distances[port] = DefaultModelFactory.IRDISTANCEDEFAULT;
+            }
         }
 
         public bool GetPortState(LynxIRPort port) {
@@ -116,20 +119,29 @@ namespace RobotInitial.Model {
 
         public override string ToString() {
             IEnumerable<KeyValuePair<LynxIRPort, int>> enabledDistances = distances.Where(kvp => portStates[kvp.Key]);
+            string expression = "";
 
-            string expression = LogicalOperator.ToString() + "(";
             foreach (KeyValuePair<LynxIRPort, int> kvp in enabledDistances) {
-                expression += kvp.Key + " " + EqualityOperator.ToString() + " " + kvp.Value + " ";
+                expression += kvp.Key + " " + EqualityOperator + " " + kvp.Value;
+                if (kvp.Key != enabledDistances.Last().Key) {
+                    expression += " " + LogicalOperator + " ";
+                }
             }
-            expression += ")";
 
-            return "IRSensor " + expression;
+            return expression;
         }
 
     //    static void Main() {
     //        DefaultModelFactory fact = DefaultModelFactory.Instance;
     //        IRSensorConditional ir = fact.CreateIRSensorConditional();
+    //        ir.SetPortState(LynxIRPort.FRONTLEFT, true);
+    //        ir.SetDistance(LynxIRPort.FRONTLEFT, 1338);
+    //        ir.SetPortState(LynxIRPort.REAR, true);
+    //        ir.SetPortState(LynxIRPort.FRONTLEFT, false);
+    //        ir.SetPortState(LynxIRPort.REARLEFT, true);
+    //        ir.SetDistance(LynxIRPort.REARLEFT, 2121);
     //        Console.WriteLine(ir.ToString());
+    //        while (true) { }
     //}
     }
 }
