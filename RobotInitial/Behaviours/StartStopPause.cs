@@ -13,6 +13,7 @@ using RobotInitial.Lynx_Server;
 using RobotInitial.Model;
 using System.Windows.Threading;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace RobotInitial.Behaviours {
 	class StartStopPause : Behavior<Grid> {
@@ -48,7 +49,7 @@ namespace RobotInitial.Behaviours {
 				Network.Instance.startProgram(start);
 			}
 			catch (LynxBusyException exc) {
-				Console.WriteLine("LYNX IS BUSY!");
+				Console.WriteLine("Lynx is Busy!");
 				return;
 			}
 
@@ -80,13 +81,28 @@ namespace RobotInitial.Behaviours {
 			// Get its view model
 			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
 
+			// Get the animation
+			Storyboard story = (Storyboard)mainWindow.StartStopControl.FindResource("RunningAnimation");
+
 			// Set the colour
 			if (mainWindowViewModel.ProgramPaused) {
 				RadialGradientBrush currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.StartTriangle.Fill;
 				currentBrush.GradientStops[1].Color = Colors.Orange;
+
+				// Get the brush of the animated ellipse
+				currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.AnimatedEllipse.Fill;
+				currentBrush.GradientStops[0].Color = Colors.Orange;
+				story.Pause(mainWindow.StartStopControl);
+
 			} else {
 				RadialGradientBrush currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.StartTriangle.Fill;
 				currentBrush.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#FF00FF04");
+
+				// Get the brush of the animated ellipse
+				currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.AnimatedEllipse.Fill;
+				currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
+				story.Pause(mainWindow.StartStopControl);
+				mainWindow.StartStopControl.AnimatedEllipse.Visibility = Visibility.Hidden;
 			}
 
 			// Unhide the start button
@@ -202,15 +218,26 @@ namespace RobotInitial.Behaviours {
 			// Hide the UI Play button
 			mainWindow.StartStopControl.StartButtonGrid.SetValue(UIElement.VisibilityProperty,Visibility.Hidden);
 
+			// Get and start the animation
+			Storyboard story = (Storyboard)mainWindow.StartStopControl.FindResource("RunningAnimation");
+			mainWindow.StartStopControl.AnimatedEllipse.Visibility = Visibility.Visible;
+
 			// Create and launch the thread to start the program
 			if(mainWindowViewModel.ProgramPaused) {
 				// Switch off the pause flag before moving to the new thread
 				mainWindowViewModel.ProgramPaused = false;
 
+				// Fix the color of the animation back up
+				RadialGradientBrush currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.AnimatedEllipse.Fill;
+				currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
+
+				story.Resume(mainWindow.StartStopControl);
+
 				NoArgDelegate programResumer = new NoArgDelegate(resumeProgram);
 				programResumer.BeginInvoke(null,null);
 			}
 			else {
+				story.Begin(mainWindow.StartStopControl, true);
 				StartProgramDelegate programLauncher = new StartProgramDelegate(startProgram);
 				programLauncher.BeginInvoke(startBlock,null,null);
 			}

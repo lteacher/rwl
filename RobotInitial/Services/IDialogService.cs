@@ -6,8 +6,10 @@ using System.Windows;
 
 namespace RobotInitial.Services
 {
-    interface IDialogService
+    public interface IDialogService
     {
+		string FileName { get; }
+		bool OpenFileDialog();
         //string? ShowOpenFileDialog();
         //string? ShowSaveFileDialog();
         //string? ShowMessageDialog(string text, string title, MessageBoxButton button, MessageBoxImage image);

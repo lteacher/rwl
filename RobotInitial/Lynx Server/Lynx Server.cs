@@ -27,7 +27,6 @@ namespace RobotInitial.Lynx_Server
                 //Check for TCP/IP connection requests
                 client = tcpListener.AcceptTcpClient();
 
-
                 //Send request off to a new thread to be handled
                 currentRequest.setClient(client);
                 currentRequest.processRequest();

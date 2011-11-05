@@ -48,16 +48,78 @@
 				<SplineDoubleKeyFrame KeyTime="0:0:0.3" Value="0.395"/>
 			</DoubleAnimationUsingKeyFrames>
 		</Storyboard>
-		<Storyboard x:Key="RunningAnimation"/>
+		<Storyboard x:Key="RunningAnimation" RepeatBehavior="Forever">
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="AnimatedEllipse">
+				<EasingDoubleKeyFrame KeyTime="0" Value="13.583"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="4.583"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-6.042"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-20.292"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-32.542"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-43.875"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="-53.125"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="-57.625"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="-57.875"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="-57.792"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="-57.625"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.1" Value="-57.708"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="-56.958"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.3" Value="-51.833"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.4" Value="-41.5"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="-30.666"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.6" Value="-20.666"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.7" Value="-8.166"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.8" Value="6.334"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.9" Value="14.584"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2" Value="16.334"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2.1" Value="16.084"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="13.584"/>
+			</DoubleAnimationUsingKeyFrames>
+			<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="AnimatedEllipse">
+				<EasingDoubleKeyFrame KeyTime="0" Value="10.667"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="-0.833"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="-4.958"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="-5.083"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-5.083"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="-2.416"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.6" Value="5.334"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.7" Value="16.709"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="29.459"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:0.9" Value="39.542"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1" Value="50.042"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.1" Value="62.959"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.2" Value="74.542"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.3" Value="84.667"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.4" Value="91.5"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.5" Value="93.167"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.6" Value="93"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.7" Value="92.5"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.8" Value="87.333"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:1.9" Value="74.333"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2" Value="55.833"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2.1" Value="40.083"/>
+				<EasingDoubleKeyFrame KeyTime="0:0:2.2" Value="10.708"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
 	</UserControl.Resources>
-	<UserControl.Triggers>
-		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
-			<BeginStoryboard Storyboard="{StaticResource RunningAnimation}"/>
-		</EventTrigger>
-	</UserControl.Triggers>
 	
-    <Grid x:Name="MainGrid" Visibility="Hidden">
-        <Rectangle Height="75" Width="100" Fill="DarkGray" Stroke="Black" Opacity="0.10" StrokeThickness="8" RadiusY="24.5" RadiusX="24.5"/>
+    <Grid x:Name="MainGrid">
+        <Rectangle Height="75" Width="100" Fill="DarkGray" Stroke="Black" Opacity="0.10" StrokeThickness="4" RadiusY="24.5" RadiusX="24.5"/>
+        <Ellipse x:Name="AnimatedEllipse" Visibility="Hidden" HorizontalAlignment="Left" Height="16.875" Margin="-1.334,0,0,8.583" VerticalAlignment="Bottom" Width="16.875" RenderTransformOrigin="0.5,0.5" Opacity="0.435" StrokeThickness="71">
+        	<Ellipse.Fill>
+        		<RadialGradientBrush>
+        			<GradientStop Color="#FF00BE03" Offset="0.659"/>
+        			<GradientStop Color="Black" Offset="0.145"/>
+        		</RadialGradientBrush>
+        	</Ellipse.Fill>
+        	<Ellipse.RenderTransform>
+        		<TransformGroup>
+        			<ScaleTransform/>
+        			<SkewTransform/>
+        			<RotateTransform/>
+        			<TranslateTransform/>
+        		</TransformGroup>
+        	</Ellipse.RenderTransform>
+        </Ellipse>
         <Grid x:Name="StartButtonGrid" Margin="32.5,20" VerticalAlignment="Bottom" HorizontalAlignment="Left" Opacity="0.395" MouseLeave="ResetColours" MouseDown="PressedColourChange" MouseUp="ReleasedColourChange">
             <i:Interaction.Behaviors>
                 <b:StartStopPause/>
