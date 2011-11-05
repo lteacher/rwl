@@ -20,9 +20,6 @@ namespace RobotInitial.View {
 	public partial class StartStopControlView : UserControl {
 		public StartStopControlView() {
 			InitializeComponent();
-			//this.StartButtonGrid.MouseDown +=new MouseButtonEventHandler(DoStartButtonAction);
-			//this.StopButtonGrid.MouseDown += new MouseButtonEventHandler(DoStopButtonAction);
-			//this.PauseButtonGrid.MouseDown += new MouseButtonEventHandler(DoPauseButtonAction);
 		}
 
 		private void PressedColourChange(object sender, System.Windows.Input.MouseButtonEventArgs e)

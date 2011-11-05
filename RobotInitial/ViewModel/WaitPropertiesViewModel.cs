@@ -58,6 +58,7 @@ namespace RobotInitial.ViewModel
 			}
 		}
 
+		// Timer Condition Duration property
 		public string TimeDuration {
 			get {
 				return (_timeCondition.Duration / 1000).ToString();
@@ -67,6 +68,7 @@ namespace RobotInitial.ViewModel
 				if (Double.TryParse(value, out result)) {
 					result *= 1000;
 					_timeCondition.Duration = (int)result;
+					NotifyPropertyChanged("TimeDuration");
 				}
 				else return;
 			}

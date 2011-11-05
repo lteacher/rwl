@@ -18,6 +18,7 @@ namespace RobotInitial.Behaviours {
 
 		private delegate void NoArgDelegate();
 		private delegate void StartProgramDelegate(StartBlock arg);
+		private bool ProgramIsPaused = false;
 
 		protected override void OnAttached() {
 			base.OnAttached();
@@ -31,21 +32,6 @@ namespace RobotInitial.Behaviours {
 			else if(AssociatedObject.Name == "PauseButtonGrid") {
 				AssociatedObject.MouseDown += new System.Windows.Input.MouseButtonEventHandler(DoPauseButtonAction);
 			}
-		}
-
-		private void DoPauseButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
-
-			// Make sure robot is still connected
-
-			// Make sure the program is still running
-
-			// Pause the program
-
-			// Pause the running animation
-
-			// Display the play button as resume
-
-			Console.WriteLine("Nothing Happened!!!");
 		}
 
 		// Start the program up on a separate thread
@@ -73,10 +59,15 @@ namespace RobotInitial.Behaviours {
 
 			// Start the program running animation and await status
 			while (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+				if(response == Request_Handler.PROGRAM_PAUSED_RESPONSE) {
+					ProgramIsPaused = true;
+					break;
+				}
 				response = Network.Instance.requestProgramStatus();
 			}
 
-			Console.WriteLine("Program Completed!");
+			// Some debug text
+			Console.WriteLine(ProgramIsPaused ? "Program Paused!" : "Program Completed!" );
 
 			// Get back to the UI thread
 			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
@@ -92,12 +83,47 @@ namespace RobotInitial.Behaviours {
 
 		// Stop the program on a separate thread
 		private void stopProgram() {
+			// Make sure the program is still running
+			int response = Network.Instance.requestProgramStatus();
+			if (response != Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+				Console.WriteLine("Program is NOT Running!");
+				return;
+			}
+
 			// Stop the program
 			Network.Instance.stopProgram();
 
 			// Get back to the UI thread and make updates
 			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
 				 new NoArgDelegate(updateUIAfterProgram));
+		}
+
+		// Pause the program on a separate thread
+		private void pauseProgram() {
+			// Make sure the program is still running
+			int response = Network.Instance.requestProgramStatus();
+			if (response != Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+				Console.WriteLine("Program is NOT Running!");
+				return;
+			}
+
+			// Pause the program
+			Network.Instance.pauseProgram();
+
+			// Get back to the UI thread and make updates
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+				 new NoArgDelegate(doPauseUIUpdates));
+		}
+
+		private void doPauseUIUpdates() {
+			// Pause the running animation
+
+			// Display the Play Button in Resume mode
+		}
+
+		// Pause the program on a separate thread
+		private void resumeProgram() {
+
 		}
 
 		private void DoStartButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -136,6 +162,7 @@ namespace RobotInitial.Behaviours {
 			// Make sure robot is still connected
 			if(mainWindowViewModel.Connected != true) {
 				// recover UI, this should not be happening here
+				updateUIAfterProgram();
 				return;
 			}
 
@@ -144,6 +171,27 @@ namespace RobotInitial.Behaviours {
 			programLauncher.BeginInvoke(null, null);
 
 			Console.WriteLine("Stopping Program");
+		}
+
+		private void DoPauseButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
+
+			// Make sure robot is still connected
+			// Get the Main Window view
+			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
+
+			// Get its view model
+			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
+
+			// Make sure robot is still connected
+			if (mainWindowViewModel.Connected != true) {
+				// recover UI, this should not be happening here
+				updateUIAfterProgram();
+				return;
+			}
+
+			// Create and launch the thread to start the program
+			NoArgDelegate programLauncher = new NoArgDelegate(pauseProgram);
+			programLauncher.BeginInvoke(null, null);
 		}
 	}
 }

@@ -13,6 +13,7 @@ namespace RobotInitial.Lynx_Server {
 		public const byte STOPPED_RESPONSE = 10;
 		public const byte NO_PROGRAM_RESPONSE = 254;
 		public const byte PROGRAM_EXECUTING_RESPONSE = 253;
+		public const byte PROGRAM_PAUSED_RESPONSE = 252;
 
 		public const int STOP_REQUEST = 83;
 		public const int PAUSE_REQUEST = 80;
@@ -168,6 +169,7 @@ namespace RobotInitial.Lynx_Server {
 					Console.Write("Pausing Program \n");
 					// Tell program to pause
 					VM.pause();
+					programStatus = PROGRAM_PAUSED_RESPONSE;
 				}
 			}
 		}
@@ -179,6 +181,7 @@ namespace RobotInitial.Lynx_Server {
 					Console.Write("Resuming Program \n");
 					// Tell program to resume
 					VM.resume();
+					programStatus = PROGRAM_EXECUTING_RESPONSE;
 				}
 			}
 		}

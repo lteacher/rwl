@@ -47,23 +47,6 @@ namespace RobotInitial.Lynx_Server {
         object initialiseLock = new Object();
         object runningLock = new Object();
 
-		//public Boolean Initialise() {
-		//    lock (initialiseLock) {
-		//        if (runningProgram) {
-		//            return false;
-		//        } else {
-		//            runningProgram = true;
-		//            Start = null;
-		//            Protocol = null;
-		//            terminate = Shutdown.None;
-		//            state = EndState.None;
-		//            runningProgramID = Thread.CurrentThread.ManagedThreadId;
-		//        }
-		//    }
-
-		//    return true;
-		//}
-
 		public Boolean Initialise() {
 			lock (initialiseLock) {
 				if (runningProgram) {
@@ -163,71 +146,3 @@ namespace RobotInitial.Lynx_Server {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-//    public static Boolean runningProgram = false;
-//    private static Boolean stopProgram = false;
-//    private static Object thisLock = new Object();
-
-//    private TcpClient client;
-
-//    public static void Initialise(object input){
-
-//        //Only one thread may attempt to initalise the VM at a time
-//        lock (thisLock) {
-
-//            //If the VM is currently running a program, stop.
-//            if (runningProgram) {
-//                return;
-//            } else {
-//                runningProgram = true;
-//            }
-
-//            //Cast our input object to the TcpClient and start the VM.
-//            RWL_Virtual_Machine VM = new RWL_Virtual_Machine((TcpClient)input);
-//            VM.Start();
-
-//        }
-//    }
-
-//    public static void forceStop(){
-//        stopProgram = true;
-//    }
-
-//    private RWL_Virtual_Machine(TcpClient client) {
-//        this.client = client;
-//    }
-
-//    private void Start() {
-//        while (!stopProgram) {
-
-//        }
-//    }
-//}
-
-//Grab the start block from the workspace
-//LinkedList<Block> ProgramList = new LinkedList<Block>();
-//LynxProtocol protocol = new LynxProtocol();
-//Block currentBlock;
-
-//program._startBlock.perform(protocol, ref ProgramList);
-
-//while (ProgramList.Count > 0) {
-//    if (terminate) {
-//        state = EndState.TerminatedByClient;
-//        return;
-//    }
-
-//    //Pop the first item on the stack/list and run it
-//    currentBlock = ProgramList.First.Value;
-//    ProgramList.RemoveFirst();
-//    currentBlock.perform(protocol, ref ProgramList);
-//}
