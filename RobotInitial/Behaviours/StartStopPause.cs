@@ -60,14 +60,13 @@ namespace RobotInitial.Behaviours {
 			// Start the program running animation and await status
 			while (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
 				if(response == Request_Handler.PROGRAM_PAUSED_RESPONSE) {
-					ProgramIsPaused = true;
 					break;
 				}
 				response = Network.Instance.requestProgramStatus();
 			}
 
 			// Some debug text
-			Console.WriteLine(ProgramIsPaused ? "Program Paused!" : "Program Completed!" );
+			Console.WriteLine(response == Request_Handler.PROGRAM_PAUSED_RESPONSE ? "Program Paused!" : "Program Completed!");
 
 			// Get back to the UI thread
 			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
