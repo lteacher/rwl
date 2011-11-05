@@ -6,6 +6,7 @@ using System.Text;
 namespace RobotInitial.Model {
     class ModelExecutor {
         private Stack<Block> execStack = new Stack<Block>();
+        private volatile bool finishCalled = false;
 
         public StartBlock Start { get; private set; }
         public Protocol Protocol { get; private set; }
@@ -22,7 +23,7 @@ namespace RobotInitial.Model {
         }
 
         public bool IsDone() {
-            return execStack.Count <= 0;
+            return execStack.Count <= 0 || finishCalled;
         }
 
         public void ExecuteOneBlock() {
@@ -45,6 +46,7 @@ namespace RobotInitial.Model {
                 //Console.WriteLine("Program threw exception, stop execution");
                 //program threw Exception, stop execution
                 StopExecution();
+                execStack.Clear();
                 Console.WriteLine("An error occured during the execution of the program");
                 Console.WriteLine(e);
                 return;
@@ -64,8 +66,13 @@ namespace RobotInitial.Model {
         }
 
         public void StopExecution() {
-            execStack.Clear();
-            Protocol.OnExecutionFinish();
+            //ensure finish is called only once
+            lock (this) {
+                if (!finishCalled) {
+                    finishCalled = true;
+                    Protocol.OnExecutionFinish();
+                }
+            }
         }
 
         public void ExecuteAll() {

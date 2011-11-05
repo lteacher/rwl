@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using RobotInitial.Model;
 using System.Diagnostics;
+using System.Threading;
 
 namespace RobotInitial.LynxProtocol {
     class LynxProtocol : Protocol {
@@ -13,6 +14,14 @@ namespace RobotInitial.LynxProtocol {
         private readonly MessageFactory factory = new LynxMessageFactory();
         private LynxMessage currentContCmdL = null;
         private LynxMessage currentContCmdR = null;
+        private LynxMessage pausedContCmdL = null;
+        private LynxMessage pausedContCmdR = null;
+        private bool brakeFlagL = false;
+        private bool brakeFlagR = false;
+        private volatile bool pauseFlag = false;
+        private volatile bool stopFlag = false;
+        private readonly Object movementLock = new Object();
+        private readonly Object flagReadLock = new Object();
 
         #endregion
 
@@ -25,16 +34,39 @@ namespace RobotInitial.LynxProtocol {
 
         #region Implemented Protocol Methods
 
-        public void Move(MoveParameters parameters) {
-            LynxMessage l = factory.CreateMoveMsg(parameters, Side.LEFT);
-            LynxMessage r = factory.CreateMoveMsg(parameters, Side.RIGHT);
-
-            if (parameters.DurationUnit == MoveDurationUnit.UNLIMITED) {
-                StartContinuousMovement(l, r);
+        //this junk is only needed because the brake commands are screwed and we are using a hack instead.
+        //only send brake commands when the last command was not a brake.
+        private static void NullifyMessageIfFlaggedHack(MoveDirection direction, ref bool brakeFlag, ref LynxMessage message) {
+            if (direction == MoveDirection.STOP) {
+                if (brakeFlag) {
+                    message = null;
+                }
+                brakeFlag = true;
             } else {
-                ClearContinuousMovement(); 
-                SendMovement(l, r);
-                WaitForCompletion();
+                brakeFlag = false;
+            }
+        }
+
+        public void Move(MoveParameters parameters) {
+            lock (movementLock) {
+                if (ShouldStop()) {
+                    return;
+                }
+
+                LynxMessage l = factory.CreateMoveMsg(parameters, Side.LEFT);
+                LynxMessage r = factory.CreateMoveMsg(parameters, Side.RIGHT);
+
+                //nullify any stop messages if it already stopped.
+                //obliterate this junk when the brake commands actually work, instead of using our move a very small distance hack
+                NullifyMessageIfFlaggedHack(parameters.LeftDirection, ref brakeFlagL, ref l);
+                NullifyMessageIfFlaggedHack(parameters.RightDirection, ref brakeFlagR, ref r);
+
+                if (parameters.DurationUnit == MoveDurationUnit.UNLIMITED) {
+                    StartContinuousMovement(l, r);
+                } else {
+                    SendEncoderMovement(l, r);
+                    WaitForCompletion();
+                }
             }
         }
 
@@ -57,6 +89,12 @@ namespace RobotInitial.LynxProtocol {
                 new Vector3(r.GetArg(7), r.GetArg(8), r.GetArg(9)));
         }
 
+
+        public int RequestStatus() {
+            //the lynx status doesn't contain any useful info for the program
+            return 0;
+        }
+
         //need to test how the robot reacts to the reset commands before I can write this
         public void OnExecutionStart() {
             Console.WriteLine("PLEASE WRITE THE INITILISATION CODE");
@@ -65,30 +103,66 @@ namespace RobotInitial.LynxProtocol {
         }
 
         public void OnExecutionFinish() {
-            Console.WriteLine("program ended");
-            SendMovement(factory.CreateBrakeMsg(Side.LEFT), factory.CreateBrakeMsg(Side.RIGHT));
-        }
+            Console.WriteLine("program ended/terminated");
 
-        public int RequestStatus() {
-            //the lynx status doesn't contain any useful info for the program
-            return 0;
+            //flag stop before lock attempt to pre-empt any movement commands
+            bool executeStop;
+            lock (flagReadLock) {
+                executeStop = !stopFlag;
+                stopFlag = true;
+            }
+
+            if (executeStop) {
+                lock (movementLock) {
+                    SendBrake();
+                }
+            }
         }
 
         public void Pause() {
+            //flag pause before lock to pre-empt any movement commands
+            bool executePause;
+            lock (flagReadLock) {
+                executePause = !pauseFlag;
+                pauseFlag = true;
+            }
+
+            if (executePause) {
+                lock (movementLock) {
+                    PauseContinuousMovement();
+                }
+            }
         }
 
         public void Resume() {
+            //have to do this because there is no Interlocked.Exchange for bools
+            //and I cant make my own exchange with a ref because then the flag will not be considered volatile
+            bool executeResume;
+            lock (flagReadLock) {
+                executeResume = pauseFlag;
+                pauseFlag = false;
+            }
+
+            if (executeResume) {
+                lock (movementLock) {
+                    ResumeContinuousMovement();
+                }
+            }
         }
 
         #endregion
 
         #region Helper Methods
 
+        private bool ShouldStop() {
+            return pauseFlag || stopFlag;
+        }
+
         private void WaitForCompletion() {
             //continuously poll until both motors return the complete status
             bool leftIncomplete = true;
             bool rightIncomplete = true;
-            while (leftIncomplete || rightIncomplete) {
+            while ((leftIncomplete || rightIncomplete) && !ShouldStop()) {
                 if (leftIncomplete) {
                     leftIncomplete = RequestStatus(Side.LEFT).HasFlag(LynxStatus.COMMAND_INCOMPLETE);
                 }
@@ -98,9 +172,23 @@ namespace RobotInitial.LynxProtocol {
             }
         }
 
-        private void SendMovement(LynxMessage left, LynxMessage right) {
-            LynxMessagePort.Instance.Send(left, false);
-            LynxMessagePort.Instance.Send(right, false);
+        private void SendEncoderMovement(LynxMessage left, LynxMessage right) {
+            if (left != null) {
+                LynxMessagePort.Instance.Send(left, false);
+            }
+            if (right != null) {
+                LynxMessagePort.Instance.Send(right, false);
+            }
+            ClearContinuousMovement();
+        }
+
+        private void SendBrake() {
+            //only send the brake when it is actually moving
+            if (IsContinuouslyMoving()) {
+                LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.LEFT), false);
+                LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.RIGHT), false);
+                ClearContinuousMovement();
+            }
         }
 
         private LynxStatus RequestStatus(Side side) {
@@ -114,14 +202,26 @@ namespace RobotInitial.LynxProtocol {
 
         private void StartContinuousMovement(LynxMessage left, LynxMessage right) {
             //only send if it is different to the current continuous command
-            if (!left.Equals(currentContCmdL)) {
+            if (left != null && !left.Equals(currentContCmdL)) {
                 LynxMessagePort.Instance.Send(left, false);
                 currentContCmdL = left;
             }
-            if (!right.Equals(currentContCmdR)) {
+            if (right != null && !right.Equals(currentContCmdR)) {
                 LynxMessagePort.Instance.Send(right, false);
                 currentContCmdR = right;
             }
+        }
+
+        private void PauseContinuousMovement() {
+            pausedContCmdL = currentContCmdL;
+            pausedContCmdR = currentContCmdR;
+            this.SendBrake(); //clears currentContCmdL/R
+        }
+
+        private void ResumeContinuousMovement() {
+            StartContinuousMovement(pausedContCmdL, pausedContCmdR);
+            pausedContCmdL = null;
+            pausedContCmdR = null;
         }
 
         private void ClearContinuousMovement() {
@@ -129,7 +229,18 @@ namespace RobotInitial.LynxProtocol {
             currentContCmdR = null;
         }
 
-        #endregion
+        //private bool IsLeftContinuouslyMoving() {
+        //    return currentContCmdL != null;
+        //}
 
+        //private bool IsRightContinuouslyMoving() {
+        //    return currentContCmdR != null;
+        //}
+
+        private bool IsContinuouslyMoving() {
+            return currentContCmdR != null || currentContCmdL != null;
+        }
+
+        #endregion
     }
 }

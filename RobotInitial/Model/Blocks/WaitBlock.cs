@@ -30,7 +30,7 @@ namespace RobotInitial.Model {
                 initilised = false;
                 performAfter.AddFirst(Next);
             } else {
-                //condition is yet to be true, re-evalutate again
+                //condition not true yet, evalutate again
                 //the block is exited so the stop/pause checks can occur while waiting
                 performAfter.AddFirst(this);
             }
