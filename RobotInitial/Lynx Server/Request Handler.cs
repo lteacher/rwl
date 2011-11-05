@@ -59,6 +59,7 @@ namespace RobotInitial.Lynx_Server {
 							pauseCurrentProgram();
 							break;
 						case RESUME_REQUEST:	// Resume a paused program
+							resumeCurrentProgram();
 							break;
 						case DISCONNECT_REQUEST:	// Disconnect, stop looping!
 							closeConnection();

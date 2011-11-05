@@ -12,13 +12,13 @@ using System.Net;
 using RobotInitial.Lynx_Server;
 using RobotInitial.Model;
 using System.Windows.Threading;
+using System.Windows.Media;
 
 namespace RobotInitial.Behaviours {
 	class StartStopPause : Behavior<Grid> {
 
 		private delegate void NoArgDelegate();
 		private delegate void StartProgramDelegate(StartBlock arg);
-		private bool ProgramIsPaused = false;
 
 		protected override void OnAttached() {
 			base.OnAttached();
@@ -74,17 +74,34 @@ namespace RobotInitial.Behaviours {
 		}
 
 		private void updateUIAfterProgram() {
+			// Get the Main Window view
+			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
+
+			// Get its view model
+			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
+
+			// Set the colour
+			if (mainWindowViewModel.ProgramPaused) {
+				RadialGradientBrush currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.StartTriangle.Fill;
+				currentBrush.GradientStops[1].Color = Colors.Orange;
+			} else {
+				RadialGradientBrush currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.StartTriangle.Fill;
+				currentBrush.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#FF00FF04");
+			}
+
 			// Unhide the start button
+			mainWindow.StartStopControl.StartButtonGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
 
 			// Stop the playing animation
-
+			
 		}
 
 		// Stop the program on a separate thread
 		private void stopProgram() {
 			// Make sure the program is still running
 			int response = Network.Instance.requestProgramStatus();
-			if (response != Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+			if (response != Request_Handler.PROGRAM_EXECUTING_RESPONSE &&
+				response != Request_Handler.PROGRAM_PAUSED_RESPONSE) {
 				Console.WriteLine("Program is NOT Running!");
 				return;
 			}
@@ -94,7 +111,7 @@ namespace RobotInitial.Behaviours {
 
 			// Get back to the UI thread and make updates
 			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-				 new NoArgDelegate(updateUIAfterProgram));
+				 new NoArgDelegate(doStopUIUpdates));
 		}
 
 		// Pause the program on a separate thread
@@ -115,14 +132,52 @@ namespace RobotInitial.Behaviours {
 		}
 
 		private void doPauseUIUpdates() {
-			// Pause the running animation
+			// Get the Main Window view
+			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
 
-			// Display the Play Button in Resume mode
+			// Get its view model
+			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
+
+			// Set the paused flag
+			mainWindowViewModel.ProgramPaused = true;
+			
+			// Pause the running animation
 		}
+
+		private void doStopUIUpdates() {
+			// Get the Main Window view
+			MainWindowView mainWindow = (MainWindowView)Application.Current.MainWindow;
+
+			// Get its view model
+			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
+
+			// Its not paused if it ever was
+			mainWindowViewModel.ProgramPaused = false;
+		}
+
 
 		// Pause the program on a separate thread
 		private void resumeProgram() {
+			
+			// Resume the program!
+			Network.Instance.resumeProgram();
 
+			// Get the status here
+			int response = Network.Instance.requestProgramStatus();
+
+			Console.WriteLine("Waiting for completion!");
+
+			// Start the program running animation and await status
+			while (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+				if (response == Request_Handler.PROGRAM_PAUSED_RESPONSE) {
+					break;
+				}
+				response = Network.Instance.requestProgramStatus();
+			}
+
+			// Get back to the UI thread
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+				 new NoArgDelegate(updateUIAfterProgram));
 		}
 
 		private void DoStartButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {
@@ -145,10 +200,20 @@ namespace RobotInitial.Behaviours {
 			}
 
 			// Hide the UI Play button
+			mainWindow.StartStopControl.StartButtonGrid.SetValue(UIElement.VisibilityProperty,Visibility.Hidden);
 
 			// Create and launch the thread to start the program
-			StartProgramDelegate programLauncher = new StartProgramDelegate(startProgram);
-			programLauncher.BeginInvoke(startBlock,null,null);
+			if(mainWindowViewModel.ProgramPaused) {
+				// Switch off the pause flag before moving to the new thread
+				mainWindowViewModel.ProgramPaused = false;
+
+				NoArgDelegate programResumer = new NoArgDelegate(resumeProgram);
+				programResumer.BeginInvoke(null,null);
+			}
+			else {
+				StartProgramDelegate programLauncher = new StartProgramDelegate(startProgram);
+				programLauncher.BeginInvoke(startBlock,null,null);
+			}
 		}
 
 		private void DoStopButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {

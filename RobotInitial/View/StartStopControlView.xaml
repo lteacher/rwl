@@ -86,7 +86,7 @@
         			</RadialGradientBrush>
         		</Ellipse.Fill>
         	</Ellipse>
-        	<ed:RegularPolygon x:Name="regularPolygon" InnerRadius="1" Margin="9.666,8.958,1.501,9.875" PointCount="3" Stretch="Fill" RenderTransformOrigin="0.5,0.5" Stroke="Black" StrokeThickness="0.5">
+        	<ed:RegularPolygon x:Name="StartTriangle" InnerRadius="1" Margin="9.666,8.958,1.501,9.875" PointCount="3" Stretch="Fill" RenderTransformOrigin="0.5,0.5" Stroke="Black" StrokeThickness="0.5">
         		<ed:RegularPolygon.Fill>
         			<RadialGradientBrush Center="11.917,11.1" GradientOrigin="11.917,7.1" MappingMode="Absolute" RadiusY="7.8" RadiusX="6.7">
         				<RadialGradientBrush.RelativeTransform>

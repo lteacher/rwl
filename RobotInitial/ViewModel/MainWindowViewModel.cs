@@ -55,6 +55,7 @@ namespace RobotInitial.ViewModel
 		//ObservableCollection<TaskBlockTabViewModel> _brickTabs;
 
 		public bool Connected = false;
+		public bool ProgramPaused { get; set; }
 		public bool AddressesEnabled { get; set; }
 		private delegate void NoArgDelegate();
 		private delegate void OneArgDelegate(string arg);
