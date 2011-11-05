@@ -42,7 +42,6 @@ namespace RobotInitial.Lynx_Server {
         private StartBlock Start;
         private Protocol Protocol;
         public EndState state;
-        private volatile Boolean pauseFlag = false;
 		private ModelExecutor executor;
 
         object initialiseLock = new Object();
@@ -88,11 +87,11 @@ namespace RobotInitial.Lynx_Server {
 		}
 
         public void pause() {
-            pauseFlag = true;
+            executor.Pause();
         }
 
         public void resume() {
-            pauseFlag = false;
+            executor.Resume();
         }
 
         public void LoadProgram(StartBlock start, Protocol protocol) {
@@ -108,6 +107,7 @@ namespace RobotInitial.Lynx_Server {
             if (Thread.CurrentThread.ManagedThreadId == runningProgramID) {
                 this.terminate = terminate;
 				state = EndState.TerminatedByClient;
+                executor.StopExecution();
             } else {
                 throw new VirtualMachineOwnershipException();
             }
@@ -147,15 +147,9 @@ namespace RobotInitial.Lynx_Server {
                     while (!executor.IsDone()) {
                         //Check hardware/software shutdowns
                         if (terminate != Shutdown.None) {
-                            executor.StopExecution();
+                            //executor.StopExecution(); now called on the request thread
                             state = EndState.TerminatedByClient;
                             break;
-                        }
-
-                        if (pauseFlag) {
-                            executor.Pause();
-                            while (pauseFlag) { }   //busy wait
-                            executor.Resume();
                         }
 
                         //Run through next program instruction
@@ -164,7 +158,6 @@ namespace RobotInitial.Lynx_Server {
 
                     if (state == EndState.None) state = EndState.Completed;
                     LynxMessagePort.Instance.ReleaseComPort();
-
                 }
             }
         }

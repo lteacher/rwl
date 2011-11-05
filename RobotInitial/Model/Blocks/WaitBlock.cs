@@ -9,6 +9,7 @@ namespace RobotInitial.Model {
     class WaitBlock : AbstractBlock {
 
         public Conditional<bool> WaitUntil { get; set; }
+        public bool initilised = false;
 
         internal WaitBlock() {
         }
@@ -19,15 +20,19 @@ namespace RobotInitial.Model {
         }
 
         public override void Perform(Protocol protocol, ref LinkedList<Block> performAfter) {
-            performAfter.AddFirst(Next);
+            if (!initilised) {
+                initilised = true;
+                WaitUntil.Initilize();
+            }
 
-            WaitUntil.Initilize();
-            while (!WaitUntil.Evaluate(protocol)) {
-                //sleeping may potentially reduce the reponsiveness of the conditional which could
-                //obviously cause problems.... ie the robot crashing into the wall
-                //because the IR sensor wasn't polled often enough. But I don't really know if this would be an issue. 
-                //This just has to be tested.
-                //Thread.Sleep(10);
+            if (WaitUntil.Evaluate(protocol)) {
+                //continue to next block
+                initilised = false;
+                performAfter.AddFirst(Next);
+            } else {
+                //condition not true yet, evalutate again
+                //the block is exited so the stop/pause checks can occur while waiting
+                performAfter.AddFirst(this);
             }
         }
 
