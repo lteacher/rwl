@@ -63,9 +63,23 @@ namespace RobotInitial.ViewModel
 		private delegate void OneArgDelegate(string arg);
 		public Visibility ConnectButtonVisibility { get; set; }
 		public Visibility DisconnectButtonVisibility { get; set; }
-		public Visibility RefreshButtonVisibility { get; set; }
+		private Visibility _refreshButtonVisibility;
+		public Visibility RefreshButtonVisibility {
+			get {
+				return _refreshButtonVisibility;
+			}
+			set {
+				_refreshButtonVisibility = value;
+				NotifyPropertyChanged("RefreshButtonVisibility");
+			} 
+		}
 		public Collection<string> _robotNames = new Collection<string>();
 		public Collection<IPEndPoint> _robotEndpoints = new Collection<IPEndPoint>();
+		public Collection<IPEndPoint> RobotEndpoints {
+			get {
+				return _robotEndpoints;
+			}
+		}
 		public Collection<string> RobotNames {
 			get { return _robotNames; }
 		}
@@ -282,29 +296,29 @@ namespace RobotInitial.ViewModel
 			showStartStopWidget();
 		}
 		// Show the start stop widget in the UI
-		private void showStartStopWidget() {
+		public void showStartStopWidget() {
 			if (Connected) {
 				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
 			}
 		}
 
 		// hide the start stop widget
-		private void hideStartStopWidget() {
+		public void hideStartStopWidget() {
 			if (!Connected || Workspaces.Count == 0) {
 				StartStopControlView startStopControl = ((MainWindowView)Application.Current.MainWindow).StartStopControl;
 				startStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
 
-				// Unhide the UI Play button
-				startStopControl.StartButtonGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
-				RadialGradientBrush currentBrush = (RadialGradientBrush)startStopControl.StartTriangle.Fill;
-				currentBrush.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#FF00FF04");
+				//// Unhide the UI Play button
+				//startStopControl.StartButtonGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+				//RadialGradientBrush currentBrush = (RadialGradientBrush)startStopControl.StartTriangle.Fill;
+				//currentBrush.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#FF00FF04");
 
-				// Get the brush of the animated ellipse
-				currentBrush = (RadialGradientBrush)startStopControl.AnimatedEllipse.Fill;
-				currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
-				Storyboard story = (Storyboard)startStopControl.FindResource("RunningAnimation");
-				story.Stop(startStopControl);
-				startStopControl.AnimatedEllipse.Visibility = Visibility.Hidden;
+				//// Get the brush of the animated ellipse
+				//currentBrush = (RadialGradientBrush)startStopControl.AnimatedEllipse.Fill;
+				//currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
+				//Storyboard story = (Storyboard)startStopControl.FindResource("RunningAnimation");
+				//story.Stop(startStopControl);
+				//startStopControl.AnimatedEllipse.Visibility = Visibility.Hidden;
 			}
 		}
 
@@ -412,25 +426,25 @@ namespace RobotInitial.ViewModel
 			}
 		}
 
-		public ICommand DisconnectRobotCommand {
-			get {
-				if(_disconnectCommand == null) {
-					_disconnectCommand = new RelayCommand(param => this.disconnectCurrentRobot());
-				}
-				return _disconnectCommand;
-			}
-		}
+		//public ICommand DisconnectRobotCommand {
+		//    get {
+		//        if(_disconnectCommand == null) {
+		//            _disconnectCommand = new RelayCommand(param => this.disconnectCurrentRobot());
+		//        }
+		//        return _disconnectCommand;
+		//    }
+		//}
 
-		public ICommand ConnectCommand {
-			get {
-				if (_connectCommand == null) {
-					_connectCommand = new RelayCommand(param => this.connectToRobot());
-				}
-				return _connectCommand;
-			}
-		}
+		//public ICommand ConnectCommand {
+		//    get {
+		//        if (_connectCommand == null) {
+		//            _connectCommand = new RelayCommand(param => this.connectToRobot());
+		//        }
+		//        return _connectCommand;
+		//    }
+		//}
 
-		private void setConnectionVisible(ConnectionVisible visible) {
+		public void setConnectionVisible(ConnectionVisible visible) {
 			switch(visible) {
 				case ConnectionVisible.CONNECT:
 					ConnectButtonVisibility = Visibility.Visible;
@@ -456,114 +470,7 @@ namespace RobotInitial.ViewModel
 			NotifyPropertyChanged("AddressesEnabled");
 		}
 
-		public void connectToRobot() {
-			// hide the server refresh
-			RefreshButtonVisibility = Visibility.Hidden;
-			NotifyPropertyChanged("RefreshButtonVisibility");
 
-			// Switch out the connection and disconnect buttons
-			setConnectionVisible(ConnectionVisible.DISCONNECT_ADDRESS);
-
-			// Launch separate thread
-			NoArgDelegate connector = new NoArgDelegate(makeConnection);
-			connector.BeginInvoke(null,null);
-		}
-
-		// Try to make a connection on a separate worker thread
-		private void makeConnection() {
-			if (CurrentAddressText == null) return;
-			try {
-				if (RobotNames.Contains(CurrentAddressText)) {
-					int index = RobotNames.IndexOf(CurrentAddressText);
-
-					// Connect to the Lynx from the list of IP Endpoints
-                    Network.Instance.connectToLynx(_robotEndpoints[index], Network.STANDARD_TIMEOUT);
-				}
-				else {
-					// try to parse an IPAddress
-					IPAddress ip;
-					if (IPAddress.TryParse(CurrentAddressText, out ip)) {
-						// Connect using the input IP
-                        Network.Instance.connectToLynx(new IPEndPoint(ip, Network.DefaultPort), Network.STANDARD_TIMEOUT);
-					}
-
-					else {
-						// Try getting a Host entry
-						IPHostEntry IPEntry = Dns.GetHostEntry(CurrentAddressText);
-
-						// If successfull, have a go at connecting from the first address
-                        Network.Instance.connectToLynx(new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort), Network.STANDARD_TIMEOUT);
-					}
-				}
-
-				// Connection must have been a success here !
-				// Update the properties back on the main UI thread
-				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-					 new NoArgDelegate(connectionAccept));
-			}
-			catch (LynxBusyException exc) {
-				// Connection must have been a success here !
-				// Update the properties back on the main UI thread
-				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-					 new NoArgDelegate(connectionFailed));
-				Console.WriteLine("Lynx is currently Busy... Connection Failed");
-			}
-			catch (SocketException exc) {
-				// Connection must have been a success here !
-				// Update the properties back on the main UI thread
-				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
-					 new NoArgDelegate(connectionFailed));
-				Console.WriteLine("Socket Exception During Connection: {0}", exc);
-			}
-		}
-
-		// Make changes on connection accepted
-		private void connectionAccept() {
-			Connected = true;
-
-			// Set UI values or stop the animation
-			Console.WriteLine("Connection SUCCEEEDED!!");
-
-			// Show the start stop widget
-			showStartStopWidget();
-
-			// Launch server poller
-
-		}
-
-		// Make changes on connection failure
-		private void connectionFailed() {
-			Connected = false;			
-			Console.WriteLine("Connection FAILED!!");
-
-			// Show the connect button and enable the address
-			setConnectionVisible(ConnectionVisible.CONNECT_ADDRESS);
-
-			// Show the server refresh
-			RefreshButtonVisibility = Visibility.Visible;
-			NotifyPropertyChanged("RefreshButtonVisibility");
-		}
-
-		// Disconnect the current robot
-		private void disconnectCurrentRobot() {
-			if(Network.Instance.isConnected()) {
-				Network.Instance.closeConnection();
-			}
-
-			// Not connected now!
-			Connected = false;
-
-			// Show the server refresh
-			RefreshButtonVisibility = Visibility.Visible;
-			NotifyPropertyChanged("RefreshButtonVisibility");
-			setConnectionVisible(ConnectionVisible.CONNECT_ADDRESS);
-
-			// hide the start stop widget
-			hideStartStopWidget();
-
-			// Reset the start stop widget
-
-		}
 
 		
 
