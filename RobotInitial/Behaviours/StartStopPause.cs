@@ -160,6 +160,13 @@ namespace RobotInitial.Behaviours {
 				StartProgramDelegate programLauncher = new StartProgramDelegate(startProgram);
 				programLauncher.BeginInvoke(null, null, null);
 			}
+			else if (response == Request_Handler.COMPLETED_RESPONSE) {
+				// Do stop UI update
+				doStopUIUpdates();
+
+				// Update the UI for that which should display the play button again
+				updateUIAfterProgram();
+			}
 
 			// Show the start stop widget
 			mainWindowViewModel.showStartStopWidget();
@@ -345,8 +352,14 @@ namespace RobotInitial.Behaviours {
 			// Get its view model
 			MainWindowViewModel mainWindowViewModel = (MainWindowViewModel)mainWindow.DataContext;
 
-			// Its not paused if it ever was
-			mainWindowViewModel.ProgramPaused = false;
+			// If the program is paused
+			if(mainWindowViewModel.ProgramPaused) {
+				// Set as not paused
+				mainWindowViewModel.ProgramPaused = false;
+
+				// Do UI updates
+				updateUIAfterProgram();
+			}
 		}
 
 
