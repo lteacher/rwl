@@ -39,18 +39,21 @@ namespace RobotInitial.Behaviours {
 		private void startProgram(StartBlock start) {
 			// Check the status is not running
 			int response = Network.Instance.requestProgramStatus();
-			if (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE) {
+			if (response == Request_Handler.PROGRAM_EXECUTING_RESPONSE ||
+				response == Request_Handler.PROGRAM_PAUSED_RESPONSE) {
 				Console.WriteLine("Program Already Running!!");
-				return;
 			}
-
-			// Start the program
-			try {
-				Network.Instance.startProgram(start);
+			else if(response == Request_Handler.COMPLETED_RESPONSE) {
+				Console.WriteLine("Program Already Completed!!");
 			}
-			catch (LynxBusyException exc) {
-				Console.WriteLine("Lynx is Busy!");
-				return;
+			else {
+				// Start the program
+				try {
+					Network.Instance.startProgram(start);
+				}
+				catch (LynxBusyException exc) {
+					Console.WriteLine("Lynx is Busy!");
+				}
 			}
 
 			// Get the status here
@@ -101,7 +104,7 @@ namespace RobotInitial.Behaviours {
 				// Get the brush of the animated ellipse
 				currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.AnimatedEllipse.Fill;
 				currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
-				story.Pause(mainWindow.StartStopControl);
+				story.Stop(mainWindow.StartStopControl);
 				mainWindow.StartStopControl.AnimatedEllipse.Visibility = Visibility.Hidden;
 			}
 

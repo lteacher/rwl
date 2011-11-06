@@ -20,6 +20,8 @@ using LynxTest2.Communications;
 using System.Threading;
 using System.Windows.Threading;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 
 namespace RobotInitial.ViewModel
 {
@@ -289,7 +291,20 @@ namespace RobotInitial.ViewModel
 		// hide the start stop widget
 		private void hideStartStopWidget() {
 			if (!Connected || Workspaces.Count == 0) {
-				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
+				StartStopControlView startStopControl = ((MainWindowView)Application.Current.MainWindow).StartStopControl;
+				startStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
+
+				// Unhide the UI Play button
+				startStopControl.StartButtonGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+				RadialGradientBrush currentBrush = (RadialGradientBrush)startStopControl.StartTriangle.Fill;
+				currentBrush.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#FF00FF04");
+
+				// Get the brush of the animated ellipse
+				currentBrush = (RadialGradientBrush)startStopControl.AnimatedEllipse.Fill;
+				currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
+				Storyboard story = (Storyboard)startStopControl.FindResource("RunningAnimation");
+				story.Stop(startStopControl);
+				startStopControl.AnimatedEllipse.Visibility = Visibility.Hidden;
 			}
 		}
 
@@ -545,6 +560,9 @@ namespace RobotInitial.ViewModel
 
 			// hide the start stop widget
 			hideStartStopWidget();
+
+			// Reset the start stop widget
+
 		}
 
 		
