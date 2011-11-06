@@ -91,7 +91,7 @@
         	<Grid x:Name="TimerPane" Visibility="{Binding TimerPaneVisibility}" Margin="10.208,39.141,-0.79,0" HorizontalAlignment="Center" VerticalAlignment="Center" Width="634.393" Height="83.779">
         		<Grid Height="22.723" Margin="171.5,-4.668,150.902,0" VerticalAlignment="Top">
         			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Width="52.334" TextAlignment="Center" Margin="47,3.418,0,2.008" FontFamily="Comic Sans MS" FontWeight="Bold" d:LayoutOverrides="HorizontalAlignment"><Run Language="en-au" Text="Reaches"/></TextBlock>
-        			<TextBox TextWrapping="Wrap" Text="{Binding TimeDuration}"  Margin="101.333,0,0,0" MaxLength="6" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50.324"/>
+        			<TextBox TextWrapping="Wrap" Text="{Binding TimeDuration,Mode=TwoWay}"  Margin="101.333,0,0,0" MaxLength="6" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" Padding="0" VerticalAlignment="Top" HorizontalAlignment="Left" Width="50.324"/>
         			<TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Width="50.001" TextAlignment="Center" Margin="154,3.418,0,2.008" FontFamily="Comic Sans MS" FontWeight="Bold"><Run Language="en-au" Text="seconds"/></TextBlock>
         		</Grid>
         	</Grid>

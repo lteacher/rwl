@@ -73,14 +73,14 @@ namespace RobotInitial.ViewModel
 				NotifyPropertyChanged("RefreshButtonVisibility");
 			} 
 		}
-		public Collection<string> _robotNames = new Collection<string>();
+		public ObservableCollection<string> _robotNames = new ObservableCollection<string>();
 		public Collection<IPEndPoint> _robotEndpoints = new Collection<IPEndPoint>();
 		public Collection<IPEndPoint> RobotEndpoints {
 			get {
 				return _robotEndpoints;
 			}
 		}
-		public Collection<string> RobotNames {
+		public ObservableCollection<string> RobotNames {
 			get { return _robotNames; }
 		}
 
@@ -219,7 +219,7 @@ namespace RobotInitial.ViewModel
 										Console.WriteLine("Pinging ({0})...", value);
 
 										// Connect to the address
-                                        Network.Instance.connectToLynx(endpoint, Network.PING_TIMEOUT);
+										Network.Instance.connectToLynx(endpoint, Network.PING_TIMEOUT);
 
 										// Make sure the server is running 
 										if (Network.Instance.robotConnectionAvail()) {
@@ -244,8 +244,12 @@ namespace RobotInitial.ViewModel
 								// Move to the nodes value
 								string value = reader.ReadElementContentAsString();
 
-								// Add the displayName
-								RobotNames.Add(value);
+								// Add a name to the RobotNames, note its back on the UI thread
+								Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+									 new OneArgDelegate(addRobotName),value);
+
+								//// Add the displayName
+								//RobotNames.Add(value);
 
 								// Set the flag back to false
 								IPAdded = false;
@@ -270,8 +274,13 @@ namespace RobotInitial.ViewModel
 			AddressesEnabled = true;
 			CurrentAddressText = RobotNames.Count>0 ? RobotNames[0]: "No Default Robots Available (Enter an IPAddress)";
 			NotifyPropertyChanged("AddressesEnabled");
-			NotifyPropertyChanged("RobotNames");
 			NotifyPropertyChanged("CurrentAddressText");
+			//NotifyPropertyChanged("RobotNames");
+		}
+
+		// Used to add an item to the RobotNames observable collection
+		private void addRobotName(string name) {
+			RobotNames.Add(name);
 		}
 
 		//#region Command Definitions
@@ -307,18 +316,6 @@ namespace RobotInitial.ViewModel
 			if (!Connected || Workspaces.Count == 0) {
 				StartStopControlView startStopControl = ((MainWindowView)Application.Current.MainWindow).StartStopControl;
 				startStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
-
-				//// Unhide the UI Play button
-				//startStopControl.StartButtonGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
-				//RadialGradientBrush currentBrush = (RadialGradientBrush)startStopControl.StartTriangle.Fill;
-				//currentBrush.GradientStops[1].Color = (Color)ColorConverter.ConvertFromString("#FF00FF04");
-
-				//// Get the brush of the animated ellipse
-				//currentBrush = (RadialGradientBrush)startStopControl.AnimatedEllipse.Fill;
-				//currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
-				//Storyboard story = (Storyboard)startStopControl.FindResource("RunningAnimation");
-				//story.Stop(startStopControl);
-				//startStopControl.AnimatedEllipse.Visibility = Visibility.Hidden;
 			}
 		}
 

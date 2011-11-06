@@ -101,7 +101,9 @@ namespace RobotInitial.Behaviours {
 				}
 
 				//======== Connection must have been a success here !
-				// Get the current robot status
+				//-------- Apparently, unless the clicked a stale connection address
+				//-------- So the solution is to use a timeout
+				// Get the current robot status, Asynchronously
 				int response = Network.Instance.requestProgramStatus();
 
 
@@ -153,6 +155,8 @@ namespace RobotInitial.Behaviours {
 
 				// Get and start the animation
 				Storyboard story = (Storyboard)mainWindow.StartStopControl.FindResource("RunningAnimation");
+				RadialGradientBrush currentBrush = (RadialGradientBrush)mainWindow.StartStopControl.AnimatedEllipse.Fill;
+				currentBrush.GradientStops[0].Color = (Color)ColorConverter.ConvertFromString("#FF00BE03");
 				mainWindow.StartStopControl.AnimatedEllipse.Visibility = Visibility.Visible;
 
 				// Launch a fake start program to pickup on the execution
@@ -160,7 +164,8 @@ namespace RobotInitial.Behaviours {
 				StartProgramDelegate programLauncher = new StartProgramDelegate(startProgram);
 				programLauncher.BeginInvoke(null, null, null);
 			}
-			else if (response == Request_Handler.COMPLETED_RESPONSE) {
+			// Just reset completely
+			else {
 				// Do stop UI update
 				doStopUIUpdates();
 
@@ -189,8 +194,10 @@ namespace RobotInitial.Behaviours {
 			// Show the connect button and enable the address
 			mainWindowViewModel.setConnectionVisible(ConnectionVisible.CONNECT_ADDRESS);
 
-			// Show the server refresh
 			mainWindowViewModel.RefreshButtonVisibility = Visibility.Visible;
+
+			// Most likely cause of failure is an invalid address, refresh the list
+			mainWindowViewModel.updateRobotAddressList();
 		}
 
 		// Disconnect the current robot
@@ -214,6 +221,10 @@ namespace RobotInitial.Behaviours {
 
 			// hide the start stop widget
 			mainWindowViewModel.hideStartStopWidget();
+
+			// Update the robot list
+			mainWindowViewModel.updateRobotAddressList();
+
 
 			// Reset the start stop widget
 

@@ -4,6 +4,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using RobotInitial.Model;
 using System.Threading;
 using System.Net;
+using System.IO;
 
 namespace RobotInitial.Lynx_Server {
     class Request_Handler {
@@ -43,31 +44,38 @@ namespace RobotInitial.Lynx_Server {
 				// if data available (should be if this method is called, possible exception?)
 				if (clientStream.DataAvailable) {
 					// get the message
-					int message = clientStream.ReadByte();
-
-					switch (message) {
-						case PING_REQUEST:		// Return a status
-							sendPingResult();
-							break;
-						case EXECUTE_REQUEST:	// Process a program
-							processInboundProgram();
-							break;
-						case STOP_REQUEST:		// Stop a program that is running
-							stopCurrentProgram();
-							break;
-						case PAUSE_REQUEST:		// Pause the currently executing program
-							pauseCurrentProgram();
-							break;
-						case RESUME_REQUEST:	// Resume a paused program
-							resumeCurrentProgram();
-							break;
-						case DISCONNECT_REQUEST:	// Disconnect, stop looping!
-							closeConnection();
-							break;
-                        case PROGRAM_STATUS_REQUEST:	// Status request
-							sendProgramStatus();
-							break;
+					try {
+						int message = clientStream.ReadByte();
+					
+						switch (message) {
+							case PING_REQUEST:		// Return a status
+								sendPingResult();
+								break;
+							case EXECUTE_REQUEST:	// Process a program
+								processInboundProgram();
+								break;
+							case STOP_REQUEST:		// Stop a program that is running
+								stopCurrentProgram();
+								break;
+							case PAUSE_REQUEST:		// Pause the currently executing program
+								pauseCurrentProgram();
+								break;
+							case RESUME_REQUEST:	// Resume a paused program
+								resumeCurrentProgram();
+								break;
+							case DISCONNECT_REQUEST:	// Disconnect, stop looping!
+								closeConnection();
+								break;
+							case PROGRAM_STATUS_REQUEST:	// Status request
+								sendProgramStatus();
+								break;
+						}
 					}
+					catch (IOException exc) {
+						closeConnection();
+						continue;
+					}
+
 				}
 
 				// If the program thread is null lets skip it
@@ -105,22 +113,25 @@ namespace RobotInitial.Lynx_Server {
         }
 
 		public void closeConnection() {
-			client.Close();
-			clientStream.Close();
-			keepLooping = false;
-			Console.Write("Closed Connection \n");
+			try {
+				if(clientStream != null) {
+					clientStream.Close();
+					client.Close();
+					keepLooping = false;
+					Console.Write("Closed Connection \n");
+				}
+			} catch(IOException) {
+				keepLooping = false;
+			}
 			return;
 		}
 
 		// Send back the current status
 		private void sendPingResult() {
 			Console.WriteLine("Ping Request Accepted, Sending Response");
-			if (VM.isInitial()) {
-				clientStream.WriteByte(OK_RESPONSE);
-			}
-			else {
-				clientStream.WriteByte(BUSY_RESPONSE);
-			}
+			// Just send the an OK result, no one cares if the VM is busy unless
+			// we are actually trying to run something
+			clientStream.WriteByte(OK_RESPONSE);
 		}
 
 		// Process a program that is ready to run
@@ -189,7 +200,11 @@ namespace RobotInitial.Lynx_Server {
 
 		// Send the status of the program back to the caller
 		private void sendProgramStatus() {
-            clientStream.WriteByte((byte)programStatus);
+			try {
+				clientStream.WriteByte((byte)programStatus);
+			} catch(IOException exc) {
+				closeConnection();
+			}
 		}
 
 		//public void processRequest() {

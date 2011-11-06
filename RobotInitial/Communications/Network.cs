@@ -12,13 +12,14 @@ using RobotInitial;
 
 namespace LynxTest2.Communications {
     class Network {
-        public const int PING_TIMEOUT = 2000;
-        public const int STANDARD_TIMEOUT = 6000;
+        public const int PING_TIMEOUT = 1000;
+        public const int STANDARD_TIMEOUT = 4000;
 		public static readonly Network Instance = new Network();
 		public static readonly int DefaultPort = 7331;
         private NetworkStream connection;
 		private TcpClient client;
 		private IPEndPoint connectedRobot;
+		private bool Connected = false;
 
 		private Network() { /* Force non-instantiability */ } 
 
@@ -28,19 +29,30 @@ namespace LynxTest2.Communications {
 			client = new TcpClient();
 			connectedRobot = robot;
 			// Connect Asynchonously
-            IAsyncResult result = client.BeginConnect(robot.Address, DefaultPort, null, null);
+			IAsyncResult result = client.BeginConnect(robot.Address, DefaultPort, null, null);
 
 			// Wait for success max timout duration
-            bool success = result.AsyncWaitHandle.WaitOne(timeout);
+			bool success = result.AsyncWaitHandle.WaitOne(timeout);
 
 			// If unsuccessful throw a SocketException
-            if(!success) {
-                client.Close();
-                throw new SocketException();
-            }
+			if(!success) {
+				// If the connnection is not null
+				if(connection != null) {
+					// Shut down the connection the HARD way since it should not be running
+					connection.Close();
+					client.Close();
+					Connected = false;
+					throw new SocketException();
+				}
+			}
 
-			//client.Connect(robot);
-            if(client.Connected) connection = Instance.client.GetStream();
+			// Since Connected property is useless lets try catch
+			try {
+				connection = Instance.client.GetStream();
+				Connected = true;
+			} catch(InvalidOperationException exc) {
+				Connected = false;
+			}
 		}
 
 		// Send the program, called on button start press
@@ -64,15 +76,35 @@ namespace LynxTest2.Communications {
 
 		// Check if a connection is available to a robot
 		public bool robotConnectionAvail() {
-			if(!isConnected()) return false;
+			
+			// Make sure previous connecting step succeeded
+			if(!Connected) return false;
 
 			// Send a ping request
 			connection.WriteByte(Request_Handler.PING_REQUEST);
 
-			//Read response from server. 1 = ready, 0 = busy.
-			int response = connection.ReadByte();
+			// Create a buffer to take the asynchronous read
+			byte[] buffer = new byte[1];
 
-			// Close the connection
+			//Read response asynchronously, will break on IO Block
+			IAsyncResult result = connection.BeginRead(buffer,0,1,null,null);
+
+			// Wait for success max timout duration
+			bool success = result.AsyncWaitHandle.WaitOne(PING_TIMEOUT);
+
+			// If unsuccessful throw a SocketException
+			if (!success) {
+				// If the connnection is not null
+				if (connection != null) {
+					// Shut down the connection the HARD way since it should not be running
+					closeConnection();
+					throw new SocketException();
+				}
+			}
+			// Set the response
+			int response = buffer[0];
+
+			// Disconnect
 			closeConnection();
 
 			return response == Request_Handler.OK_RESPONSE ? true : false;
@@ -80,40 +112,105 @@ namespace LynxTest2.Communications {
 
 		// Close the connection to the Lynx
 		public void closeConnection() {
-			if (isConnected()) connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
-			client.Close();
+			if(Connected)connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
 			connection.Close();
+			client.Close();
+			Connected = false;
 		}
 
 		// Check if the connection is still active
 		public bool isConnected() {
-			return client.Connected;
+			return Connected;
 		}
 
         public int requestProgramStatus()
         {
-            // Send a status request
-            connection.WriteByte(Request_Handler.PROGRAM_STATUS_REQUEST);
+			try {
+				// Send a status request
+				connection.WriteByte(Request_Handler.PROGRAM_STATUS_REQUEST);
 
-            //Read response from server. 1 = ready, 0 = busy.
-            return connection.ReadByte();
+				// Create a buffer to take the asynchronous read
+				byte[] buffer = new byte[1];
+
+				//Read response asynchronously, will break on IO Block
+				IAsyncResult result = connection.BeginRead(buffer, 0, 1, null, null);
+
+				// Wait for success max timout duration
+				bool success = result.AsyncWaitHandle.WaitOne(PING_TIMEOUT);
+
+				// If unsuccessful throw a SocketException
+				if (!success) {
+					// If the connnection is not null
+					if (connection != null) {
+						// Shut down the connection the HARD way since it should not be running
+						closeConnection();
+						//connection.Close();
+						//client.Close();
+						//Connected = false;
+						throw new SocketException();
+					}
+				}
+
+				// Set the response
+				int response = buffer[0];
+
+				// Return it
+				return response;	
+			} catch(IOException exc) {
+				// If the connnection is not null
+				if (connection != null) {
+					// Shut down the connection the HARD way since it should not be running
+					connection.Close();
+					client.Close();
+					Connected = false;
+				}
+				Console.WriteLine("Abnormal Termination due to IOException");
+			}
+			return -1;		
         }
 
         public void stopProgram() {
             if (connection != null) {
-                connection.WriteByte(Request_Handler.STOP_REQUEST);
+				try {
+					if (Connected) connection.WriteByte(Request_Handler.STOP_REQUEST);
+				}
+				catch (IOException exc) {
+					// Shut down the connection the HARD way since it should not be running
+					connection.Close();
+					client.Close();
+					Connected = false;
+					Console.WriteLine("Abnormal Termination due to IOException");
+				}
             }
         }
 
         public void pauseProgram() {
             if (connection != null) {
-                connection.WriteByte(80);
+				try {
+					if (Connected) connection.WriteByte(Request_Handler.PAUSE_REQUEST);
+				}
+				catch (IOException exc) {
+					// Shut down the connection the HARD way since it should not be running
+					connection.Close();
+					client.Close();
+					Connected = false;
+					Console.WriteLine("Abnormal Termination due to IOException");
+				}
             }
         }
 
         public void resumeProgram() {
             if (connection != null) {
-                connection.WriteByte(82);
+				try {
+					if (isConnected()) connection.WriteByte(Request_Handler.RESUME_REQUEST);
+				}
+				catch (IOException exc) {
+					// Shut down the connection the HARD way since it should not be running
+					connection.Close();
+					client.Close();
+					Connected = false;
+					Console.WriteLine("Abnormal Termination due to IOException");
+				}
             }
         }
 
