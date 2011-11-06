@@ -18,6 +18,7 @@ namespace RobotInitial.LynxProtocol {
 
         #endregion
 
+        private const int TIMEOUT = 5000;
         private const String NEWLINE = "\r\n";
         private const String PORTNAME = "COM1";             //default "COM1"
         private const int BAUDRATE = 115200;                //default 9600
@@ -30,6 +31,7 @@ namespace RobotInitial.LynxProtocol {
         private LynxMessagePort() {
             port = new SerialPort(PORTNAME, BAUDRATE, PARITY, DATABITS, STOPBITS);
             port.NewLine = NEWLINE;
+            port.ReadTimeout = TIMEOUT;
         }
 
         ~LynxMessagePort() {
@@ -68,7 +70,12 @@ namespace RobotInitial.LynxProtocol {
 
                 if (isRequest) {
                     Console.WriteLine("Reading Response...");
-                    response = new LynxMessage(port.ReadLine());    //blocking call
+
+                    //blocking call, timeout will be caught by the executor
+                    //because we can't really do much if the COM port is not responding
+                    //so the best thing to do is just kill the program
+                    response = new LynxMessage(port.ReadLine());    
+
                     Console.WriteLine(response.ToString());
                 } else {
                     Thread.Sleep(DELAYAFTERSEND);   //give the robot time to accept the message

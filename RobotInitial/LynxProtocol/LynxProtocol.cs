@@ -201,12 +201,12 @@ namespace RobotInitial.LynxProtocol {
         private void StartContinuousMovement(LynxMessage left, LynxMessage right) {
             //only send if it is different to the current continuous command
             if (left != null && !left.Equals(currentContCmdL)) {
-                LynxMessagePort.Instance.Send(left, false);
                 currentContCmdL = left;
+                LynxMessagePort.Instance.Send(left, false);
             }
             if (right != null && !right.Equals(currentContCmdR)) {
-                LynxMessagePort.Instance.Send(right, false);
                 currentContCmdR = right;
+                LynxMessagePort.Instance.Send(right, false);
             }
         }
 
