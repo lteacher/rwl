@@ -102,7 +102,7 @@
 		</Storyboard>
 	</UserControl.Resources>
 	
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Visibility="Hidden">
         <Rectangle Height="75" Width="100" Fill="DarkGray" Stroke="Black" Opacity="0.10" StrokeThickness="4" RadiusY="24.5" RadiusX="24.5"/>
         <Ellipse x:Name="AnimatedEllipse" Visibility="Hidden" HorizontalAlignment="Left" Height="16.875" Margin="-1.334,0,0,8.583" VerticalAlignment="Bottom" Width="16.875" RenderTransformOrigin="0.5,0.5" Opacity="0.435" StrokeThickness="71">
         	<Ellipse.Fill>
