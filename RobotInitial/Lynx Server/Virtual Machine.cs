@@ -88,9 +88,9 @@ namespace RobotInitial.Lynx_Server {
         public void TerminateProgram(Shutdown terminate) {
             //Calling thread must currently have ownership of the VM
             if (Thread.CurrentThread.ManagedThreadId == runningProgramID) {
+                executor.StopExecution();
                 this.terminate = terminate;
 				state = EndState.TerminatedByClient;
-                executor.StopExecution();
             } else {
                 throw new VirtualMachineOwnershipException();
             }

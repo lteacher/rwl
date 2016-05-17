@@ -57,21 +57,34 @@ namespace LynxTest2.Communications {
 
 		// Send the program, called on button start press
 		public void startProgram(StartBlock program) {
-			// Send a Execution request
-			connection.WriteByte(Request_Handler.EXECUTE_REQUEST);
+            try
+            {
+                // Send a Execution request
+                connection.WriteByte(Request_Handler.EXECUTE_REQUEST);
 
-			// Get the response
-			int response = connection.ReadByte();
+                // Get the response
+                int response = connection.ReadByte();
 
-			Console.Write("Response recieved: " + response + "\n");
+                Console.Write("Response recieved: " + response + "\n");
 
-			if (response == Request_Handler.OK_RESPONSE) {
-				program.Serialise(connection);
-				Console.Write("Program sent \n");
-			}
-			if (response == Request_Handler.BUSY_RESPONSE) {
-				throw new RobotInitial.LynxBusyException();
-			}
+                if (response == Request_Handler.OK_RESPONSE)
+                {
+                    program.Serialise(connection);
+                    Console.Write("Program sent \n");
+                }
+                if (response == Request_Handler.BUSY_RESPONSE)
+                {
+                    throw new RobotInitial.LynxBusyException();
+                }
+            }
+            catch (Exception exc)
+            {
+                // Shut down the connection the HARD way since it should not be running
+                closeConnection();
+                Connected = false;
+                
+                Console.WriteLine("Abnormal Termination due to IOException");
+            }
 		}
 
 		// Check if a connection is available to a robot
@@ -112,10 +125,16 @@ namespace LynxTest2.Communications {
 
 		// Close the connection to the Lynx
 		public void closeConnection() {
-			if(Connected)connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
-			connection.Close();
-			client.Close();
-			Connected = false;
+            try
+            {
+                if (Connected) connection.WriteByte(Request_Handler.DISCONNECT_REQUEST);
+                connection.Close();
+                client.Close();
+                Connected = false;
+            }
+            catch (Exception exc) {
+                Console.WriteLine("Abnormal Termination due to IOException");
+            }
 		}
 
 		// Check if the connection is still active
@@ -126,8 +145,15 @@ namespace LynxTest2.Communications {
         public int requestProgramStatus()
         {
 			try {
-				// Send a status request
-				connection.WriteByte(Request_Handler.PROGRAM_STATUS_REQUEST);
+                if (connection != null)
+                {
+                    // Send a status request
+                    connection.WriteByte(Request_Handler.PROGRAM_STATUS_REQUEST);
+                }
+                else
+                {
+                    return -1;
+                }
 
 				// Create a buffer to take the asynchronous read
 				byte[] buffer = new byte[1];
@@ -156,7 +182,7 @@ namespace LynxTest2.Communications {
 
 				// Return it
 				return response;	
-			} catch(IOException exc) {
+			} catch(Exception exc) {
 				// If the connnection is not null
 				if (connection != null) {
 					// Shut down the connection the HARD way since it should not be running

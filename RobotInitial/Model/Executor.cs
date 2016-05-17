@@ -23,12 +23,17 @@ namespace RobotInitial.Model {
             execStack.Push(Start);
         }
 
+        public bool WasTerminated()
+        {
+            return finishCalled;
+        }
+
         public bool IsDone() {
-            return execStack.Count <= 0 || finishCalled;
+            return execStack.Count <= 0;
         }
 
         public void ExecuteOneBlock() {
-            if (IsDone() || paused) {
+            if (IsDone() || WasTerminated()) {
                 return;
             }
 
@@ -59,23 +64,23 @@ namespace RobotInitial.Model {
         }
 
         public void Pause() {
-            paused = true;
-            //repeated pauses is handled in the protocol with synchrnisation
-            Protocol.Pause();
+                paused = true;
+                //repeated pauses is handled in the protocol with synchrnisation
+                Protocol.Pause();
         }
 
         public void Resume() {
-            paused = false;
-            //repeated resumes is handled in the protocol with synchrnisation
-            Protocol.Resume();
+                paused = false;
+                //repeated resumes is handled in the protocol with synchrnisation
+                Protocol.Resume();
         }
 
         public void StopExecution() {
             //ensure finish is called only once
             lock (this) {
                 if (!finishCalled) {
-                    finishCalled = true;
                     Protocol.OnExecutionFinish();
+                    finishCalled = true;
                 }
             }
         }

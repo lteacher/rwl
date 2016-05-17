@@ -182,11 +182,11 @@ namespace RobotInitial.LynxProtocol {
 
         private void SendBrake() {
             //only send the brake when it is actually moving
-            if (IsContinuouslyMoving()) {
+            //if (IsContinuouslyMoving()) {
                 LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.LEFT), false);
                 LynxMessagePort.Instance.Send(factory.CreateBrakeMsg(Side.RIGHT), false);
                 ClearContinuousMovement();
-            }
+            //}
         }
 
         private LynxStatus RequestStatus(Side side) {

@@ -136,13 +136,13 @@ namespace RobotInitial.ViewModel
 			ConnectButtonVisibility = Visibility.Visible;
 			DisconnectButtonVisibility = Visibility.Hidden;
 
-			//=== TESTING ONLY, START A LOCAL LYNX SERVER!
-			Thread ServerThread;
-			Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
-			ServerThread = new Thread(server.start);
-			ServerThread.Start();
-			Console.WriteLine("SERVER IS RUNNING");
-			//====================================================
+            //=== TESTING ONLY, START A LOCAL LYNX SERVER!
+            Thread ServerThread;
+            Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
+            ServerThread = new Thread(server.start);
+            ServerThread.Start();
+            Console.WriteLine("SERVER IS RUNNING");
+            //====================================================
 
 			// Update the RobotNames address list
 			updateRobotAddressList();

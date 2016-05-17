@@ -111,9 +111,9 @@ namespace RobotInitial.Model {
             IRData data = protocol.RequestIR();
             IEnumerable<KeyValuePair<LynxIRPort, int>> enabledDistances = distances.Where(kvp => portStates[kvp.Key]);
             if (LogicalOperator == LogicalOperator.AND) {
-                return enabledDistances.All(kvp => EqualityOperator.Evaluate(kvp.Value, data.GetDistance(kvp.Key)));
+                return enabledDistances.All(kvp => EqualityOperator.Evaluate(data.GetDistance(kvp.Key), kvp.Value));
             } else {  //if (LogicalOperator == LogicalOperator.OR) 
-                return enabledDistances.Any(kvp => EqualityOperator.Evaluate(kvp.Value, data.GetDistance(kvp.Key)));
+                return enabledDistances.Any(kvp => EqualityOperator.Evaluate(data.GetDistance(kvp.Key), kvp.Value));
             }
         }
 

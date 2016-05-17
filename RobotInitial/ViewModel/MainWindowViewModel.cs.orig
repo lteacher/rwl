@@ -1,0 +1,811 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Windows.Data;
+using System.Windows.Input;
+
+using RobotInitial.Command;
+using RobotInitial.Properties;
+using RobotInitial.Model;
+using RobotInitial.View;
+using System.Windows;
+using System.Net;
+using System.Xml;
+using System.IO;
+using System.Net.Sockets;
+using LynxTest2.Communications;
+using System.Threading;
+using System.Windows.Threading;
+using System.Windows.Controls;
+using RobotInitial.Communications;
+
+namespace RobotInitial.ViewModel
+{
+	enum ConnectionVisible {
+		CONNECT, // Show the connect button
+		DISCONNECT, // Show the Disconnect button
+		CONNECT_ADDRESS, // Show the connect button and allow address edit
+		DISCONNECT_ADDRESS // Show the Disconnect button and disallow address edit
+	};
+
+	class MainWindowViewModel : ClosableViewModel, INotifyPropertyChanged 
+    {
+
+        #region Fields
+
+        #region Commands
+
+        RelayCommand _newWorkspaceCommand;
+        RelayCommand _openWorkspaceCommand;
+        RelayCommand _saveWorkspaceCommand;
+        RelayCommand _saveAsWorkspaceCommand;
+        RelayCommand _closeWorkspaceCommand;
+		RelayCommand _refreshRobotsCommand;
+        RelayCommand _disconnectCommand;
+		RelayCommand _connectCommand;
+
+        RelayCommand _undoCommand;
+        RelayCommand _redoCommand;
+
+        #endregion // Commands
+     
+		//ObservableCollection<WorkspaceViewModel> _workspaces;
+		//ObservableCollection<TaskBlockTabViewModel> _brickTabs;
+
+		public bool Connected = false;
+		public bool ProgramPaused { get; set; }
+		public bool AddressesEnabled { get; set; }
+		private delegate void NoArgDelegate();
+		private delegate void OneArgDelegate(string arg);
+		public LynxRobot ConnectedRobot { get; set; }
+		public Visibility ConnectButtonVisibility { get; set; }
+		public Visibility DisconnectButtonVisibility { get; set; }
+		public Visibility RefreshButtonVisibility { get; set; }
+		public Collection<string> _robotNames = new Collection<string>();
+		public Collection<IPAddress> _robotIPAddresses = new Collection<IPAddress>();
+		public Collection<string> RobotNames {
+			get { return _robotNames; }
+		}
+
+		// The workspace views that can show in the tab control
+		ObservableCollection<WorkspaceView> _workspaces = new ObservableCollection<WorkspaceView>();
+        public ObservableCollection<WorkspaceView> Workspaces {
+			get { return _workspaces; }
+		}
+
+		// The brick tabs on the left side, theres really just one tab for now
+		ObservableCollection<TaskBlockTabView> _brickTabs = new ObservableCollection<TaskBlockTabView>();
+		public ObservableCollection<TaskBlockTabView> BrickTabs {
+			get { return _brickTabs; }
+		}
+
+		// The selected index of whatever workspace is active, used to get the currently selected index... since i know it will work
+		public int SelectedIndex { get; set; }
+
+		// Selected address
+		public int SelectedAddress { get; set; }
+
+		// Set the current text of the address box
+		public string CurrentAddressText { get; set; }
+
+		// Now the current/active workspace is easy to get, its the item in the collection from the selected index
+		public WorkspaceView GetCurrentWorkspace() {
+			return Workspaces[SelectedIndex];
+		}
+
+		public WorkspaceViewModel ActiveWorkspaceViewModel {
+			get {
+				return (WorkspaceViewModel)GetCurrentWorkspace().DataContext;
+			}
+		}
+
+        bool _undoEnabled = false;
+        bool _redoEnabled = false;
+
+        #endregion // Fields
+
+        public MainWindowViewModel()
+        {
+            base.DisplayName = Resources.applicationDisplayName;
+			// Create a new workspace
+			CreateNewWorkspace();
+
+            Application.Current.MainWindow.Closing +=new CancelEventHandler(MainWindow_Closing);
+
+			// Just add a bricktabs probably there wont ever be any more tabs
+			BrickTabs.Add(new TaskBlockTabView());
+
+			// Initialise the connect and disconnect buttons
+			ConnectButtonVisibility = Visibility.Visible;
+			DisconnectButtonVisibility = Visibility.Hidden;
+
+			//=== TESTING ONLY, START A LOCAL LYNX SERVER!
+			Thread ServerThread;
+			Lynx_Server.Lynx_Server server = new Lynx_Server.Lynx_Server();
+			ServerThread = new Thread(server.start);
+			ServerThread.Start();
+			Console.WriteLine("SERVER IS RUNNING");
+			//====================================================
+
+			// Update the RobotNames address list
+			updateRobotAddressList();
+		}
+
+        public void MainWindow_Closing(object sender, CancelEventArgs e)
+        {
+            if (Connected)
+            {
+                Console.WriteLine("Disconnecting on Window Close!");
+                Network.Instance.closeConnection();
+            }
+        }
+			
+		public void updateRobotAddressList() {
+            RobotNames.Clear();
+            _robotEndpoints.Clear();
+			CurrentAddressText = "Updating Robot List";
+			AddressesEnabled = false;
+			NotifyPropertyChanged("AddressesEnabled");
+			NotifyPropertyChanged("CurrentAddressText");
+			NoArgDelegate addressUpdate = new NoArgDelegate(checkAddressConnections);
+			addressUpdate.BeginInvoke(null, null);
+		}
+
+		private void checkAddressConnections() {
+			string robotsXML = Resources.Robots;
+
+			using (XmlReader reader = XmlReader.Create(new StringReader(robotsXML))) {
+				
+				bool IPAdded = false;
+				while (reader.Read()) {
+					if(reader.NodeType == XmlNodeType.Element) {
+						// If the element name is IPAddress
+						if (reader.Name == "IPAddress") {
+							// Move to the nodes value
+							string value = reader.ReadElementContentAsString();
+
+							// Check the value isnt empty
+							if(value != "") {
+								try {
+									IPHostEntry IPEntry = Dns.GetHostEntry(value);
+<<<<<<< HEAD
+=======
+									IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse(value), Network.DefaultPort);
+
+									// Debug text
+									Console.WriteLine("Pinging ({0})...", value);
+
+									// Connect to the address
+									Network.Instance.connectToLynx(endpoint,Network.PING_TIMEOUT);
+>>>>>>> PreMerge
+
+									// Make sure the server is running 
+									if(LynxRobot.robotAlive(IPEntry.AddressList[0])) {
+										// Add to our collection of IPAddresses
+										_robotIPAddresses.Add(IPEntry.AddressList[0]);
+
+										// Set the added flag
+										IPAdded = true;
+									}
+								}
+								catch (SocketException exc) {
+									Console.WriteLine("Connection to ({0}) Failed", value);
+								}
+							}
+							else {
+								reader.MoveToContent();
+								value = reader.ReadElementContentAsString();
+								if(value != "") {
+									try {
+										// NOTE: Here im using the first address, there could be more than one!!
+										IPHostEntry IPEntry = Dns.GetHostEntry(value);
+<<<<<<< HEAD
+=======
+										IPEndPoint endpoint = new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort);
+
+										// Debug text
+										Console.WriteLine("Pinging ({0})...", value);
+
+										// Connect to the address
+                                        Network.Instance.connectToLynx(endpoint, Network.PING_TIMEOUT);
+>>>>>>> PreMerge
+
+										// Make sure the server is running 
+										if(LynxRobot.robotAlive(IPEntry.AddressList[0])) {
+											// Add to our collection of IPAddresses
+											_robotIPAddresses.Add(IPEntry.AddressList[0]);
+
+											// Set the added flag
+											IPAdded = true;
+										}
+										//}
+									}
+									catch (SocketException exc) {
+										Console.WriteLine("Connection to ({0}) Failed", value);
+									}
+								}
+							}
+						}
+
+						// If the element name is DisplayName
+						if (reader.Name == "DisplayName") {
+							// If the IP is added
+							if(IPAdded) {
+								// Move to the nodes value
+								string value = reader.ReadElementContentAsString();
+
+								// Add the displayName
+								RobotNames.Add(value);
+
+								// Set the flag back to false
+								IPAdded = false;
+							}
+						}
+					}
+				}
+			}
+
+			// Update the properties back on the main UI thread
+			Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+				 new NoArgDelegate(robotNamesUpdated));
+		}
+
+		// Update a bunch of properties
+		private void robotNamesUpdated() {
+            Console.WriteLine("Current Available Robots: ");
+            foreach (string str in RobotNames)
+            {
+                Console.WriteLine(str);
+            }
+			AddressesEnabled = true;
+			CurrentAddressText = RobotNames.Count>0 ? RobotNames[0]: "No Default Robots Available (Enter an IPAddress)";
+			NotifyPropertyChanged("AddressesEnabled");
+			NotifyPropertyChanged("RobotNames");
+			NotifyPropertyChanged("CurrentAddressText");
+		}
+
+		//#region Command Definitions
+
+		//#region NewWorkspaceCommand
+
+		public ICommand NewWorkspaceCommand {
+			get {
+				if (_newWorkspaceCommand == null) {
+					_newWorkspaceCommand = new RelayCommand(param => this.CreateNewWorkspace());
+				}
+				return _newWorkspaceCommand;
+			}
+		}
+
+		private void CreateNewWorkspace() {
+			WorkspaceView workspace = new WorkspaceView();
+			((WorkspaceViewModel)workspace.DataContext).DisplayName = Resources.untitledFileName;
+			Workspaces.Add(workspace);
+			
+			// Show the start stop widget
+			showStartStopWidget();
+		}
+		// Show the start stop widget in the UI
+		private void showStartStopWidget() {
+			if (Connected) {
+				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Visible);
+			}
+		}
+
+		// hide the start stop widget
+		private void hideStartStopWidget() {
+			if (!Connected || Workspaces.Count == 0) {
+				((MainWindowView)Application.Current.MainWindow).StartStopControl.MainGrid.SetValue(UIElement.VisibilityProperty, Visibility.Hidden);
+			}
+		}
+
+		//#endregion // NewWorkspaceCommand
+
+		//#region OpenWorkspaceCommand
+
+		//public ICommand OpenWorkspaceCommand
+		//{
+		//    get
+		//    {
+		//        if (_openWorkspaceCommand == null)
+		//        {
+		//            _openWorkspaceCommand = new RelayCommand(param => this.OpenWorkspace());
+		//        }
+		//        return _openWorkspaceCommand;
+		//    }
+		//}
+
+		//#endregion // OpenWorkspaceCommand
+
+		//#region SaveWorkspaceCommand
+
+		//public ICommand SaveWorkspaceCommand
+		//{
+		//    get
+		//    {
+		//        if (_saveWorkspaceCommand == null)
+		//        {
+		//            _saveWorkspaceCommand = new RelayCommand(param => this.SaveWorkspace(false));
+		//        }
+		//        return _saveWorkspaceCommand;
+		//    }
+		//}
+
+		//#endregion // SaveWorkspaceCommand
+
+		//#region SaveAsWorkspaceCommand
+
+		//public ICommand SaveAsWorkspaceCommand
+		//{
+		//    get
+		//    {
+		//        if (_saveAsWorkspaceCommand == null)
+		//        {
+		//            _saveAsWorkspaceCommand = new RelayCommand(param => this.SaveWorkspace(true));
+		//        }
+		//        return _saveAsWorkspaceCommand;
+		//    }
+		//}
+
+		//#endregion // SaveWorkspaceAsCommand
+
+		//#region CloseWorkspaceCommand
+
+		public ICommand CloseWorkspaceCommand {
+			get {
+				if (_closeWorkspaceCommand == null) {
+					_closeWorkspaceCommand = new RelayCommand(param => this.CloseWorkspace());
+				}
+				return _closeWorkspaceCommand;
+			}
+		}
+
+		//#endregion // CloseWorkspaceCommand
+
+		//#region UndoCommand
+
+		//public ICommand UndoCommand
+		//{
+		//    get
+		//    {
+		//        if (_undoCommand == null)
+		//        {
+		//            _undoCommand = new RelayCommand(param => this.GetCurrentWorkspace().Undo());
+		//        }
+		//        return _undoCommand;
+		//    }
+		//}
+
+		//#endregion // UndoCommand
+
+		//#region RedoCommand
+        
+		//public ICommand RedoCommand
+		//{
+		//    get
+		//    {
+		//        if (_redoCommand == null)
+		//        {
+		//            _redoCommand = new RelayCommand(param => this.GetCurrentWorkspace().Redo());
+		//        }
+		//        return _redoCommand;
+		//    }
+		//}
+        
+		//#endregion // RedoCommand
+
+		public ICommand RefreshRobotsCommand {
+			get {
+				if(_refreshRobotsCommand == null) {
+					_refreshRobotsCommand = new RelayCommand(param => this.updateRobotAddressList());
+				}
+				return _refreshRobotsCommand;
+			}
+		}
+
+		public ICommand DisconnectRobotCommand {
+			get {
+				if(_disconnectCommand == null) {
+					_disconnectCommand = new RelayCommand(param => this.disconnectCurrentRobot());
+				}
+				return _disconnectCommand;
+			}
+		}
+
+		public ICommand ConnectCommand {
+			get {
+				if (_connectCommand == null) {
+					_connectCommand = new RelayCommand(param => this.connectToRobot());
+				}
+				return _connectCommand;
+			}
+		}
+
+		private void setConnectionVisible(ConnectionVisible visible) {
+			switch(visible) {
+				case ConnectionVisible.CONNECT:
+					ConnectButtonVisibility = Visibility.Visible;
+					DisconnectButtonVisibility = Visibility.Hidden;
+					break;
+				case ConnectionVisible.DISCONNECT:
+					ConnectButtonVisibility = Visibility.Hidden;
+					DisconnectButtonVisibility = Visibility.Visible;
+					break;
+				case ConnectionVisible.CONNECT_ADDRESS:
+					ConnectButtonVisibility = Visibility.Visible;
+					DisconnectButtonVisibility = Visibility.Hidden;
+					AddressesEnabled = true;
+					break;
+				case ConnectionVisible.DISCONNECT_ADDRESS:
+					ConnectButtonVisibility = Visibility.Hidden;
+					DisconnectButtonVisibility = Visibility.Visible;
+					AddressesEnabled = false;
+					break;
+			}
+			NotifyPropertyChanged("ConnectButtonVisibility");
+			NotifyPropertyChanged("DisconnectButtonVisibility");
+			NotifyPropertyChanged("AddressesEnabled");
+		}
+
+		public void connectToRobot() {
+			// hide the server refresh
+			RefreshButtonVisibility = Visibility.Hidden;
+			NotifyPropertyChanged("RefreshButtonVisibility");
+
+			// Switch out the connection and disconnect buttons
+			setConnectionVisible(ConnectionVisible.DISCONNECT_ADDRESS);
+
+			// Launch separate thread
+			NoArgDelegate connector = new NoArgDelegate(makeConnection);
+			connector.BeginInvoke(null,null);
+		}
+
+		// Try to make a connection on a separate worker thread
+		private void makeConnection() {
+			if (CurrentAddressText == null) return;
+			try {
+				if (RobotNames.Contains(CurrentAddressText)) {
+					int index = RobotNames.IndexOf(CurrentAddressText);
+
+					// Connect to the Lynx from the list of IP Endpoints
+<<<<<<< HEAD
+					//Network.Instance.connectToLynx(_robotEndpoints[index]);
+					ConnectedRobot = LynxRobot.connectToRobotNumber(_robotIPAddresses[index]);
+=======
+                    Network.Instance.connectToLynx(_robotEndpoints[index], Network.STANDARD_TIMEOUT);
+>>>>>>> PreMerge
+				}
+				else {
+					// try to parse an IPAddress
+					IPAddress ip;
+					if (IPAddress.TryParse(CurrentAddressText, out ip)) {
+						// Connect using the input IP
+<<<<<<< HEAD
+						ConnectedRobot = LynxRobot.connectToRobotNumber(ip);
+=======
+                        Network.Instance.connectToLynx(new IPEndPoint(ip, Network.DefaultPort), Network.STANDARD_TIMEOUT);
+>>>>>>> PreMerge
+					}
+
+					else {
+						// Try getting a Host entry
+						IPHostEntry IPEntry = Dns.GetHostEntry(CurrentAddressText);
+
+						// If successfull, have a go at connecting from the first address
+<<<<<<< HEAD
+						ConnectedRobot = LynxRobot.connectToRobotNumber(IPEntry.AddressList[0]);
+=======
+                        Network.Instance.connectToLynx(new IPEndPoint(IPEntry.AddressList[0], Network.DefaultPort), Network.STANDARD_TIMEOUT);
+>>>>>>> PreMerge
+					}
+				}
+
+				// Connection must have been a success here !
+				// Update the properties back on the main UI thread
+				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+					 new NoArgDelegate(connectionAccept));
+			}
+			catch (LynxBusyException exc) {
+				// Connection must have been a success here !
+				// Update the properties back on the main UI thread
+				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+					 new NoArgDelegate(connectionFailed));
+				Console.WriteLine("Lynx is currently Busy... Connection Failed");
+			}
+			catch (SocketException exc) {
+				// Connection must have been a success here !
+				// Update the properties back on the main UI thread
+				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Normal,
+					 new NoArgDelegate(connectionFailed));
+				Console.WriteLine("Socket Exception During Connection: {0}", exc);
+			}
+		}
+
+		// Make changes on connection accepted
+		private void connectionAccept() {
+			Connected = true;
+
+			// Set UI values or stop the animation
+			Console.WriteLine("Connection SUCCEEEDED!!");
+
+			// Show the start stop widget
+			showStartStopWidget();
+
+			// Launch server poller
+
+		}
+
+		// Make changes on connection failure
+		private void connectionFailed() {
+			Connected = false;			
+			Console.WriteLine("Connection FAILED!!");
+
+			// Show the connect button and enable the address
+			setConnectionVisible(ConnectionVisible.CONNECT_ADDRESS);
+
+			// Show the server refresh
+			RefreshButtonVisibility = Visibility.Visible;
+			NotifyPropertyChanged("RefreshButtonVisibility");
+		}
+
+		// Disconnect the current robot
+		private void disconnectCurrentRobot() {
+			if (Connected) {
+				ConnectedRobot.disconnect();
+			}
+
+			// Not connected now!
+			Connected = false;
+
+			// Show the server refresh
+			RefreshButtonVisibility = Visibility.Visible;
+			NotifyPropertyChanged("RefreshButtonVisibility");
+			setConnectionVisible(ConnectionVisible.CONNECT_ADDRESS);
+
+			// hide the start stop widget
+			hideStartStopWidget();
+		}
+
+		
+
+
+
+		//#endregion // Command Definitions
+
+//        #region Property Bindings
+
+//        public bool IsRedoEnabled
+//        {
+//            get { return GetCurrentWorkspace().IsRedoEnabled; }
+//        }
+
+//        public bool IsUndoEnabled
+//        {
+//            get { return GetCurrentWorkspace().IsUndoEnabled; }
+//        }
+
+//        #endregion // Property Bindings
+
+//        #region Collection Definitions
+
+//        #region Workspaces
+
+//        public ObservableCollection<WorkspaceViewModel> Workspaces
+//        {
+//            get
+//            {
+//                if (_workspaces == null)
+//                {
+//                    _workspaces = new ObservableCollection<WorkspaceViewModel>();
+//                    _workspaces.CollectionChanged += OnWorkspacesChanged;
+//                }
+
+//                return _workspaces;
+//            }
+//        }
+
+//        void OnWorkspacesChanged(object sender, NotifyCollectionChangedEventArgs e)
+//        {
+//            if (e.NewItems != null && e.NewItems.Count != 0)
+//            {
+//                foreach (WorkspaceViewModel workspace in e.NewItems)
+//                {
+//                    workspace.RequestClose += this.OnWorkspaceRequestClose;
+//                }
+
+//            }
+
+//            if (e.OldItems != null && e.OldItems.Count != 0)
+//            {
+//                foreach (WorkspaceViewModel workspace in e.OldItems)
+//                {
+//                    workspace.RequestClose -= this.OnWorkspaceRequestClose;
+//                }
+//            }
+//        }
+
+//        void OnWorkspacePropertyChanged(object sender, EventArgs e)
+//        {
+//            Debug.WriteLine("Property Changed: " + e);
+//            if (e.ToString().Equals("IsUndoEnabled"))
+//            {
+//                OnPropertyChanged("IsUndoEnabled");
+//            }
+//            else if (e.ToString().Equals("IsRedoEnabled"))
+//            {
+//                OnPropertyChanged("IsRedoEnabled");
+//            }
+
+//        }
+
+//        void OnWorkspaceRequestClose(object sender, EventArgs e)
+//        {
+//            WorkspaceViewModel workspace = sender as WorkspaceViewModel;
+//            workspace.Dispose();
+//            this.Workspaces.Remove(workspace);
+//        }
+
+//#endregion // Workspaces
+
+//        #region BrickTabs
+
+//        public ObservableCollection<TaskBlockTabViewModel> BrickTabs
+//        {
+//            get
+//            {
+//                if (_brickTabs == null)
+//                {
+//                    _brickTabs = new ObservableCollection<TaskBlockTabViewModel>();
+//                    _brickTabs.CollectionChanged += OnBricksTabChanged;
+//                }
+
+//                return _brickTabs;
+
+//            }
+//        }
+
+//        void OnBricksTabChanged(object sender, NotifyCollectionChangedEventArgs e)
+//        {
+//            if (e.NewItems != null && e.NewItems.Count != 0)
+//            {
+//                foreach (TaskBlockTabViewModel brickTab in e.NewItems)
+//                {
+//                    brickTab.RequestClose += this.OnBrickTabRequestClose;
+//                }
+
+//            }
+
+//            if (e.OldItems != null && e.OldItems.Count != 0)
+//            {
+//                foreach (TaskBlockTabViewModel brickTab in e.OldItems)
+//                {
+//                    brickTab.RequestClose -= this.OnBrickTabRequestClose;
+//                }
+//            }
+//        }
+
+//        void OnBrickTabRequestClose(object sender, EventArgs e)
+//        {
+//            TaskBlockTabViewModel brickTab = sender as TaskBlockTabViewModel;
+//            brickTab.Dispose();
+//            this.BrickTabs.Remove(brickTab);
+//        }
+
+//        #endregion // BrickTabs
+
+//        #endregion // Collection Definitions
+
+//        #region Private Helper Methods
+
+//        void Initialise()
+//        {
+//            TaskBlockTabViewModel btmodel = new TaskBlockTabViewModel();
+//            this.BrickTabs.Add(btmodel);
+
+//            // Create a new workspace on startup
+//            CreateNewWorkspace();
+//        }
+
+//        void CreateNewWorkspace()
+//        {
+//            Workspace workspaceModel = Workspace.CreateNewWorkspace();
+//            WorkspaceViewModel workspace = new WorkspaceViewModel();
+//            workspace.DisplayName = Resources.untitledFileName;
+//            this.Workspaces.Add(workspace);
+//            //workspace.PropertyChanged += new PropertyChangedEventHandler(OnWorkspacePropertyChanged);
+//            this.SetActiveWorkspace(workspace);
+//        }
+
+//        void SetActiveWorkspace(WorkspaceViewModel workspace)
+//        {
+//            Debug.Assert(Workspaces.Contains(workspace));
+
+//            ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Workspaces);
+//            if (collectionView != null)
+//            {
+//                collectionView.MoveCurrentTo(workspace);
+//                NotifyPropertyChanged("Workspaces");
+//            }
+//        }
+
+//        void OpenWorkspace()
+//        {
+//            // Show Dialog (this is a non-trivial task in MVVM)
+//            // Get filename from dialog
+//            Workspace workspaceModel = Workspace.LoadWorkspace("rawr.rwl");
+//            //WorkspaceViewModel workspace = new WorkspaceViewModel(workspaceModel);
+//            WorkspaceViewModel workspace = new WorkspaceViewModel();
+//            this.Workspaces.Add(workspace);
+//            this.SetActiveWorkspace(workspace);
+//        }
+
+//        void SaveWorkspace(bool newFile)
+//        {
+//            ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Workspaces);
+//            if (collectionView != null)
+//            {
+//                WorkspaceViewModel viewmodel = collectionView.CurrentItem as WorkspaceViewModel;
+//                if (viewmodel != null)
+//                {
+//                    if (viewmodel.IsUntitled || newFile)
+//                    {
+//                        // Show Dialog (this is a non-trivial task in MVVM)
+//                        // Get filename from dialog
+//                    }
+
+//                    // Write Workspace Model to disk
+//                    // Mark Workspace as saved.
+//                }
+                    
+//            }
+//        }
+
+		void CloseWorkspace() {
+			// Save Workspace.
+			Workspaces.RemoveAt(SelectedIndex);
+			if(Workspaces.Count == 0) {
+				SelectedIndex = 0;
+
+				// Closing all pages resets the properties to blank!
+				((PropertiesTabViewModel)((MainWindowView)Application.Current.MainWindow).PropertiesView.DataContext).setBlankProperties();
+
+				// Hide the start stop widget
+				hideStartStopWidget();
+				NotifyPropertyChanged("SelectedIndex");
+				return;
+			}
+
+			// If theres still workspaces open get the now selected one and update the properties
+			if (ActiveWorkspaceViewModel.SelectedBlock != null) {
+				((PropertiesTabViewModel)((MainWindowView)Application.Current.MainWindow).PropertiesView.DataContext).setPropertiesView(
+										((ControlBlockViewModel)ActiveWorkspaceViewModel.SelectedBlock.DataContext).PropertiesView);
+			}
+
+			
+		}
+
+//        WorkspaceViewModel GetCurrentWorkspace()
+//        {
+//            ICollectionView collectionView = CollectionViewSource.GetDefaultView(this.Workspaces);
+//            return collectionView.CurrentItem as WorkspaceViewModel;
+//        }
+
+
+//        #endregion // Private Helper Methods
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		/// <summary>
+		/// Notifies the property changed.
+		/// </summary>
+		/// <param name="property">The property.</param>
+		private void NotifyPropertyChanged(string property) {
+			if (PropertyChanged != null) {
+				PropertyChanged(this, new PropertyChangedEventArgs(property));
+			}
+		}
+    }
+}

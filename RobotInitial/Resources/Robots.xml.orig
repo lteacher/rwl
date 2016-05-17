@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<Robots>
+  <Robot>
+<<<<<<< HEAD
+=======
+	 <IPAddress></IPAddress>
+	 <HostName>robot1.csem.flinders.edu.au</HostName>
+    <DisplayName>Awesome Bot</DisplayName>
+  </Robot>
+  <Robot>
+    <IPAddress></IPAddress>
+    <HostName>robot2.csem.flinders.edu.au</HostName>
+    <DisplayName>George</DisplayName>
+  </Robot>
+  <Robot>
+    <IPAddress></IPAddress>
+    <HostName>robot3.csem.flinders.edu.au</HostName>
+    <DisplayName>The Invisible Bot</DisplayName>
+  </Robot>
+  <Robot>
+	 <IPAddress></IPAddress>
+	 <HostName>robot4.csem.flinders.edu.au</HostName>
+	 <DisplayName>The Crippler</DisplayName>
+  </Robot>
+	<Robot>
+>>>>>>> PreMerge
+		<IPAddress>127.0.0.1</IPAddress>
+	   <HostName></HostName>
+	   <DisplayName>LocalHost</DisplayName>
+	</Robot>
+</Robots>

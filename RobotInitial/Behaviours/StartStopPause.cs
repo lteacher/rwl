@@ -476,7 +476,7 @@ namespace RobotInitial.Behaviours {
 			NoArgDelegate programLauncher = new NoArgDelegate(stopProgram);
 			programLauncher.BeginInvoke(null, null);
 
-			Console.WriteLine("Stopping Program");
+			Console.WriteLine("Stopping Program!!");
 		}
 
 		private void DoPauseButtonAction(object sender, System.Windows.Input.MouseEventArgs e) {

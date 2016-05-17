@@ -6,7 +6,7 @@
     <ExpressionBlendVersion>4.0.20525.0</ExpressionBlendVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{4633A89F-B021-4782-A8A9-34CF93797C1B}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <DefaultClrNameSpace>RobotInitial</DefaultClrNameSpace>
     <RootNamespace>RobotInitial</RootNamespace>
@@ -37,7 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>RobotInitial.App</StartupObject>
+    <StartupObject>RobotInitial.Lynx_Server.ServerTest</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Drawing" />
